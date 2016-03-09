@@ -2,27 +2,10 @@
 
 /**
  * Created by PhpStorm.
- * User: Simone Gosetto
- * Date: 19/11/2015
- * Time: 15:55
- *
- * DATASERVICEGATEWAY
- * Per la gestione di tutte le richieste al DB
- *
- * INPUT:
- * token per autenticare la richiesta
- * query sql
- * tipo di query (query/non query) - OK
- * query criptata si/no (da gestire nelle prossime versioni)
- *
- *
- * OUTPUT:
- * messaggio di errore - OK
- * recordset - OK
- * righe affected - OK
- *
+ * User: Simone
+ * Date: 09/03/2016
+ * Time: 19:20
  */
-
 //header('Content-Type: application/json');
 
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
@@ -42,15 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 include "FD_Mysql.php";
-include "FD_Decrypt.php";
+//include "FD_Decrypt.php";
 
 if(!isset($_GET["gest"])){
     echo json_encode("Invalid request !");
     return;
 }
-
-//Oggetto di output (per ora faccio l'output del json in un unico array, successivamente possiamo anche gestire un array di oggetti più complesso)
-//$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
 
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
 /**
@@ -60,30 +40,21 @@ if(!isset($_GET["gest"])){
  * 3 -> GET
  */
 $gest = $_GET["gest"];
-/**
- * $type:
- * 1 -> Query
- * 2 -> Non Query
- */
-$cripted=false; //DA IMPLEMENTARE
 
 if($gest == 1){
-    $query = $_POST["query"];
-    $type = $_POST["type"];
-    $cripted = $_POST["cripted"];
     $keyRequest = $_POST["token"];
+    $username = $_POST["username"];
+    $password = $_POST["password"];
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
-    $query = $objData->query;
-    $type = $objData->type;
-    $cripted = $objData->cripted;
     $keyRequest = $objData->token;
+    $username =  $objData->username;
+    $password =  $objData->password;
 } else if($gest == 3) {
-    $query = $_GET["query"];
-    $type = $_GET["type"];
-    $cripted = $_GET["cripted"];
     $keyRequest = $_GET["token"];
+    $username = $_GET["username"];
+    $password = $_GET["password"];
 }
 
 $keyRequest = strtolower($keyRequest);
@@ -92,17 +63,7 @@ if($keyRequest != strtolower(md5_file("esatto.mp3"))){
     return;
 }
 
-if(strlen($query) == 0){
-    echo json_encode("Invalid query !");
-    return;
-}
-
-if(strlen($type) == 0){
-    echo json_encode("Invalid type !");
-    return;
-}
-
-if(strlen($query) > 0 && strlen($type) > 0){
+if(strlen($keyRequest) > 0){
 
     //Inizializzo componente SQL
     $sql = new FD_Mysql($keyRequest);
@@ -110,28 +71,16 @@ if(strlen($query) > 0 && strlen($type) > 0){
     //Controllo che la connessione al DB sia andata a buon fine
     if(strlen($sql->lastError) > 0){
         echo json_encode($sql->lastError);
+        echo "errore";
         if($sql->connected){
             $sql->closeConnection();
         }
         return;
     }
-    /*
-    //Se criptata ricavo la query reale
-    if($cripted == true) {
-        //Oggetto di decriptazione
-        $dec = new FD_Decrypt();
-        //Descripto la query
-        $query = $dec->decrypt($query);
-    }
-    */
 
-    //Eseguo la query
-    if($type == 1){
-        $result = $sql->exportJSON($query);
-    }else{
-        $result = "";
-        $sql->executeSQL($query);
-    }
+    //Eseguo la query di login
+    $result = $sql->exportJSON("call spFD_login('".$username."','".md5($password)."')");
+    echo "stored";
 
     if(strlen($sql->lastError) > 0){
         echo json_encode($sql->lastError);
@@ -141,14 +90,21 @@ if(strlen($query) > 0 && strlen($type) > 0){
         return;
     }
 
+    //Se l'utente non esiste o le credenziali immesse sono errate
+    if($sql->affected == 0){
+        echo json_encode("Invalid users or password !");
+        return;
+    }
+
+    //Alloco variabile di sessione
+    session_start();
+    $_SESSION['username'] = $username;
+    $_SESSION['email'] = $sql->result[0]["email"];
+    $_SESSION['admin'] = $sql->result[0]["admin"];
+
+    //Chiudo connessione
     $sql->closeConnection();
 
-    /*
-        $databox["errormessage"] = $sql->lastError;
-        $databox["recordset"] = $result;
-        $databox["affected"] = $sql->affected;
-    */
-    //print_r($databox);
     echo $result;
 }else{
     echo json_encode("Invalid request !");
