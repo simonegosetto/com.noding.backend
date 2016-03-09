@@ -6,7 +6,7 @@
  * Time: 12:12
  */
 
-class FD_CurrencyConvertor {
+class FD_CurrencyConverter {
 
     var $cambio;
     var $currency =  array(
@@ -162,7 +162,7 @@ class FD_CurrencyConvertor {
         "ZWD"=>"Zimbabwe Dollar  "
     );
 
-    function FD_CurrencyConvertor(){
+    function FD_CurrencyConverter(){
 
     }
 
