@@ -23,7 +23,7 @@
  *
  */
 
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -49,8 +49,8 @@ if(!isset($_GET["gest"])){
     return;
 }
 
-//Oggetto di output
-$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
+//Oggetto di output (per ora faccio l'output del json in un unico array, successivamente possiamo anche gestire un array di oggetti più complesso)
+//$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
 
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
 /**
@@ -106,7 +106,6 @@ if(strlen($type) == 0){
 if(strlen($query) > 0 && strlen($type) > 0){
 
     //Token di richiesta
-    //$keyRequest = md5_file("http://simonegosetto.it/FD_Components/esatto.mp3");
     $sql = new FD_Mysql($keyRequest);
 
     if(strlen($sql->lastError) > 0){

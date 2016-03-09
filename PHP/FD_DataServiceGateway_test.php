@@ -33,13 +33,11 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 }
 // Access-Control headers are received during OPTIONS requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-
 }
 
 include "FD_Mysql_test.php";
@@ -51,7 +49,7 @@ if(!isset($_GET["gest"])){
 }
 
 //Oggetto di output
-$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
+//$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
 
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
 /**
@@ -107,7 +105,6 @@ if(strlen($type) == 0){
 if(strlen($query) > 0 && strlen($type) > 0){
 
     //Token di richiesta
-    //$keyRequest = md5_file("http://simonegosetto.it/FD_Components/esatto.mp3");
     $sql = new FD_Mysql($keyRequest);
 	
 	if(strlen($sql->lastError) > 0){
