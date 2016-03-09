@@ -6,7 +6,6 @@
  * Date: 09/03/2016
  * Time: 19:20
  */
-//header('Content-Type: application/json');
 
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -79,7 +78,7 @@ if(strlen($keyRequest) > 0){
     }
 
     //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('".$username."','".md5($password)."')");
+    $result = $sql->exportJSON("call spFD_login('".$username."','".md5($password)."');");
     echo "stored";
 
     if(strlen($sql->lastError) > 0){
@@ -92,7 +91,7 @@ if(strlen($keyRequest) > 0){
 
     //Se l'utente non esiste o le credenziali immesse sono errate
     if($sql->affected == 0){
-        echo json_encode("Invalid users or password !");
+        echo json_encode("Invalid username or password !");
         return;
     }
 
