@@ -45,7 +45,7 @@ include "FD_Mysql.php";
 include "FD_Decrypt.php";
 
 if(!isset($_GET["gest"])){
-    echo json_encode("Invalid request !");
+    echo '{"error" : "Invalid request !"}';
     return;
 }
 
@@ -68,37 +68,61 @@ $gest = $_GET["gest"];
 $cripted=false; //DA IMPLEMENTARE
 
 if($gest == 1){
-    $query = $_POST["query"];
-    $type = $_POST["type"];
-    $cripted = $_POST["cripted"];
-    $keyRequest = $_POST["token"];
+    if(isset($_POST["query"])) {
+        $query = $_POST["query"];
+    }
+    if(isset($_POST["type"])) {
+        $type = $_POST["type"];
+    }
+    if(isset($_POST["cripted"])) {
+        $cripted = $_POST["cripted"];
+    }
+    if(isset($_POST["token"])) {
+        $keyRequest = $_POST["token"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
-    $query = $objData->query;
-    $type = $objData->type;
-    $cripted = $objData->cripted;
-    $keyRequest = $objData->token;
+    if(property_exists((object) $objData,"query")){
+        $query = $objData->query;
+    }
+    if(property_exists((object) $objData,"type")) {
+        $type = $objData->type;
+    }
+    if(property_exists((object) $objData,"cripted")) {
+        $cripted = $objData->cripted;
+    }
+    if(property_exists((object) $objData,"token")) {
+        $keyRequest = $objData->token;
+    }
 } else if($gest == 3) {
-    $query = $_GET["query"];
-    $type = $_GET["type"];
-    $cripted = $_GET["cripted"];
-    $keyRequest = $_GET["token"];
+    if(isset($_GET["query"])) {
+        $query = $_GET["query"];
+    }
+    if(isset($_GET["type"])) {
+        $type = $_GET["type"];
+    }
+    if(isset($_GET["cripted"])) {
+        $cripted = $_GET["cripted"];
+    }
+    if(isset($_GET["token"])) {
+        $keyRequest = $_GET["token"];
+    }
 }
 
 $keyRequest = strtolower($keyRequest);
 if($keyRequest != strtolower(md5_file("esatto.mp3"))){
-    echo json_encode("Invalid token !");
+    echo '{"error" : "Invalid token !"}';
     return;
 }
 
 if(strlen($query) == 0){
-    echo json_encode("Invalid query !");
+    echo '{"error" : "Invalid query !"}';
     return;
 }
 
 if(strlen($type) == 0){
-    echo json_encode("Invalid type !");
+    echo '{"error" : "Invalid type !"}';
     return;
 }
 
@@ -109,7 +133,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
 
     //Controllo che la connessione al DB sia andata a buon fine
     if(strlen($sql->lastError) > 0){
-        echo json_encode($sql->lastError);
+        echo '{"error" : "'.$sql->lastError.'"}';
         if($sql->connected){
             $sql->closeConnection();
         }
@@ -134,7 +158,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
     }
 
     if(strlen($sql->lastError) > 0){
-        echo json_encode($sql->lastError);
+        echo '{"error" : "'.$sql->lastError.'"}';
         if($sql->connected){
             $sql->closeConnection();
         }
@@ -151,7 +175,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
     //print_r($databox);
     echo $result;
 }else{
-    echo json_encode("Invalid request !");
+    echo '{"error" : "Invalid request !"}';
 }
 
 

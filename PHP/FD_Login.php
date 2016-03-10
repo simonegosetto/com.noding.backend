@@ -7,128 +7,154 @@
  * Time: 19:20
  */
 
+namespace {
+
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header('Access-Control-Allow-Credentials: true');
-    header('Access-Control-Max-Age: 86400');    // cache for 1 day
-}
+    if (isset($_SERVER['HTTP_ORIGIN'])) {
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Max-Age: 86400');    // cache for 1 day
+    }
 
 //Imposto tutti i metodi come abilitati
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
-    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-}
+        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    }
 
-ini_set('display_errors', 1);
+    ini_set('display_errors', 1);
 
-include "FD_Mysql.php";
-include "FD_Random.php";
-//include "FD_Decrypt.php";
+    include "FD_Mysql.php";
+    include "FD_Random.php";
+    use Lcobucci\JWT\Builder;
 
-if(!isset($_GET["gest"])){
-    echo json_encode("Invalid request !");
-    return;
-}
+    if (!isset($_GET["gest"])) {
+        echo '{"error" : "Invalid request !""}';
+        return;
+    }
 
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
-/**
- * gest:
- * 1 -> POST
- * 2 -> JSON
- * 3 -> GET
- */
-$gest = $_GET["gest"];
-
-if($gest == 1){
-    $keyRequest = $_POST["token"];
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-} else if($gest == 2) {
-    $data = file_get_contents("php://input");
-    $objData = json_decode($data);
-    $keyRequest = $objData->token;
-    $username =  $objData->username;
-    $password =  $objData->password;
-} else if($gest == 3) {
-    $keyRequest = $_GET["token"];
-    $username = $_GET["username"];
-    $password = $_GET["password"];
-}
-
-$keyRequest = strtolower($keyRequest);
-if($keyRequest != strtolower(md5_file("esatto.mp3"))){
-    echo json_encode("Invalid token !");
-    return;
-}
-
-if(strlen($keyRequest) > 0){
-    //echo $username." ".$password." ".$keyRequest;
-    //echo getcwd();
-    //Inizializzo componente SQL
-    $sql = new FD_Mysql($keyRequest);
-
-    //Controllo che la connessione al DB sia andata a buon fine
-    if(strlen($sql->lastError) > 0){
-        echo json_encode($sql->lastError);
-        echo "errore";
-        if($sql->connected){
-            $sql->closeConnection();
-        }
-        return;
-    }
-
-    //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('".$username."','".md5($password)."');");
-
-    if(strlen($sql->lastError) > 0){
-        echo json_encode($sql->lastError);
-        if($sql->connected){
-            $sql->closeConnection();
-        }
-        return;
-    }
-
-    //Se l'utente non esiste o le credenziali immesse sono errate
-    if($sql->affected == 0){
-        echo json_encode("Invalid username or password !");
-        return;
-    }
-
-    //Alloco variabile di sessione
-    $random = new FD_Random();
-    $array = json_decode($result, true);
-
-    $_SESSION['user_id'] = $array["id"];
-    $_SESSION['username'] = $username;
-    $_SESSION['email'] = $array["email"];
-    $_SESSION['admin'] = $array["admin"];
-    $_SESSION['ID'] = $random->Generate(50);
-
-    /*
-     * unset($_SESSION['username']);
-		  unset($_SESSION['email']);
-		  unset($_SESSION['name']);
-          unset($_SESSION['userid']);
-          session_destroy();
-		  session_regenerate_id();
-     *
+    /**
+     * gest:
+     * 1 -> POST
+     * 2 -> JSON
+     * 3 -> GET
      */
+    $gest = $_GET["gest"];
 
-    //Salvo nel log delle sessioni
-    $sql->executeSQL("call spFD_session_log(".$array["id"].",'".$_SESSION['ID']."');");
+    if ($gest == 1) {
+        if (isset($_POST["token"])) {
+            $keyRequest = $_POST["token"];
+        }
+        if (isset($_POST["username"])) {
+            $username = $_POST["username"];
+        }
+        if (isset($_POST["password"])) {
+            $password = $_POST["password"];
+        }
+    } else if ($gest == 2) {
+        $data = file_get_contents("php://input");
+        $objData = json_decode($data);
+        $keyRequest = $objData->token;
+        $username = $objData->username;
+        $password = $objData->password;
+    } else if ($gest == 3) {
+        if (isset($_GET["token"])) {
+            $keyRequest = $_GET["token"];
+        }
+        if (isset($_GET["username"])) {
+            $username = $_GET["username"];
+        }
+        if (isset($_GET["password"])) {
+            $password = $_GET["password"];
+        }
+    }
 
-    echo $sql->lastError;
+    $keyRequest = strtolower($keyRequest);
+    if ($keyRequest != strtolower(md5_file("esatto.mp3"))) {
+        echo '{"error" : "Invalid token !""}';
+        return;
+    }
 
-    //Chiudo connessione
-    $sql->closeConnection();
+    if (strlen($keyRequest) > 0) {
+        //echo $username." ".$password." ".$keyRequest;
+        //echo getcwd();
+        //Inizializzo componente SQL
+        $sql = new FD_Mysql($keyRequest);
 
-    echo $result;
-}else{
-    echo json_encode("Invalid request !");
+        //Controllo che la connessione al DB sia andata a buon fine
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            if ($sql->connected) {
+                $sql->closeConnection();
+            }
+            return;
+        }
+
+        //Eseguo la query di login
+        $result = $sql->exportJSON("call spFD_login('" . $username . "','" . md5($password) . "');");
+
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            if ($sql->connected) {
+                $sql->closeConnection();
+            }
+            return;
+        }
+
+        //Se l'utente non esiste o le credenziali immesse sono errate
+        if ($sql->affected == 0) {
+            echo '{"error" : "Invalid username or password !"}';
+            return;
+        }
+
+        //Alloco variabile di sessione
+        $random = new FD_Random();
+        $array = json_decode($result, true);
+
+        //Inizializzo la sessione
+        session_start();
+        $_SESSION['user_id'] = $array["id"];
+        $_SESSION['username'] = $username;
+        $_SESSION['email'] = $array["email"];
+        $_SESSION['admin'] = $array["admin"];
+        $_SESSION['ID'] = $random->Generate(50);
+
+        //Gestisco l'ID di sessione con lo standard JWT
+        $token = (new Builder())->setIssuer('http://example.com')// Configures the issuer (iss claim)
+        ->setAudience('http://example.org')// Configures the audience (aud claim)
+        ->setId('4f1g23a12aa', true)// Configures the id (jti claim), replicating as a header item
+        ->setIssuedAt(time())// Configures the time that the token was issue (iat claim)
+        ->setNotBefore(time() + 60)// Configures the time that the token can be used (nbf claim)
+        ->setExpiration(time() + 3600)// Configures the expiration time of the token (exp claim)
+        ->set('uid', 1)// Configures a new claim, called "uid"
+        ->getToken(); // Retrieves the generated token
+        $token->getHeaders(); // Retrieves the token headers
+        $token->getClaims(); // Retrieves the token claims
+        echo $token; // The string representation of the object is a JWT string (pretty easy, right?)
+
+        /*
+         * unset($_SESSION['username']);
+              unset($_SESSION['email']);
+              unset($_SESSION['name']);
+              unset($_SESSION['userid']);
+              session_destroy();
+              session_regenerate_id();
+         *
+         */
+
+        //Salvo nel log delle sessioni
+        $sql->executeSQL("call spFD_session_log(" . $array["id"] . ",'" . $_SESSION['ID'] . "');");
+
+        //Chiudo connessione
+        $sql->closeConnection();
+
+        echo $result;
+    } else {
+        echo '{"error" : "Invalid request !""}';
+    }
 }
-
 
