@@ -23,7 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+ini_set('display_errors', 1);
+
 include "FD_Mysql.php";
+include "FD_Random.php";
 //include "FD_Decrypt.php";
 
 if(!isset($_GET["gest"])){
@@ -63,7 +66,8 @@ if($keyRequest != strtolower(md5_file("esatto.mp3"))){
 }
 
 if(strlen($keyRequest) > 0){
-
+    //echo $username." ".$password." ".$keyRequest;
+    //echo getcwd();
     //Inizializzo componente SQL
     $sql = new FD_Mysql($keyRequest);
 
@@ -79,7 +83,6 @@ if(strlen($keyRequest) > 0){
 
     //Eseguo la query di login
     $result = $sql->exportJSON("call spFD_login('".$username."','".md5($password)."');");
-    echo "stored";
 
     if(strlen($sql->lastError) > 0){
         echo json_encode($sql->lastError);
@@ -96,10 +99,29 @@ if(strlen($keyRequest) > 0){
     }
 
     //Alloco variabile di sessione
-    session_start();
+    $random = new FD_Random();
+    $array = json_decode($result, true);
+
+    $_SESSION['user_id'] = $array["id"];
     $_SESSION['username'] = $username;
-    $_SESSION['email'] = $sql->result[0]["email"];
-    $_SESSION['admin'] = $sql->result[0]["admin"];
+    $_SESSION['email'] = $array["email"];
+    $_SESSION['admin'] = $array["admin"];
+    $_SESSION['ID'] = $random->Generate(50);
+
+    /*
+     * unset($_SESSION['username']);
+		  unset($_SESSION['email']);
+		  unset($_SESSION['name']);
+          unset($_SESSION['userid']);
+          session_destroy();
+		  session_regenerate_id();
+     *
+     */
+
+    //Salvo nel log delle sessioni
+    $sql->executeSQL("call spFD_session_log(".$array["id"].",'".$_SESSION['ID']."');");
+
+    echo $sql->lastError;
 
     //Chiudo connessione
     $sql->closeConnection();
