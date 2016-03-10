@@ -19,6 +19,7 @@ class FD_Url {
     var $MOBILE_TYPE;
     var $IP_ADDRESS;
     var $LOCALE = "";
+
    /*
     'GATEWAY_INTERFACE',
     'SERVER_ADDR',
