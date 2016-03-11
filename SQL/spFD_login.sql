@@ -11,7 +11,10 @@ BEGIN
   -- Controllo che esista l'utente
   IF (select 1 from users where username = in_username and password = in_password) > 0 then
    BEGIN
-    select u.*,
+    select u.id,
+          u.username,
+          u.email,
+          u.admin,
           a.azi_desc,
           a.azi_db
     from users u

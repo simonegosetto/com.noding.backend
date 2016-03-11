@@ -7,17 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="PHP">
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/PHP/vendor/composer" />
-          <root url="file://$MODULE_DIR$/PHP/vendor/lcobucci/jwt" />
-        </CLASSES>
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/PHP/vendor/composer" />
-          <root url="file://$MODULE_DIR$/PHP/vendor/lcobucci/jwt" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
