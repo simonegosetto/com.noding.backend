@@ -42,15 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 include "FD_Mysql.php";
-include "FD_Decrypt.php";
+include "FD_Crypt.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
     return;
 }
-
-//Oggetto di output (per ora faccio l'output del json in un unico array, successivamente possiamo anche gestire un array di oggetti più complesso)
-//$databox = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
 
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
 /**
@@ -78,7 +75,7 @@ if($gest == 1){
         $cripted = $_POST["cripted"];
     }
     if(isset($_POST["token"])) {
-        $keyRequest = $_POST["token"];
+        $token = $_POST["token"];
     }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
@@ -93,7 +90,7 @@ if($gest == 1){
         $cripted = $objData->cripted;
     }
     if(property_exists((object) $objData,"token")) {
-        $keyRequest = $objData->token;
+        $token = $objData->token;
     }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
@@ -106,11 +103,31 @@ if($gest == 1){
         $cripted = $_GET["cripted"];
     }
     if(isset($_GET["token"])) {
-        $keyRequest = $_GET["token"];
+        $token = $_GET["token"];
     }
 }
 
-$keyRequest = strtolower($keyRequest);
+//Prendo il token di sessione dell'utente e controllo che sia valido
+if(strlen($token)>0){
+    $crypt = new FD_Crypt();
+    $token2 = $crypt->simple_crypt($token,"decrypt");
+    $token_array = explode(",",$token2);
+    if(count($token_array) == 3) {
+        $keyRequest = strtolower($token_array[1]);
+    }else{
+        echo '{"error" : "Invalid token !"}';
+        return;
+    }
+}else{
+    echo '{"error" : "Invalid token !"}';
+    return;
+}
+
+if(strlen($keyRequest) == 0){
+    echo '{"error" : "Invalid token !"}';
+    return;
+}
+
 if($keyRequest != strtolower(md5_file("esatto.mp3"))){
     echo '{"error" : "Invalid token !"}';
     return;
@@ -167,12 +184,6 @@ if(strlen($query) > 0 && strlen($type) > 0){
 
     $sql->closeConnection();
 
-    /*
-        $databox["errormessage"] = $sql->lastError;
-        $databox["recordset"] = $result;
-        $databox["affected"] = $sql->affected;
-    */
-    //print_r($databox);
     echo $result;
 }else{
     echo '{"error" : "Invalid request !"}';

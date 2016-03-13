@@ -56,9 +56,15 @@ if ($gest == 1) {
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
-    $keyRequest = $objData->token;
-    $username = $objData->username;
-    $password = $objData->password;
+    if(property_exists((object) $objData,"token")) {
+        $keyRequest = $objData->token;
+    }
+    if(property_exists((object) $objData,"username")) {
+        $username = $objData->username;
+    }
+    if(property_exists((object) $objData,"password")) {
+        $password = $objData->password;
+    }
 } else if ($gest == 3) {
     if (isset($_GET["token"])) {
         $keyRequest = $_GET["token"];
@@ -109,15 +115,14 @@ if (strlen($keyRequest) > 0) {
         return;
     }
 
-    //echo $result;
-
     //Alloco variabile di sessione
     $random = new FD_Random();
     $crypt = new FD_Crypt();
     $array = json_decode($result, true);
     $date = new DateTime();
-    //$token = $crypt->encrypt($random->Generate(10).",".$keyRequest);//.",".$date->format('Y-m-d H:i:s'));
-    $token = $keyRequest;
+    //$salt = 'FDFilSimVerGosDV';
+    $token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
+    //$token = $crypt->login_encrypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
 
     //Inizializzo la sessione
     /*
