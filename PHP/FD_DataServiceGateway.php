@@ -77,6 +77,9 @@ if($gest == 1){
     if(isset($_POST["token"])) {
         $token = $_POST["token"];
     }
+    if(isset($_POST["database"])) {
+        $database = $_POST["database"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -92,6 +95,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"token")) {
         $token = $objData->token;
     }
+    if(property_exists((object) $objData,"database")) {
+        $database = $objData->database;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -104,6 +110,9 @@ if($gest == 1){
     }
     if(isset($_GET["token"])) {
         $token = $_GET["token"];
+    }
+    if(isset($_GET["database"])) {
+        $database = $_GET["database"];
     }
 }
 
@@ -168,8 +177,10 @@ if(strlen($query) > 0 && strlen($type) > 0){
 
     //Eseguo la query
     if($type == 1){
+        $sql->UseDB($database);
         $result = $sql->exportJSON($query);
     }else{
+        $sql->UseDB($database);
         $result = "";
         $sql->executeSQL($query);
     }
