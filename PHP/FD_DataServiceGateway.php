@@ -132,6 +132,11 @@ if(strlen($token)>0){
     return;
 }
 
+if(strlen($database) == 0){
+    echo '{"error" : "Invalid database !"}';
+    return;
+}
+
 if(strlen($keyRequest) == 0){
     echo '{"error" : "Invalid token !"}';
     return;
@@ -175,12 +180,34 @@ if(strlen($query) > 0 && strlen($type) > 0){
     }
     */
 
+    //Check abilitazione DB
+    $sql->CheckDB($token,$database);
+    if(strlen($sql->lastError) > 0){
+        echo '{"error" : "'.$sql->lastError.'"}';
+        if($sql->connected){
+            $sql->closeConnection();
+        }
+        return;
+    }
+    if($sql->affected == 0){
+        echo '{"error" : "Invalid db for this user !"}';
+        return;
+    }
+
+    //Seleziono il DB
+    $sql->UseDB($database);
+    if(strlen($sql->lastError) > 0){
+        echo '{"error" : "'.$sql->lastError.'"}';
+        if($sql->connected){
+            $sql->closeConnection();
+        }
+        return;
+    }
+
     //Eseguo la query
     if($type == 1){
-        $sql->UseDB($database);
         $result = $sql->exportJSON($query);
     }else{
-        $sql->UseDB($database);
         $result = "";
         $sql->executeSQL($query);
     }

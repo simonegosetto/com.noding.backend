@@ -167,6 +167,11 @@ class FD_Mysql {
         }
     }
 
+    //Controllo abilitazione DB
+    public function CheckDB($token,$db){
+        $this->executeSQL("call spFD_CheckDB('"+$token+"','"+$db+"');");
+    }
+
     //Esecuzione della query
     public function executeSQL($query){
         $this->lastQuery = $query;
