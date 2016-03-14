@@ -42,7 +42,6 @@ class FD_Mysql {
             $this->Connect();
         }else{
             $this->validatedRequest=false;
-            //echo "Richiesta al server non valida";
             $this->lastError="Richiesta al server non valida";
         }
     }
