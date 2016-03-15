@@ -62,6 +62,8 @@ class FD_Mysql {
         }
 
         $this->connected = true;
+        //Imposto il charset che mi aiuta nell'estrazione corretta dei dati
+        mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
 
@@ -284,6 +286,7 @@ class FD_Mysql {
     //Funzione che mi esporta il risultato della query in JSON
     public function exportJSON($query){
         $this->executeSQL($query);
+        //var_dump($this->arrayedResult);
 
         /*$table=array();
         while($row=mysql_fetch_object($this->result)){

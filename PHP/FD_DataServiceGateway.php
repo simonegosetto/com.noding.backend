@@ -157,7 +157,7 @@ if(strlen($type) == 0){
     return;
 }
 
-if(strlen($query) > 0 && strlen($type) > 0){
+if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
     //Inizializzo componente SQL
     $sql = new FD_Mysql($keyRequest);
@@ -170,6 +170,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
         }
         return;
     }
+
     /*
     //Se criptata ricavo la query reale
     if($cripted == true) {
@@ -195,7 +196,11 @@ if(strlen($query) > 0 && strlen($type) > 0){
     }
 */
     //Seleziono il DB
-    $sql->UseDB($database);
+    if(!$sql->UseDB($database)){
+        echo '{"error" : "Invalid database"}';
+        return;
+    }
+
     if(strlen($sql->lastError) > 0){
         echo '{"error" : "'.$sql->lastError.'"}';
         if($sql->connected){
