@@ -6,7 +6,7 @@ CREATE PROCEDURE spFD_databases ()
 
 BEGIN
 
- show databases
+ show databases;
 
 END$$
 

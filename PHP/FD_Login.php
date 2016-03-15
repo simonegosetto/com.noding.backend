@@ -120,9 +120,7 @@ if (strlen($keyRequest) > 0) {
     $crypt = new FD_Crypt();
     $array = json_decode($result, true);
     $date = new DateTime();
-    //$salt = 'FDFilSimVerGosDV';
     $token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
-    //$token = $crypt->login_encrypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
 
     //Inizializzo la sessione
     /*

@@ -152,7 +152,6 @@ class FD_Mysql {
     //Chiusura connessione al DB
     public function closeConnection(){
         mysqli_close($this->conn);
-        //echo "\nDisconnesso";
     }
 
     //Pulisce il buffer della connessione dalle precedenti query
@@ -168,7 +167,8 @@ class FD_Mysql {
 
     //Controllo abilitazione DB
     public function CheckDB($token,$db){
-        $this->executeSQL("call spFD_CheckDB('"+$token+"','"+$db+"');");
+        $this->executeSQL("call spFD_CheckDB('"+$token+"','"+$db+"'')");
+        //echo "call spFD_CheckDB('"+$token+"','"+$db+"');";
     }
 
     //Esecuzione della query
@@ -193,7 +193,6 @@ class FD_Mysql {
             //echo "Query eseguita correttamente !";
         }else{
             $this->lastError = mysqli_error($this->conn);
-            //echo "Errore nella query: ".$this->lastError;
             return false;
         }
     }
@@ -230,7 +229,6 @@ class FD_Mysql {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
             }else{
-                //echo "Database selezionato: ".$this->database."\n";
                 return true;
             }
         }else{
@@ -238,7 +236,6 @@ class FD_Mysql {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
             }else{
-                //echo "Database selezionato: ".$this->database."\n";
                 return true;
             }
         }

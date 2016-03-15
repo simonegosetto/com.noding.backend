@@ -179,7 +179,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
         $query = $dec->decrypt($query);
     }
     */
-
+/*
     //Check abilitazione DB
     $sql->CheckDB($token,$database);
     if(strlen($sql->lastError) > 0){
@@ -193,7 +193,7 @@ if(strlen($query) > 0 && strlen($type) > 0){
         echo '{"error" : "Invalid db for this user !"}';
         return;
     }
-
+*/
     //Seleziono il DB
     $sql->UseDB($database);
     if(strlen($sql->lastError) > 0){
