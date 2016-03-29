@@ -18,12 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 include "FD_Crypt.php";
 
-if(!isset($_POST["qrcontent"])){
+$data = file_get_contents("php://input");
+$objData = json_decode($data);
+
+if(property_exists((object) $objData,"qrcontent")){
+    $stringa = $objData->qrcontent;
+}else{
     echo '{"error" : "Invalid request !"}';
     return;
 }
-
-$stringa = $_POST["qrcontent"];
 
 $crypt = new FD_Crypt();
 $result = $crypt->simple_crypt($stringa);
