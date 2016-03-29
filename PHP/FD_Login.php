@@ -53,6 +53,9 @@ if ($gest == 1) {
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
     }
+    if (isset($_POST["suffix"])) {
+        $suffix = $_POST["suffix"];
+    }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -65,6 +68,9 @@ if ($gest == 1) {
     if(property_exists((object) $objData,"password")) {
         $password = $objData->password;
     }
+    if(property_exists((object) $objData,"suffix")) {
+        $suffix = $objData->suffix;
+    }
 } else if ($gest == 3) {
     if (isset($_GET["token"])) {
         $keyRequest = $_GET["token"];
@@ -74,6 +80,9 @@ if ($gest == 1) {
     }
     if (isset($_GET["password"])) {
         $password = $_GET["password"];
+    }
+    if (isset($_GET["suffix"])) {
+        $suffix = $_GET["suffix"];
     }
 }
 
@@ -87,7 +96,7 @@ if (strlen($keyRequest) > 0) {
     //echo $username." ".$password." ".$keyRequest;
     //echo getcwd();
     //Inizializzo componente SQL
-    $sql = new FD_Mysql($keyRequest);
+    $sql = new FD_Mysql($keyRequest,$suffix);
 
     //Controllo che la connessione al DB sia andata a buon fine
     if (strlen($sql->lastError) > 0) {

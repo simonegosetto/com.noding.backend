@@ -80,6 +80,9 @@ if($gest == 1){
     if(isset($_POST["database"])) {
         $database = $_POST["database"];
     }
+    if (isset($_POST["suffix"])) {
+        $suffix = $_POST["suffix"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -98,6 +101,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"database")) {
         $database = $objData->database;
     }
+    if(property_exists((object) $objData,"suffix")) {
+        $suffix = $objData->suffix;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -113,6 +119,9 @@ if($gest == 1){
     }
     if(isset($_GET["database"])) {
         $database = $_GET["database"];
+    }
+    if (isset($_GET["suffix"])) {
+        $suffix = $_GET["suffix"];
     }
 }
 
@@ -160,7 +169,7 @@ if(strlen($type) == 0){
 if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
     //Inizializzo componente SQL
-    $sql = new FD_Mysql($keyRequest);
+    $sql = new FD_Mysql($keyRequest,$suffix);
 
     //Controllo che la connessione al DB sia andata a buon fine
     if(strlen($sql->lastError) > 0){

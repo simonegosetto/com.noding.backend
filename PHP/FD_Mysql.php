@@ -25,12 +25,16 @@ class FD_Mysql {
 	 * *******************/
 
     //Costruttore
-    function FD_Mysql($keyRequest=""){
+    function FD_Mysql($keyRequest="",$suffix=""){
         $this->key = strtolower(md5_file("esatto.mp3"));
         if($keyRequest == $this->key){
             $this->validatedRequest=true;
 
-            $ini_array = parse_ini_file("config.inc.ini");
+            if(strlen($suffix) > 0){
+                $ini_array = parse_ini_file("config.inc_".$suffix.".ini");
+            }else {
+                $ini_array = parse_ini_file("config.inc.ini");
+            }
             $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
             $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
             if(strlen($ini_array["password"]) > 0){
