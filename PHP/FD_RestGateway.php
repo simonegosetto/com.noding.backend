@@ -22,6 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+//prendo parametri in ingresso
+$data = file_get_contents("php://input");
+$objData = json_decode($data);
+if(property_exists((object) $objData,"username")){
+    $username = $objData->username;
+}
+if(property_exists((object) $objData,"password")) {
+    $password = $objData->password;
+}
+
+if(strlen($username) == 0){
+    echo '{"error" : "Username non valido !""}';
+    return;
+}
+
+if(strlen($password) == 0){
+    echo '{"error" : "Password non valida !""}';
+    return;
+}
+
+/*
 function httpGet($url){
     // Get cURL resource
     $curl = curl_init();
@@ -37,66 +58,51 @@ function httpGet($url){
     curl_close($curl);
     //return $resp;
 }
-
+*/
+/*
 $url = 'http://xxx.volontapp.it/form_login/';
-httpGet($url);
-
-$ch = curl_init('http://xxx.volontapp.it/form_login/');
+$ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-// get headers too with this line
 curl_setopt($ch, CURLOPT_HEADER, 1);
 $result = curl_exec($ch);
-// get cookie
-// multi-cookie variant contributed by @Combuster in comments
 preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $result, $matches);
 $cookies = array();
 foreach($matches[1] as $item) {
     parse_str($item, $cookie);
     $cookies = array_merge($cookies, $cookie);
 }
-var_dump($cookies);
 
+echo $cookies["csrftoken"];
+*/
 
 //Metodo per la richiesta POST al server API
-function httpPost($url, $data){
+function httpPost($url, $data){//, $token){
     $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_POST, 1);
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HEADER, 1);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $response = curl_exec($curl);
     curl_close($curl);
     return $response;
 }
 
-
-/*
-
-$url = 'http://xxx.volontapp.it/api-auth/login/';
-setcookie("csrftoken", 'WsR9AJCYpMJGbyoJx43mARgatu1VdKZY');
-$data = array( 'csrfmiddlewaretoken' => 'WsR9AJCYpMJGbyoJx43mARgatu1VdKZY',
-               //'csrftoken' => 'WsR9AJCYpMJGbyoJx43mARgatu1VdKZY',
-               //'csrf_token' => 'WsR9AJCYpMJGbyoJx43mARgatu1VdKZY',
-               'next' => '/persone/rest_api/persone/',
-               'username' => 'xxx',
-               'password' => 'volontapp');
-
-echo httpPost($url,$data);
-
-*/
-
-/*
-include("restclient.php");
-
-$api = new RestClient(array(
-        'base_url' => "http://xxx.volontapp.it/",
-        'format' => "json")
+$url = 'http://xxx.volontapp.it/form_login/';
+//setcookie("csrftoken",$cookies["csrftoken"],time()+3600,"/","xxx.volontapp.it");
+$data = array( //'csrfmiddlewaretoken' => $cookies["csrftoken"],
+               'username' => $username,
+               'password' => $password
 );
-$result = $api->get("api-auth/login/");
 
-if($result->info->http_code < 400) {
-    echo "success:<br/><br/>";
-} else {
-    echo "failed:<br/><br/>";
+$result = httpPost($url,$data);
+
+//setaccio l'header per prendermi i parametri per il cookie
+preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $result, $matches);
+$cookies = array();
+foreach($matches[1] as $item) {
+    parse_str($item, $cookie);
+    $cookies = array_merge($cookies, $cookie);
 }
-echo $result->response;
-*/
+
+echo  json_encode($cookies);
