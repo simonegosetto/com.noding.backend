@@ -49,6 +49,8 @@ if(!isset($_GET["gest"])){
     return;
 }
 
+$crypt = new FD_Crypt();
+
 //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
 /**
  * gest:
@@ -83,6 +85,10 @@ if($gest == 1){
     if (isset($_POST["suffix"])) {
         $suffix = $_POST["suffix"];
     }
+    if (isset($_POST["timbratura"])) {
+        $timbratura = $_POST["timbratura"];
+        $totem = $_POST["totem"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -104,6 +110,10 @@ if($gest == 1){
     if(property_exists((object) $objData,"suffix")) {
         $suffix = $objData->suffix;
     }
+    if(property_exists((object) $objData,"timbratura")) {
+        $timbratura = $objData->timbratura;
+        $totem = $objData->totem;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -123,11 +133,14 @@ if($gest == 1){
     if (isset($_GET["suffix"])) {
         $suffix = $_GET["suffix"];
     }
+    if (isset($_GET["timbratura"])) {
+        $timbratura = $_GET["timbratura"];
+        $totem = $_GET["totem"];
+    }
 }
 
 //Prendo il token di sessione dell'utente e controllo che sia valido
 if(strlen($token)>0){
-    $crypt = new FD_Crypt();
     $token2 = $crypt->simple_crypt($token,"decrypt");
     $token_array = explode(",",$token2);
     if(count($token_array) == 3) {
@@ -164,6 +177,19 @@ if(strlen($query) == 0){
 if(strlen($type) == 0){
     echo '{"error" : "Invalid type !"}';
     return;
+}
+
+if($timbratura == 1){
+    if(strlen($totem) == 0){
+        echo '{"error" : "Timbratura non valida !"}';
+        return;
+    }
+    $totem2 = $crypt->simple_crypt($totem,"decrypt");
+    $totem_array = json_decode($totem2, true);
+    if($totem_array["action"] == "marcatura_ingresso") {
+        $type = 2;
+        $query = "call spFD_GestioneTimbratura(".$totem_array["sede"].",NOW(),'".$token."');";
+    }
 }
 
 if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
