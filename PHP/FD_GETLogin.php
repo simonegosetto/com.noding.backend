@@ -25,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 ini_set('display_errors', 1);
 
 include "FD_Mysql.php";
-include "FD_Random.php";
-include "FD_Crypt.php";
 include "FD_Url.php";
 
 if (!isset($_GET["gest"])) {
@@ -99,17 +97,12 @@ if(strlen($keyRequest)>0) {
 }
 
 if (strlen($keyRequest) > 0) {
-    //echo $username." ".$password." ".$keyRequest;
-    //echo getcwd();
     //Inizializzo componente SQL
     $sql = new FD_Mysql($keyRequest,$suffix);
 
     //Controllo che la connessione al DB sia andata a buon fine
-    if (strlen($sql->lastError) > 0) {
-        echo '{"error" : "' . $sql->lastError . '"}';
-        if ($sql->connected) {
-            $sql->closeConnection();
-        }
+    if (!$sql->connected) {
+        echo '{"error" : "Errore di connessione al DB"}';
         return;
     }
 
@@ -119,8 +112,16 @@ if (strlen($keyRequest) > 0) {
     //Salvo nel log delle richieste GET
     $sql->executeSQL("call spFD_GetRequest('" . $username . "','" . $password . "','".$url->IP_ADDRESS."');");
 
+    if (strlen($sql->lastError) > 0) {
+        echo '{"error" : "' . $sql->lastError . '"}';
+        if ($sql->connected) {
+            $sql->closeConnection();
+        }
+        return;
+    }
+
     //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . $password . "');");
+    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . md5($password) . "');");
 
     if (strlen($sql->lastError) > 0) {
         echo '{"error" : "' . $sql->lastError . '"}';

@@ -87,6 +87,8 @@ if($gest == 1){
     }
     if (isset($_POST["timbratura"])) {
         $timbratura = $_POST["timbratura"];
+    }
+    if (isset($_POST["totem"])) {
         $totem = $_POST["totem"];
     }
 } else if($gest == 2) {
@@ -112,6 +114,8 @@ if($gest == 1){
     }
     if(property_exists((object) $objData,"timbratura")) {
         $timbratura = $objData->timbratura;
+    }
+    if(property_exists((object) $objData,"totem")) {
         $totem = $objData->totem;
     }
 } else if($gest == 3) {
@@ -135,6 +139,8 @@ if($gest == 1){
     }
     if (isset($_GET["timbratura"])) {
         $timbratura = $_GET["timbratura"];
+    }
+    if (isset($_GET["totem"])) {
         $totem = $_GET["totem"];
     }
 }
@@ -179,16 +185,19 @@ if(strlen($type) == 0){
     return;
 }
 
-if($timbratura == 1){
-    if(strlen($totem) == 0){
-        echo '{"error" : "Timbratura non valida !"}';
-        return;
-    }
-    $totem2 = $crypt->simple_crypt($totem,"decrypt");
-    $totem_array = json_decode($totem2, true);
-    if($totem_array["action"] == "marcatura_ingresso") {
-        $type = 2;
-        $query = "call spFD_GestioneTimbratura(".$totem_array["sede"].",NOW(),'".$token."');";
+if(isset($timbratura)) {
+    if ($timbratura == 1) {
+        if (!$totem) {
+            echo '{"error" : "Timbratura non valida !"}';
+            return;
+        }
+        $totem = json_decode(json_encode($totem), true);
+        $totem2 = $crypt->simple_crypt($totem["text"], "decrypt");
+        $totem_array = json_decode($totem2, true);
+        if ($totem_array["action"] == "marcatura_ingresso") {
+            $type = 2;
+            $query = "call spFD_GestioneTimbratura(" . $totem_array["sede"] . ",NOW(),'" . $token . "');";
+        }
     }
 }
 

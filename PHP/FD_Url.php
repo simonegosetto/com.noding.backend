@@ -19,6 +19,7 @@ class FD_Url {
     var $MOBILE_TYPE;
     var $IP_ADDRESS;
     var $LOCALE = "";
+    var $defLocale = 'it-IT';
 
    /*
     'GATEWAY_INTERFACE',
@@ -107,7 +108,7 @@ class FD_Url {
             }
         }
         if(strlen($this->LOCALE) == 0){
-            $this->LOCALE = defLocale;
+            $this->LOCALE = $defLocale;
         }
 
     }
