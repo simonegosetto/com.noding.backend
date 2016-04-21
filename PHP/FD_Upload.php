@@ -53,6 +53,9 @@ if ($gest == 1) {
     if (isset($_POST["token"])) {
         $token = $_POST["token"];
     }
+    if (isset($_POST["avatar"])) {
+        $avatar = $_POST["avatar"];
+    }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -62,12 +65,18 @@ if ($gest == 1) {
     if (property_exists((object)$objData, "token")) {
         $token = $objData->token;
     }
+    if (property_exists((object)$objData, "avatar")) {
+        $avatar = $objData->avatar;
+    }
 } else if ($gest == 3) {
     if (isset($_GET["tipo"])) {
         $tipo = $_GET["tipo"];
     }
     if (isset($_GET["token"])) {
         $token = $_GET["token"];
+    }
+    if (isset($_GET["avatar"])) {
+        $avatar = $_GET["avatar"];
     }
 }
 
@@ -202,13 +211,13 @@ if ($_FILES["file"]["error"] > 0) {
 } else if (($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/pjpeg")) {
     $random = new FD_Random();
     $name = $random->Generate(20);
-    //if($avatar == 1) {
+    if($avatar == 1) {
         $url = '../upload/avatar/'.$name.'.jpg';
-        $filename = resize_and_compression(100,100, $url, 80);
-    /*}else{
-        $url = '../upload/avatar/'+$name+'.jpg';
+        $filename = resize_and_compression(100 ,100, $url, 80);
+    }else{
+        $url = '../upload/post/'.$name.'.jpg';
         $filename = compress_image($_FILES["file"]["tmp_name"], $url, 80);
-    }*/
+    }
     /*$buffer = file_get_contents($url);
     header("Content-Type: application/force-download");
     header("Content-Type: application/octet-stream");
@@ -219,7 +228,7 @@ if ($_FILES["file"]["error"] > 0) {
     header("Content-Length: " . strlen($buffer));
     header("Content-Disposition: attachment; filename=$url");
     echo $buffer;*/
-    echo '{"result" : "Immagine caricata con successo !"}';
+    //echo '{"result" : "Immagine caricata con successo !"}';
 
     //Chiamata al databox per il salvataggio dell'immagine nel db
     $data = array(
@@ -229,7 +238,7 @@ if ($_FILES["file"]["error"] > 0) {
         "database" => "authDB",
         "suffix" => "volontapp"
     );
-    //echo httpPost("http://164.132.196.173/FD_Framework/FD_DataServiceGateway.php?gest=1",$data);
+    echo httpPost("http://164.132.196.173/FD_Framework/FD_DataServiceGateway.php?gest=1",$data);
 } else {
     echo '{"error" : "L\'immagine deve essere in formato JPG o PNG o GIF !"}';
 }
