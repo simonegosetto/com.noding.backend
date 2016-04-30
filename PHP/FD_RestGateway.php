@@ -31,6 +31,12 @@ if(property_exists((object) $objData,"username")){
 if(property_exists((object) $objData,"password")) {
     $password = $objData->password;
 }
+if(property_exists((object) $objData,"link")) {
+    $link = $objData->link;
+}
+if(property_exists((object) $objData,"db")) {
+    $db = $objData->db;
+}
 
 if(strlen($username) == 0){
     echo '{"error" : "Username non valido !""}';
@@ -39,6 +45,16 @@ if(strlen($username) == 0){
 
 if(strlen($password) == 0){
     echo '{"error" : "Password non valida !""}';
+    return;
+}
+
+if(strlen($link) == 0){
+    echo '{"error" : "Link non valido !""}';
+    return;
+}
+
+if(strlen($db) == 0){
+    echo '{"error" : "DB non valido !""}';
     return;
 }
 
@@ -88,17 +104,19 @@ function httpPost($url, $data){//, $token){
     return $response;
 }
 
-$url = 'http://xxx.volontapp.it/form_login/';
+$url = $link.'form_login/';
 //setcookie("csrftoken",$cookies["csrftoken"],time()+3600,"/","xxx.volontapp.it");
 $data = array( //'csrfmiddlewaretoken' => $cookies["csrftoken"],
                'username' => $username,
-               'password' => $password
+               'password' => $password,
+               'azi_db' => $db
 );
 
 $result = httpPost($url,$data);
 
 //setaccio l'header per prendermi i parametri per il cookie
 preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $result, $matches);
+//preg_match_all('/Set-Cookie: (.*?);/is', $result, $matches);
 $cookies = array();
 foreach($matches[1] as $item) {
     parse_str($item, $cookie);

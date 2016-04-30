@@ -114,8 +114,22 @@ if (strlen($keyRequest) > 0) {
         return;
     }
 
+    //salt
+    $result = $sql->exportJSON("call spFD_Salt('".$username."')");
+    //Controllo che la connessione al DB sia andata a buon fine
+    if (strlen($sql->lastError) > 0) {
+        echo '{"error" : "' . $sql->lastError . '"}';
+        if ($sql->connected) {
+            $sql->closeConnection();
+        }
+        return;
+    }
+    $salt = json_decode($result, true);
+    $crypt = new FD_Crypt();
+    $password = $crypt->Django_Crypt($password,$salt["salt"],20000);
+
     //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . md5($password) . "');");
+    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . $password . "');");
 
     if (strlen($sql->lastError) > 0) {
         echo '{"error" : "' . $sql->lastError . '"}';

@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 ini_set('display_errors', 1);
 
 include "FD_Mysql.php";
+include "FD_Crypt.php";
 include "FD_Url.php";
 
 if (!isset($_GET["gest"])) {
@@ -55,6 +56,9 @@ if ($gest == 1) {
     if (isset($_POST["suffix"])) {
         $suffix = $_POST["suffix"];
     }
+    if (isset($_POST["azi_db"])) {
+        $db = $_POST["azi_db"];
+    }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -70,6 +74,9 @@ if ($gest == 1) {
     if(property_exists((object) $objData,"suffix")) {
         $suffix = $objData->suffix;
     }
+    if(property_exists((object) $objData,"azi_db")) {
+        $db = $objData->azi_db;
+    }
 } else if ($gest == 3) {
     if (isset($_GET["token"])) {
         $keyRequest = $_GET["token"];
@@ -83,6 +90,9 @@ if ($gest == 1) {
     if (isset($_GET["suffix"])) {
         $suffix = $_GET["suffix"];
     }
+    if (isset($_GET["azi_db"])) {
+        $db = $_GET["azi_db"];
+    }
 }
 
 if(strlen($keyRequest)>0) {
@@ -93,6 +103,11 @@ if(strlen($keyRequest)>0) {
     }
 }else{
     echo '{"error" : "Invalid token !""}';
+    return;
+}
+
+if(strlen($db) == 0){
+    echo '{"error" : "Invalid db !""}';
     return;
 }
 
@@ -120,8 +135,22 @@ if (strlen($keyRequest) > 0) {
         return;
     }
 
+    //salt
+    $result = $sql->exportJSON("call spFD_Salt('".$username."')");
+    //Controllo che la connessione al DB sia andata a buon fine
+    if (strlen($sql->lastError) > 0) {
+        echo '{"error" : "' . $sql->lastError . '"}';
+        if ($sql->connected) {
+            $sql->closeConnection();
+        }
+        return;
+    }
+    $salt = json_decode($result, true);
+    $crypt = new FD_Crypt();
+    $password = $crypt->Django_Crypt($password,$salt["salt"],20000);
+    
     //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . md5($password) . "');");
+    $result = $sql->exportJSON("call spFD_GET('" . $username . "','" . $password . "','".$db."');");
 
     if (strlen($sql->lastError) > 0) {
         echo '{"error" : "' . $sql->lastError . '"}';

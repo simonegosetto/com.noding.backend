@@ -95,6 +95,7 @@ class FD_Url {
 
 
         //Prende lingua browser
+        /*
         $supportedLangs = array('it-IT', 'en');
 
         $languages = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -110,6 +111,7 @@ class FD_Url {
         if(strlen($this->LOCALE) == 0){
             $this->LOCALE = $defLocale;
         }
+        */
 
     }
 

@@ -82,7 +82,6 @@ if ($gest == 1) {
 
 //Dichiarazione variabili
 $name = '';
-$type = '';
 $size = '';
 $error = '';
 
@@ -211,33 +210,35 @@ if ($_FILES["file"]["error"] > 0) {
 } else if (($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/pjpeg")) {
     $random = new FD_Random();
     $name = $random->Generate(20);
-    if($avatar == 1) {
+    if($tipo == 1) {
         $url = '../upload/avatar/'.$name.'.jpg';
-        $filename = resize_and_compression(100 ,100, $url, 80);
+        $filename = resize_and_compression(150 ,150, $url, 90);
+    }else if($tipo == 2){
+        $url = '../upload/logo/'.$name.'.jpg';
+        $filename = resize_and_compression(150 ,150, $url, 90);//compress_image($_FILES["file"]["tmp_name"], $url, 90);
     }else{
         $url = '../upload/post/'.$name.'.jpg';
-        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 80);
+        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 100);
     }
-    /*$buffer = file_get_contents($url);
-    header("Content-Type: application/force-download");
-    header("Content-Type: application/octet-stream");
-    header("Content-Type: application/download");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Content-Type: application/octet-stream");
-    header("Content-Transfer-Encoding: binary");
-    header("Content-Length: " . strlen($buffer));
-    header("Content-Disposition: attachment; filename=$url");
-    echo $buffer;*/
-    //echo '{"result" : "Immagine caricata con successo !"}';
 
     //Chiamata al databox per il salvataggio dell'immagine nel db
-    $data = array(
-        "type" => "1",
-        "query" => "call spFD_updateAvatar('".$token."','".$name."');",
-        "token" => $token,
-        "database" => "authDB",
-        "suffix" => "volontapp"
-    );
+    if($tipo == 1) {
+        $data = array(
+            "type" => "1",
+            "query" => "call spFD_updateAvatar('" . $token . "','" . $name . "');",
+            "token" => $token,
+            "database" => "authDB",
+            "suffix" => "volontapp"
+        );
+    }else if($tipo == 2){
+        $data = array(
+            "type" => "1",
+            "query" => "call spFD_updateLogo('" . $token . "','" . $name . "');",
+            "token" => $token,
+            "database" => "authDB",
+            "suffix" => "volontapp"
+        );
+    }
     echo httpPost("http://164.132.196.173/FD_Framework/FD_DataServiceGateway.php?gest=1",$data);
 } else {
     echo '{"error" : "L\'immagine deve essere in formato JPG o PNG o GIF !"}';
