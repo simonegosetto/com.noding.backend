@@ -56,6 +56,9 @@ if ($gest == 1) {
     if (isset($_POST["avatar"])) {
         $avatar = $_POST["avatar"];
     }
+    if (isset($_POST["post_id"])) {
+        $post = $_POST["post_id"];
+    }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -68,6 +71,9 @@ if ($gest == 1) {
     if (property_exists((object)$objData, "avatar")) {
         $avatar = $objData->avatar;
     }
+    if (property_exists((object)$objData, "post_id")) {
+        $post = $objData->post_id;
+    }
 } else if ($gest == 3) {
     if (isset($_GET["tipo"])) {
         $tipo = $_GET["tipo"];
@@ -77,6 +83,9 @@ if ($gest == 1) {
     }
     if (isset($_GET["avatar"])) {
         $avatar = $_GET["avatar"];
+    }
+    if (isset($_GET["post_id"])) {
+        $post = $_GET["post_id"];
     }
 }
 
@@ -234,6 +243,14 @@ if ($_FILES["file"]["error"] > 0) {
         $data = array(
             "type" => "1",
             "query" => "call spFD_updateLogo('" . $token . "','" . $name . "');",
+            "token" => $token,
+            "database" => "authDB",
+            "suffix" => "volontapp"
+        );
+    }else if($tipo == 3){
+        $data = array(
+            "type" => "1",
+            "query" => "call spFD_immaginePost('" . $token . "','" . $name . "',".$post.");",
             "token" => $token,
             "database" => "authDB",
             "suffix" => "volontapp"
