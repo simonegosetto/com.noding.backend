@@ -39,22 +39,22 @@ if(property_exists((object) $objData,"db")) {
 }
 
 if(strlen($username) == 0){
-    echo '{"error" : "Username non valido !""}';
+    echo '{"error" : "Username non valido !"}';
     return;
 }
 
 if(strlen($password) == 0){
-    echo '{"error" : "Password non valida !""}';
+    echo '{"error" : "Password non valida !"}';
     return;
 }
 
 if(strlen($link) == 0){
-    echo '{"error" : "Link non valido !""}';
+    echo '{"error" : "Link non valido !"}';
     return;
 }
 
 if(strlen($db) == 0){
-    echo '{"error" : "DB non valido !""}';
+    echo '{"error" : "DB non valido !"}';
     return;
 }
 

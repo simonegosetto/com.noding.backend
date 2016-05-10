@@ -29,12 +29,14 @@ if(isset($_GET['sessionid'])){
     setcookie("sessionid", $_GET['sessionid'], time()+31556952000, "/");
 }
 
+/*
 if(isset($_GET['menu'])){
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     $domainName = $_SERVER['HTTP_HOST'].'/';
     //echo $protocol.$domainName;
     echo file_get_contents($protocol.$domainName."get_menu/");
 }
+*/
 
 if(isset($_GET['remove'])){
     unset($_COOKIE['sessionid']);

@@ -194,6 +194,7 @@ class FD_Mysql {
                 $this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
             }else{
+                $this->CleanBufferResults($this->conn);
                 return true;
             }
             //echo "Query eseguita correttamente !";

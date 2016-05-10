@@ -31,7 +31,7 @@ include "FD_Crypt.php";
 include "FD_Url.php";
 
 if (!isset($_GET["gest"])) {
-    echo '{"error" : "Invalid request !""}';
+    echo '{"error" : "Invalid request !"}';
     return;
 }
 
@@ -91,11 +91,11 @@ if ($gest == 1) {
 if(strlen($keyRequest)>0) {
     $keyRequest = strtolower($keyRequest);
     if ($keyRequest != strtolower(md5_file("esatto.mp3"))) {
-        echo '{"error" : "Invalid token !""}';
+        echo '{"error" : "Invalid token !"}';
         return;
     }
 }else{
-    echo '{"error" : "Invalid token !""}';
+    echo '{"error" : "Invalid token !"}';
     return;
 }
 
@@ -141,7 +141,10 @@ if (strlen($keyRequest) > 0) {
 
     //Se l'utente non esiste o le credenziali immesse sono errate
     if ($sql->affected == 0) {
-        echo '{"error" : "Invalid username or password !"}';
+        echo '{"error" : "Le credenziali inserite non sono corrette !"}';
+        if ($sql->connected) {
+            $sql->closeConnection();
+        }
         return;
     }
 
@@ -197,7 +200,7 @@ if (strlen($keyRequest) > 0) {
 
     echo '{"user":' . $result .',"token": {"token" : "'.$token.'"}}';
 } else {
-    echo '{"error" : "Invalid request !""}';
+    echo '{"error" : "Invalid request !"}';
 }
 
 
