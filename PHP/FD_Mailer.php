@@ -37,7 +37,7 @@ class FD_Mailer {
             $this->mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
             $this->mail->Port = 587;
             $this->mail->setFrom('app@volontapp.it', 'VolontApp');
-            $this->mail->addAddress('simone.gosetto@gmail.com', 'Commerciale VolontApp'); // Name is optional
+            $this->mail->addAddress('commerciale@volontapp.it', 'Commerciale VolontApp'); // Name is optional
             //$mail->addAddress('ellen@example.com');
             //$mail->addReplyTo('info@example.com', 'Information');
             //$mail->addCC('cc@example.com');
