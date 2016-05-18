@@ -227,7 +227,7 @@ if ($_FILES["file"]["error"] > 0) {
         $filename = resize_and_compression(150 ,150, $url, 90);//compress_image($_FILES["file"]["tmp_name"], $url, 90);
     }else{
         $url = '../upload/post/'.$name.'.jpg';
-        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 80);
+        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 30);
     }
 
     //Chiamata al databox per il salvataggio dell'immagine nel db

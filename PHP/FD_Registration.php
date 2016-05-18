@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 include "FD_Mysql.php";
 include "FD_Crypt.php";
 include "FD_Random.php";
+include "FD_Mailer.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
@@ -65,6 +66,9 @@ if($gest == 1){
     if (isset($_POST["suffix"])) {
         $suffix = $_POST["suffix"];
     }
+    if (isset($_POST["mail"])) {
+        $mail = $_POST["mail"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -86,6 +90,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"suffix")) {
         $suffix = $objData->suffix;
     }
+    if(property_exists((object) $objData,"mail")) {
+        $mail = $objData->mail;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -104,6 +111,9 @@ if($gest == 1){
     }
     if (isset($_GET["suffix"])) {
         $suffix = $_GET["suffix"];
+    }
+    if (isset($_GET["mail"])) {
+        $mail = $_GET["mail"];
     }
 }
 
@@ -141,6 +151,15 @@ if(strlen($query) == 0){
 if(strlen($type) == 0){
     echo '{"error" : "Invalid type !"}';
     return;
+}
+
+//Gestione invio mail
+if(isset($mail)) {
+    if ($mail->gestione == 1) {
+        $mailer = new FD_Mailer();
+        $mailer->SendMail("volontapp",$mail);
+        return;
+    }
 }
 
 $crypt = new FD_Crypt();

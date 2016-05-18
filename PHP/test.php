@@ -1,22 +1,36 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Simone
- * Date: 11/04/2016
- * Time: 16:41
- */
+require 'PHPMailer/PHPMailerAutoload.php';
 
+$mail = new PHPMailer;
 
-$password = "volontapp";
-$iterations = 20000;
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
-// Generate a random IV using mcrypt_create_iv(),
-// openssl_random_pseudo_bytes() or another suitable source of randomness
-//$salt = mcrypt_create_iv(16, MCRYPT_DEV_URANDOM);
-$salt = "dpvPEF4ULic6";
+$mail->isSMTP();                                      // Set mailer to use SMTP
+$mail->Host = 'smtp.volontapp.it';  // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                               // Enable SMTP authentication
+$mail->Username = 'app@volontapp.it';                 // SMTP username
+$mail->Password = 'VappStiip10';                           // SMTP password
+$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 587;                                    // TCP port to connect to
 
-//$app = sha1($salt.$password);
-$app = base64_encode(hash_pbkdf2("sha256", $password, $salt, $iterations, 32, true));
+$mail->setFrom('app@volontapp.it', 'VolontApp');
+$mail->addAddress('simone.gosetto@gmail.com', 'Joe User');     // Add a recipient
+//$mail->addAddress('ellen@example.com');               // Name is optional
+//$mail->addReplyTo('info@example.com', 'Information');
+//$mail->addCC('cc@example.com');
+//$mail->addBCC('bcc@example.com');
 
-echo 'Get pass: pbkdf2_sha256$20000$dpvPEF4ULic6$owb9r+a/Td9LRzCuZVKWQnmAGQN+Ugnod9TOQvoaD4g='.'<br/>';
-echo 'Vap pass: pbkdf2_sha256$20000$'.$salt.'$'.$app;
+//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+$mail->isHTML(true);                                  // Set email format to HTML
+
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+if(!$mail->send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message has been sent';
+}

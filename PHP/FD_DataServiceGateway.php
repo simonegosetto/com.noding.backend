@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 include "FD_Mysql.php";
 include "FD_Crypt.php";
+include "FD_Mailer.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
@@ -91,6 +92,9 @@ if($gest == 1){
     if (isset($_POST["totem"])) {
         $totem = $_POST["totem"];
     }
+    if (isset($_POST["mail"])) {
+        $mail = $_POST["mail"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -118,6 +122,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"totem")) {
         $totem = $objData->totem;
     }
+    if(property_exists((object) $objData,"mail")) {
+        $mail = $objData->mail;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -142,6 +149,9 @@ if($gest == 1){
     }
     if (isset($_GET["totem"])) {
         $totem = $_GET["totem"];
+    }
+    if (isset($_GET["mail"])) {
+        $mail = $_GET["mail"];
     }
 }
 
@@ -185,6 +195,7 @@ if(strlen($type) == 0){
     return;
 }
 
+//Gestione timbratura
 if(isset($timbratura)) {
     if ($timbratura == 1) {
         if (!$totem) {
@@ -198,6 +209,15 @@ if(isset($timbratura)) {
             $type = 2;
             $query = "call spFD_GestioneTimbratura(" . $totem_array["sede"] . ",NOW(),'" . $token . "');";
         }
+    }
+}
+
+//Gestione invio mail
+if(isset($mail)) {
+    if ($mail->gestione == 1) {
+        $mailer = new FD_Mailer();
+        $mailer->SendMail("volontapp",$mail);
+        return;
     }
 }
 
