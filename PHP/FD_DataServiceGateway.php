@@ -329,7 +329,6 @@ if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
                 );
                 httpPost($url, $data, $request_headers);
                 */
-                echo $app;
                 httpPost($url, $app);
             }
         }
@@ -355,7 +354,7 @@ function httpPost($url, $data){
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($curl);
     curl_close($curl);
-    echo $response;
+    //echo $response;
 }
 
 
