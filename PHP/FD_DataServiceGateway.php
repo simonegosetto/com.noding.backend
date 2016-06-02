@@ -95,6 +95,9 @@ if($gest == 1){
     if (isset($_POST["mail"])) {
         $mail = $_POST["mail"];
     }
+    if (isset($_POST["push"])) {
+        $push = $_POST["push"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -125,6 +128,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"mail")) {
         $mail = $objData->mail;
     }
+    if(property_exists((object) $objData,"push")) {
+        $push = $objData->push;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -152,6 +158,9 @@ if($gest == 1){
     }
     if (isset($_GET["mail"])) {
         $mail = $_GET["mail"];
+    }
+    if (isset($_GET["push"])) {
+        $push = $_GET["push"];
     }
 }
 
@@ -289,11 +298,64 @@ if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
         return;
     }
 
+    //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
+    if(isset($push)) {
+        if($push == 1){
+            $array_push = json_decode($result, true);
+            $array_push_length = count($array_push);
+            if($array_push_length > 0) {
+                $ids = [];
+                $url = 'https://onesignal.com/api/v1/notifications';
+                if (isset($array_push["device_id"])) {
+                    $ids[0] = '"'.$array_push["device_id"].'"';
+                } else {
+                    for ($i = 0; $i < $array_push_length; $i++) {
+                        $ids[$i] = '"'.$array_push[$i]["device_id"].'"';
+                    }
+                }
+                $app = implode(",", $ids);
+                /*
+                $data = array(
+                    'app_id' => '9d51a497-90c3-4a92-898c-ac5950a88f0d',
+                    'include_player_ids' => [array($app)],//array(implode(",", $ids)),//json_encode($out),//'["' . $app . '""]',
+                    'data' => '{"foo": "bar"}',
+                    'isAndroid' => true,
+                    'isIos' => true,
+                    'contents' => array('en' => 'Hai un messaggio privato') //'{"en": "Hai un messaggio privato"}'
+                );
+                $request_headers = array(
+                    'Authorization' => 'Basic N2U1MmY1ZjYtYTBjYi00NWZkLWI2YzktYjdmZDE2M2MyYmNi',
+                    'Content-Type' => 'application/json'
+                );
+                httpPost($url, $data, $request_headers);
+                */
+                echo $app;
+                httpPost($url, $app);
+            }
+        }
+    }
+
     $sql->closeConnection();
 
     echo $result;
 }else{
     echo '{"error" : "Invalid request !"}';
+}
+
+//Metodo per la richiesta POST
+function httpPost($url, $data){
+    $curl = curl_init($url);
+    //curl_setopt($curl, CURLOPT_HTTPHEADER, $request_headers);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic N2U1MmY1ZjYtYTBjYi00NWZkLWI2YzktYjdmZDE2M2MyYmNi'));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_POST, 1); //"4f49e745-f0f7-478f-8454-855b04da52b8"
+    curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"9d51a497-90c3-4a92-898c-ac5950a88f0d\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Nuovo messaggio privato ricevuto\"}}");
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    echo $response;
 }
 
 

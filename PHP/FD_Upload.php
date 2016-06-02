@@ -225,8 +225,11 @@ if ($_FILES["file"]["error"] > 0) {
     }else if($tipo == 2){
         $url = '../upload/logo/'.$name.'.jpg';
         $filename = resize_and_compression(150 ,150, $url, 90);//compress_image($_FILES["file"]["tmp_name"], $url, 90);
-    }else{
+    }else if ($tipo == 3){
         $url = '../upload/post/'.$name.'.jpg';
+        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 30);
+    }else{
+        $url = '../upload/timbrature/'.$name.'.jpg';
         $filename = compress_image($_FILES["file"]["tmp_name"], $url, 30);
     }
 
@@ -256,7 +259,7 @@ if ($_FILES["file"]["error"] > 0) {
             "suffix" => "volontapp"
         );
     }
-    echo httpPost("http://164.132.196.173/FD_Framework/FD_DataServiceGateway.php?gest=1",$data);
+    echo httpPost("http://my.volontapp.it/FD_Framework/FD_DataServiceGateway.php?gest=1",$data);
 } else {
     echo '{"error" : "L\'immagine deve essere in formato JPG o PNG o GIF !"}';
 }
