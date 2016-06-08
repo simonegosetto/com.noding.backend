@@ -315,7 +315,7 @@ if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
                     }
                 }
                 $app = implode(",", $ids);
-                $pushNotification->SendOneSignal($data,1);
+                $pushNotification->SendOneSignal($data,$push);
             }
         }
     }

@@ -21,7 +21,6 @@ class FD_PushNotification
 
     //Metodo per la richiesta POST
     public function SendOneSignal($data,$tipo){
-        echo $tipo;
         $curl = curl_init($this->url);
         //curl_setopt($curl, CURLOPT_HTTPHEADER, $request_headers);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$this->Authorization));
@@ -29,7 +28,7 @@ class FD_PushNotification
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1); //"4f49e745-f0f7-478f-8454-855b04da52b8"
         if($tipo == 1) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\".$this->app_id.\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [" . $data . "],\"contents\": {\"en\":\"Nuovo messaggio privato ricevuto\"}}");
+            curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [" . $data . "],\"contents\": {\"en\":\"Nuovo messaggio privato ricevuto\"}}");
         }
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
