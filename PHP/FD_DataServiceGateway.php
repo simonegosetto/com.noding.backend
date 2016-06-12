@@ -45,6 +45,7 @@ include "FD_Mysql.php";
 include "FD_Crypt.php";
 include "FD_Mailer.php";
 include "FD_PushNotification.php";
+include "FD_Random.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
@@ -216,7 +217,7 @@ if(isset($timbratura)) {
         $totem2 = $crypt->simple_crypt($totem["text"], "decrypt");
         $totem_array = json_decode($totem2, true);
         if ($totem_array["action"] == "marcatura_ingresso") {
-            $type = 2;
+            $type = 1;
             $query = "call spFD_GestioneTimbratura(" . $totem_array["sede"] . ",NOW(),'" . $token . "');";
         }
     }
@@ -224,8 +225,8 @@ if(isset($timbratura)) {
 
 //Gestione invio mail
 if(isset($mail)) {
+    $mailer = new FD_Mailer();
     if ($mail->gestione == 1) {
-        $mailer = new FD_Mailer();
         $mailer->SendMail("volontapp",$mail);
         return;
     }
@@ -301,22 +302,20 @@ if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
     //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
     if(isset($push)) {
-        if($push == 1){
-            $pushNotification = new FD_PushNotification('https://onesignal.com/api/v1/notifications','9d51a497-90c3-4a92-898c-ac5950a88f0d','N2U1MmY1ZjYtYTBjYi00NWZkLWI2YzktYjdmZDE2M2MyYmNi');
-            $array_push = json_decode($result, true);
-            $array_push_length = count($array_push);
-            if($array_push_length > 0) {
-                $ids = [];
-                if (isset($array_push["device_id"])) {
-                    $ids[0] = '"'.$array_push["device_id"].'"';
-                } else {
-                    for ($i = 0; $i < $array_push_length; $i++) {
-                        $ids[$i] = '"'.$array_push[$i]["device_id"].'"';
-                    }
+        $pushNotification = new FD_PushNotification('https://onesignal.com/api/v1/notifications','9d51a497-90c3-4a92-898c-ac5950a88f0d','N2U1MmY1ZjYtYTBjYi00NWZkLWI2YzktYjdmZDE2M2MyYmNi');
+        $array_push = json_decode($result, true);
+        $array_push_length = count($array_push);
+        if($array_push_length > 0) {
+            $ids = [];
+            if (isset($array_push["device_id"])) {
+                $ids[0] = '"'.$array_push["device_id"].'"';
+            } else {
+                for ($i = 0; $i < $array_push_length; $i++) {
+                    $ids[$i] = '"'.$array_push[$i]["device_id"].'"';
                 }
-                $app = implode(",", $ids);
-                $pushNotification->SendOneSignal($data,$push);
             }
+            $app = implode(",", $ids);
+            $pushNotification->SendOneSignal($app,$push);
         }
     }
 

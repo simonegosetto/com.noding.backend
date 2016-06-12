@@ -69,6 +69,9 @@ if($gest == 1){
     if (isset($_POST["mail"])) {
         $mail = $_POST["mail"];
     }
+    if (isset($_POST["reset"])) {
+        $reset = $_POST["reset"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -93,6 +96,9 @@ if($gest == 1){
     if(property_exists((object) $objData,"mail")) {
         $mail = $objData->mail;
     }
+    if(property_exists((object) $objData,"reset")) {
+        $reset = $objData->reset;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -114,6 +120,9 @@ if($gest == 1){
     }
     if (isset($_GET["mail"])) {
         $mail = $_GET["mail"];
+    }
+    if (isset($_GET["reset"])) {
+        $reset = $_GET["reset"];
     }
 }
 
@@ -153,17 +162,31 @@ if(strlen($type) == 0){
     return;
 }
 
+$random = new FD_Random();
+
 //Gestione invio mail
 if(isset($mail)) {
+    $mailer = new FD_Mailer();
     if ($mail->gestione == 1) {
-        $mailer = new FD_Mailer();
         $mailer->SendMail("volontapp",$mail);
         return;
+    }else if($mail->gestione == 2) {
+        $resetToken = $random->Generate(32);
+        $query = "call spFD_resetPasswordRequest('".$resetToken. "','".$mail->email."');";
+        $mailer->SendMail("volontapp",$mail,$resetToken);
     }
 }
 
 $crypt = new FD_Crypt();
-$random = new FD_Random();
+
+//reset password
+if(isset($reset)) {
+    $password = $crypt->Django_Crypt($reset->password,$random->Generate(12),20000);
+    //echo "call spFD_resetPassword('".$reset->token. "','".$password."');";
+    $query = "call spFD_resetPassword('".$reset->token. "','".$password."');";
+}
+
+
 $pos = strpos($query,"registration(");
 if($pos > 0){
     $take = explode(",",$query);
