@@ -100,6 +100,12 @@ if($gest == 1){
     if (isset($_POST["push"])) {
         $push = $_POST["push"];
     }
+    if (isset($_POST["change"])) {
+        $change = $_POST["change"];
+    }
+    if (isset($_POST["sede"])) {
+        $sede = $_POST["sede"];
+    }
 } else if($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -133,6 +139,12 @@ if($gest == 1){
     if(property_exists((object) $objData,"push")) {
         $push = $objData->push;
     }
+    if(property_exists((object) $objData,"change")) {
+        $change = $objData->change;
+    }
+    if(property_exists((object) $objData,"sede")) {
+        $sede = $objData->sede;
+    }
 } else if($gest == 3) {
     if(isset($_GET["query"])) {
         $query = $_GET["query"];
@@ -163,6 +175,12 @@ if($gest == 1){
     }
     if (isset($_GET["push"])) {
         $push = $_GET["push"];
+    }
+    if (isset($_GET["change"])) {
+        $change = $_GET["change"];
+    }
+    if (isset($_GET["sede"])) {
+        $sede = $_GET["sede"];
     }
 }
 
@@ -206,9 +224,17 @@ if(strlen($type) == 0){
     return;
 }
 
+$random = new FD_Random();
+
+//cambio password
+if(isset($change)) {
+    $password = $crypt->Django_Crypt($change->password,$random->Generate(12),20000);
+    $query = "call spFD_changePassword('".$token. "','".$password."');";
+}
+
 //Gestione timbratura
 if(isset($timbratura)) {
-    if ($timbratura == 1) {
+    if ($timbratura == 1) { // lettura del QrCode
         if (!$totem) {
             echo '{"error" : "Timbratura non valida !"}';
             return;
@@ -220,6 +246,9 @@ if(isset($timbratura)) {
             $type = 1;
             $query = "call spFD_GestioneTimbratura(" . $totem_array["sede"] . ",NOW(),'" . $token . "');";
         }
+    }else if($timbratura == 2){ // Manuale
+        $type = 1;
+        $query = "call spFD_GestioneTimbraturaManuale(".$sede.",NOW(),".$query.");";
     }
 }
 
@@ -302,7 +331,7 @@ if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
     //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
     if(isset($push)) {
-        $pushNotification = new FD_PushNotification('https://onesignal.com/api/v1/notifications','9d51a497-90c3-4a92-898c-ac5950a88f0d','N2U1MmY1ZjYtYTBjYi00NWZkLWI2YzktYjdmZDE2M2MyYmNi');
+        $pushNotification = new FD_PushNotification('https://onesignal.com/api/v1/notifications','5683f6e0-4499-4b0e-b797-0ed2a6b1509b','MjhlZTJmNGItMWQ1YS00NTAzLTljZTMtZmNlNTZiNzQzMDQz');
         $array_push = json_decode($result, true);
         $array_push_length = count($array_push);
         if($array_push_length > 0) {
