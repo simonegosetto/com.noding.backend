@@ -7,21 +7,6 @@
  * Time: 00:56
  */
 
-/*
-
-Notifiche per Volontari, dipendenti e Staff
-
-- turno (24 ore prima e 1 ora prima) (5)
-- corso (24 ore prima e 1 ora prima) (6)
-- news riservate (1)
-- quando viene accettato il collegamento da parte dell'associazione (2)
-
-
-Notifiche per Associazione
-- quando qualcuno commenta (3)
-- quando un volontario chiede il "collegamento" (4)
-
- */
 class FD_PushNotification
 {
     var $url = '';
@@ -42,7 +27,7 @@ class FD_PushNotification
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$this->Authorization));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_POST, 1); //"4f49e745-f0f7-478f-8454-855b04da52b8"
+        curl_setopt($curl, CURLOPT_POST, 1);
         if($push->tipo == 1) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Nuovo messaggio privato ricevuto\"}}");
         }else if($push->tipo == 2) {
@@ -51,10 +36,14 @@ class FD_PushNotification
             curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Hai ricevuto un commento ad un post !\"}}");
         }else if($push->tipo == 4) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Un volontario vuole far parte della tua asoociazione !\"}}");
-        }else if($push->tipo == 5) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Hai un turno in associazione previsto ".$push["turno"]."\"}}");
-        }else if($push->tipo == 5) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"Hai un corso in associazione previsto ".$push["corso"]."\"}}");
+        }else if($push["tipo"] == 5) {
+            curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"".$this->app_id."\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [".$data."],\"contents\": {\"en\":\"".ucfirst($push["tipo2"]).": domani alle ".$push["ora"]."\"},\"headings\": {\"en\":\"".$push["associazione"]."\"}}");
+        }else if($push["tipo"] == 6) {
+            if($push["checklist"] == 0) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"" . $this->app_id . "\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [" . $data . "],\"contents\": {\"en\":\"Sta iniziando il " . $push["tipo2"] . "!\"},\"headings\": {\"en\":\"" . $push["associazione"] . "\"}}");/*delle ".$push["ora"]."\"*/
+            }else{
+                curl_setopt($curl, CURLOPT_POSTFIELDS, "{\"app_id\":\"" . $this->app_id . "\",\"isIos\": true,\"isAndroid\":false, \"include_player_ids\": [" . $data . "],\"contents\": {\"en\":\"Sta iniziando il " . $push["tipo2"] . ", ricordati di compilare la checklist !\"},\"headings\": {\"en\":\"" . $push["associazione"] . "\"}}");/*delle ".$push["ora"]."\"*/
+            }
         }
         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);

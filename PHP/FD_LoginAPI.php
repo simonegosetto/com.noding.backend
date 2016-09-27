@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+include "FD_Crypt.php";
+
 //prendo parametri in ingresso
 $data = file_get_contents("php://input");
 $objData = json_decode($data);
@@ -42,10 +44,14 @@ function httpPost($url, $data){//, $token){
     return $response;
 }
 
+$ini_array = parse_ini_file("config.inc_volontapp.ini");
+$crypt = new FD_Crypt();
+//echo str_replace(" ","",trim($crypt->mysql_decrypt(str_replace("@","=",$ini_array["userapi"]))))."<br/>".str_replace(" ","",trim($crypt->mysql_decrypt(str_replace("@","=",$ini_array["passapi"]))));
+
 $url = $link.'api-token-auth/';
 $data = array(
-    'username' => 'xxx',
-    'password' => 'volontapp'
+    'username' => str_replace(" ","",trim($crypt->mysql_decrypt(str_replace("@","=",$ini_array["userapi"]),strtolower(md5_file("esatto.mp3"))))),
+    'password' => str_replace(" ","",trim($crypt->mysql_decrypt(str_replace("@","=",$ini_array["passapi"]),strtolower(md5_file("esatto.mp3")))))
 );
 
 $result = httpPost($url,$data);

@@ -22,6 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+//Metodo per la richiesta POST al server API
+function httpPost($url, $data){//, $token){
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HEADER, 1);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    return $response;
+}
+
 //prendo parametri in ingresso
 $data = file_get_contents("php://input");
 $objData = json_decode($data);
@@ -36,6 +49,18 @@ if(property_exists((object) $objData,"link")) {
 }
 if(property_exists((object) $objData,"db")) {
     $db = $objData->db;
+}
+if(property_exists((object) $objData,"tur_codi")) {
+    $tur_codi = $objData->tur_codi;
+}
+
+// Gestisco il turno senza passare dal resto
+if($tur_codi > 0){
+    $url = "https://demo-get3.herokuapp.com/api/";//$link.'form_login/';
+    $data = '{"data":{"turno_id":"'.$tur_codi.'"}, "type":"set_turno_checklist_verified", "apikey": "q1w2e3r4t5y6"}';
+    $result = httpPost($url,$data);
+    echo  $result;
+    return;
 }
 
 if(strlen($username) == 0){
@@ -57,6 +82,7 @@ if(strlen($db) == 0){
     echo '{"error" : "DB non valido !"}';
     return;
 }
+
 
 /*
 function httpGet($url){
@@ -91,18 +117,6 @@ foreach($matches[1] as $item) {
 echo $cookies["csrftoken"];
 */
 
-//Metodo per la richiesta POST al server API
-function httpPost($url, $data){//, $token){
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_POST, 1);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HEADER, 1);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    return $response;
-}
 
 $url = $link.'form_login/';
 //setcookie("csrftoken",$cookies["csrftoken"],time()+3600,"/","xxx.volontapp.it");

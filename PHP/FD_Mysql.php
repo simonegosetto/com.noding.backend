@@ -298,8 +298,12 @@ class FD_Mysql {
             $table[]=$row;
             unset($row);
         }*/
+        $rows = array();
+        while($r = mysqli_fetch_assoc($this->result)) {
+            $rows[] = $r;
+        }
 
-        return json_encode($this->arrayedResult);
+        return json_encode($rows, JSON_NUMERIC_CHECK);
     }
 
     //Funzione che mi esporta il risultato della query in XLS
