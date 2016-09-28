@@ -298,9 +298,16 @@ class FD_Mysql {
             $table[]=$row;
             unset($row);
         }*/
+        /*
         $rows = array();
         while($r = mysqli_fetch_assoc($this->result)) {
             $rows[] = $r;
+        }
+        */
+        if($this->affected == 1){
+            $rows[] = $this->arrayedResult;
+        }else{
+            $rows = $this->arrayedResult;
         }
 
         return json_encode($rows, JSON_NUMERIC_CHECK);
