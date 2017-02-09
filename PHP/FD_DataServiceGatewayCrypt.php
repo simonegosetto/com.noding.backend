@@ -235,7 +235,7 @@ try {
         if (is_null($params)) {
             $params = '';
         }
-        $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $params . ");";
+        $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
     }
 
     if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
