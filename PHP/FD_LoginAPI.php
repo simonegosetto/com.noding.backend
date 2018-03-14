@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-include "FD_Crypt.php";
+include "Tools/FD_Crypt.php";
 
 //prendo parametri in ingresso
 $data = file_get_contents("php://input");

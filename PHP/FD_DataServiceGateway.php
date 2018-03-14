@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-include "FD_Mysql.php";
-include "FD_Crypt.php";
-include "FD_Mailer.php";
-include "FD_PushNotification.php";
-include "FD_Random.php";
+include "DB/FD_Mysql.php";
+include "Tools/FD_Crypt.php";
+include "WebTools/FD_Mailer.php";
+include "PushNotification/FD_PushNotification.php";
+include "Tools/FD_Random.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';

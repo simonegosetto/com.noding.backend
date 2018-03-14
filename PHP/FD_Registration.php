@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-include "FD_Mysql.php";
-include "FD_Crypt.php";
-include "FD_Random.php";
-include "FD_Mailer.php";
+include "DB/FD_Mysql.php";
+include "Tools/FD_Crypt.php";
+include "Tools/FD_Random.php";
+include "WebTools/FD_Mailer.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
