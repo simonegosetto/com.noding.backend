@@ -14,14 +14,16 @@ abstract class FD_OneSignal extends FD_PushNotification
     public var $Authorization = '';
 
     //Costruttore
-    function FD_OneSignal($url,$app_id,$Authorization=''){
+    function FD_OneSignal($url,$app_id,$Authorization='')
+    {
         $this->url = $url;
         $this->app_id = $app_id;
         $this->Authorization = $Authorization;
     }
 
     //Metodo per la richiesta POST
-    abstract public function Send($data,$push,$object){
+    abstract public function Send($data,$push,$object)
+    {
         $curl = curl_init($this->url);
         //curl_setopt($curl, CURLOPT_HTTPHEADER, $request_headers);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$this->Authorization));

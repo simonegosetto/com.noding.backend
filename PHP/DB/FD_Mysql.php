@@ -9,41 +9,49 @@ class FD_Mysql extends FD_DB
 	 * *******************/
 
     //Costruttore
-    function FD_Mysql($keyRequest="",$suffix=""){
+    function FD_Mysql($keyRequest="",$suffix="")
+    {
         $this->key = strtolower(md5_file("../Config/esatto.mp3"));
         if($keyRequest == $this->key){
             $this->validatedRequest=true;
 
-            if(strlen($suffix) > 0){
+            if(strlen($suffix) > 0)
+            {
                 $ini_array = parse_ini_file("../Config/config.inc_".$suffix.".ini");
-            }else {
+            } else {
                 $ini_array = parse_ini_file("../Config/config.inc.ini");
             }
             $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
             $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
-            if(strlen($ini_array["password"]) > 0){
+            if(strlen($ini_array["password"]) > 0)
+            {
                 $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
-            }else{
+            } else
+            {
                 $this->password = "";
             }
             $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
             $this->Connect();
-        }else{
+        } else
+        {
             $this->validatedRequest=false;
             $this->lastError="Richiesta al server non valida";
         }
     }
 
     //Connessione al DB
-    private function Connect(){
+    private function Connect()
+    {
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
-        if(!$this->conn){
+        if(!$this->conn)
+        {
             $this->lastError = 'Nessuna connessione al server: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }
 
-        if(!$this->UseDB($this->database)){
+        if(!$this->UseDB($this->database))
+        {
             $this->lastError = 'Nessun DB selezionato: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
@@ -56,7 +64,8 @@ class FD_Mysql extends FD_DB
     }
 
     //Ritorna il valore decriptato
-    private function decrypt($encrypted_string, $encryption_key) {
+    private function decrypt($encrypted_string, $encryption_key)
+    {
         $encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
@@ -65,24 +74,30 @@ class FD_Mysql extends FD_DB
     }
 
     //Gestione array/stringhe
-    private function SecureData($data, $types){
-        if(is_array($data)){
+    private function SecureData($data, $types)
+    {
+        if(is_array($data))
+        {
             $i = 0;
-            foreach($data as $key=>$val){
-                if(!is_array($data[$key])){
+            foreach($data as $key=>$val)
+            {
+                if(!is_array($data[$key]))
+                {
                     $data[$key] = $this->CleanData($data[$key], $types[$i]);
                     $data[$key] = mysqli_real_escape_string($this->conn,$data[$key]);
                     $i++;
                 }
             }
-        }else{
+        } else
+        {
             $data = $this->CleanData($data, $types);
             $data = mysqli_real_escape_string($this->conn,$data);
         }
         return $data;
     }
 
-    private function cleanData(&$str) {
+    private function cleanData(&$str)
+    {
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
         if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
@@ -90,8 +105,10 @@ class FD_Mysql extends FD_DB
 
     // Pulizia delle variabili a seconda del tipo
     // possible types: none, str, int, float, bool, datetime, ts2dt
-    private function CleanData_test($data, $type = ''){
-        switch($type) {
+    private function CleanData_test($data, $type = '')
+    {
+        switch($type)
+        {
             case 'none':
                 $data = $data;
                 break;
@@ -140,13 +157,16 @@ class FD_Mysql extends FD_DB
 	 * *******************/
 
     //Chiusura connessione al DB
-    public function closeConnection(){
+    public function closeConnection()
+    {
         mysqli_close($this->conn);
     }
 
     //Pulisce il buffer della connessione dalle precedenti query
-    public function CleanBufferResults($conn){
-        while($conn->more_results()){
+    public function CleanBufferResults($conn)
+    {
+        while($conn->more_results())
+        {
             $conn->next_result();
             if($res = $conn->store_result())
             {
@@ -156,84 +176,105 @@ class FD_Mysql extends FD_DB
     }
 
     //Controllo abilitazione DB
-    public function CheckDB($token,$db){
+    public function CheckDB($token,$db)
+    {
         $this->executeSQL("call spFD_CheckDB('"+$token+"','"+$db+"'')");
         //echo "call spFD_CheckDB('"+$token+"','"+$db+"');";
     }
 
     //Esecuzione della query
-    public function executeSQL($query){
+    public function executeSQL($query)
+    {
         $this->lastQuery = $query;
-        if($this->result = mysqli_query($this->conn,$query)){
-            if ($this->result) {
+        if($this->result = mysqli_query($this->conn,$query))
+        {
+            if ($this->result)
+            {
                 $this->affected = mysqli_affected_rows($this->conn);
                 $this->records  = @mysqli_num_rows($this->result);
-            } else {
+            } else
+            {
                 $this->records  = 0;
                 $this->affected = 0;
             }
 
-            if($this->records > 0){
+            if($this->records > 0)
+            {
                 $this->arrayResults();
                 $this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
-            }else{
+            } else
+            {
                 $this->CleanBufferResults($this->conn);
                 return true;
             }
             //echo "Query eseguita correttamente !";
-        }else{
+        } else
+        {
             $this->lastError = mysqli_error($this->conn);
             return false;
         }
     }
 
     //Ritorna il numero di righe della query
-    public function countRows($query){
+    public function countRows($query)
+    {
         $result = $this->executeSQL($query);
         return $this->records;
     }
 
     //Singolo array
-    public function arrayResult(){
+    public function arrayResult()
+    {
         $this->arrayedResult = mysqli_fetch_assoc($this->result) or die (mysqli_error($this->conn));
         return $this->arrayedResult;
     }
 
     //Array multiplo
-    public function arrayResults(){
-        if($this->records == 1){
+    public function arrayResults()
+    {
+        if($this->records == 1)
+        {
             return $this->arrayResult();
         }
 
         $this->arrayedResult = array();
-        while ($data = mysqli_fetch_assoc($this->result)){
+        while ($data = mysqli_fetch_assoc($this->result))
+        {
             $this->arrayedResult[] = $data;
         }
         return $this->arrayedResult;
     }
 
     //Seleziona il DB interessato (di dafault non importa)
-    public function UseDB($db){
-        if(strlen($this->database) > 0){
-            if(!mysqli_select_db($this->conn,$db)){
+    public function UseDB($db)
+    {
+        if(strlen($this->database) > 0)
+        {
+            if(!mysqli_select_db($this->conn,$db))
+            {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
-            }else{
+            } else
+            {
                 return true;
             }
-        }else{
-            if(!mysqli_select_db($this->conn,$db)){
+        } else
+        {
+            if(!mysqli_select_db($this->conn,$db))
+            {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
-            }else{
+            } else
+            {
                 return true;
             }
         }
     }
 
     //Funzione che mi esporta il risultato della query in XML
-    public function exportXML($query){
+    public function exportXML($query)
+    {
         $this->executeSQL($query);
         $fcount = mysqli_num_fields($this->result);
         $export = "<export>\n";
@@ -254,7 +295,8 @@ class FD_Mysql extends FD_DB
     }
 
     //Funzione che mi esporta il risultato della query in CSV
-    public function exportCSV($query){
+    public function exportCSV($query)
+    {
         $this->executeSQL($query);
         $fcount = mysqli_num_fields($this->result);
         $export = "";
@@ -273,7 +315,8 @@ class FD_Mysql extends FD_DB
     }
 
     //Funzione che mi esporta il risultato della query in JSON
-    public function exportJSON($query){
+    public function exportJSON($query)
+    {
         $this->executeSQL($query);
         //var_dump($this->arrayedResult);
 
@@ -288,9 +331,11 @@ class FD_Mysql extends FD_DB
             $rows[] = $r;
         }
         */
-        if($this->affected == 1){
+        if($this->affected == 1)
+        {
             $rows[] = $this->arrayedResult;
-        }else{
+        } else
+        {
             $rows = $this->arrayedResult;
         }
 
@@ -298,7 +343,8 @@ class FD_Mysql extends FD_DB
     }
 
     //Funzione che mi esporta il risultato della query in XLS
-    public function exportXLS($query){
+    public function exportXLS($query)
+    {
         $this->executeSQL($query);
         $fcount = mysqli_num_fields($this->result);
         $export = "";

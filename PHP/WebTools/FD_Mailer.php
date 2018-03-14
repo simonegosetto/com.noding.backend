@@ -8,15 +8,19 @@
 
 include 'PHPMailer/PHPMailerAutoload.php';
 
-final class FD_Mailer {
+final class FD_Mailer
+{
 
-    function FD_Mailer(){
+    function FD_Mailer()
+    {
         $this->mail = new PHPMailer;
     }
 
-    public function SendMail($gestione, $item, $resetToken = ''){
+    public function SendMail($gestione, $item, $resetToken = '')
+    {
         $this->mail->isSMTP();
-        if($gestione == "volontapp") {
+        if($gestione == "volontapp")
+        {
             /**
              * $item->tipo
              * 1-> Segnalazione associazione non registrata
@@ -40,13 +44,17 @@ final class FD_Mailer {
             $this->mail->SMTPSecure = 'tls'; // abilitazione ssl
             $this->mail->Port = 587;
             $this->mail->setFrom('app@volontapp.it', 'VolontApp');
-            if($obj["tipo"] != 4) {
+            if($obj["tipo"] != 4)
+            {
                 $this->mail->addAddress('commerciale@volontapp.it', 'Commerciale VolontApp');
-            }else{
+            }else
+            {
                 //Controllo validità mail
-                if (!filter_var($obj["email"], FILTER_VALIDATE_EMAIL) === false) {
+                if (!filter_var($obj["email"], FILTER_VALIDATE_EMAIL) === false)
+                {
                     $this->mail->addAddress($obj["email"], 'Staff VolontApp'); // il nome è opzionale
-                } else {
+                } else
+                {
                     return;
                 }
             }
@@ -58,24 +66,28 @@ final class FD_Mailer {
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');
 
             $this->mail->isHTML(true);
-            if($obj["tipo"] == 1) {
+            if($obj["tipo"] == 1)
+            {
                 $this->mail->Subject = 'Segnalazione nuova Associazione';
                 $this->mail->Body = '<p>Volontario: '.$obj["nome"].' '.$obj["cognome"].'</p>'.
                                     '<p>Mail/Username: '.$obj["username"].'</p>'.
                                     '<p>Associazione segnalata: "'.$obj["associazione"].'"</p>';
-            }else if($obj["tipo"] == 2){
+            }else if($obj["tipo"] == 2)
+            {
                 $this->mail->Subject = 'Interesse modulo "'.$obj["modulo"].'"';
                 $this->mail->Body = '<p>Volontario: '.$obj["nome"].' '.$obj["cognome"].'</p>'.
                                     '<p>Mail/Username: '.$obj["username"].'</p>'.
                                     '<p>Associazione: '.$obj["associazione"].'</p>';
-            }else if($obj["tipo"] == 3){
+            }else if($obj["tipo"] == 3)
+            {
                 $this->mail->Subject = 'Registrazione VolontApp';
                 $this->mail->Body = '<p>Gentile <b>'.$obj["nome"].' '.$obj["cognome"].'</b></p>'.
                     '<p>grazie per esserti registrato su VolontApp, le tue credenziali di accesso sono:</p>'.
                     '<p>Username: '.$obj["username"].'</p>'.
                     '<p>Password: '.$obj["password"].'</p>'.
                     '<p>Cordiali saluti</p>';
-            }else if($obj["tipo"] == 4){
+            }else if($obj["tipo"] == 4)
+            {
                 $this->mail->Subject = 'Recupero password VolontApp';
                 $this->mail->Body = '<p>Hai richiesto di cambiare la password al tuo account VolontApp</p>'.
                     '<p>Per procedere clicca sul seguente link:</p>'.
@@ -85,7 +97,8 @@ final class FD_Mailer {
             //$this->mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
         }
 
-        if(!$this->mail->send()) {
+        if(!$this->mail->send())
+        {
             echo '{"error" : "'.$this->mail->ErrorInfo.'"}';
         }
     }

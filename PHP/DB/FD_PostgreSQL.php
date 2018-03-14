@@ -14,22 +14,28 @@ class FD_PostgreSQL extends FD_DB
 	 * *******************/
 
     //Costruttore
-    function FD_PostgreSQL($keyRequest="",$suffix=""){
+    function FD_PostgreSQL($keyRequest="",$suffix="")
+    {
         $this->key = strtolower(md5_file("../Config/esatto.mp3"));
-        if($keyRequest == $this->key){
+        if($keyRequest == $this->key)
+        {
             $this->validatedRequest=true;
 
-            if(strlen($suffix) > 0){
+            if(strlen($suffix) > 0)
+            {
                 $ini_array = parse_ini_file("../Config/config.inc_".$suffix.".ini");
-            }else {
+            } else
+            {
                 $ini_array = parse_ini_file("../Config/config.inc.ini");
             }
             $this->port = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["port"]),$this->key)));
             $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
             $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
-            if(strlen($ini_array["password"]) > 0){
+            if(strlen($ini_array["password"]) > 0)
+            {
                 $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
-            }else{
+            } else
+            {
                 $this->password = "";
             }
             $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
@@ -41,9 +47,11 @@ class FD_PostgreSQL extends FD_DB
     }
 
     //Connessione al DB
-    private function Connect(){
+    private function Connect()
+    {
         $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
-        if(!$this->conn){
+        if(!$this->conn)
+        {
             $this->lastError = 'Nessuna connessione al server';
             $this->connected = false;
             return false;
@@ -54,7 +62,8 @@ class FD_PostgreSQL extends FD_DB
     }
 
     //Ritorna il valore decriptato
-    private function decrypt($encrypted_string, $encryption_key) {
+    private function decrypt($encrypted_string, $encryption_key)
+    {
         $encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
@@ -62,7 +71,8 @@ class FD_PostgreSQL extends FD_DB
         return $decrypted_string;
     }
 
-    function cleanData(&$str) {
+    function cleanData(&$str)
+    {
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
         if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
@@ -73,12 +83,14 @@ class FD_PostgreSQL extends FD_DB
 	 * *******************/
 
     //Chiusura connessione al DB
-    public function closeConnection(){
+    public function closeConnection()
+    {
         pg_close($this->conn);
     }
 
     //Pulisce il buffer della connessione dalle precedenti query
-    public function CleanBufferResults($conn){
+    public function CleanBufferResults($conn)
+    {
         while($conn->more_results()){
             $conn->next_result();
             if($res = $conn->store_result())
@@ -89,58 +101,71 @@ class FD_PostgreSQL extends FD_DB
     }
 
     //Esecuzione della query
-    public function executeSQL($query){
+    public function executeSQL($query)
+    {
         $this->lastQuery = $query;
-        if($this->result = pg_query($this->conn,$query)){
-            if ($this->result) {
+        if($this->result = pg_query($this->conn,$query))
+        {
+            if ($this->result)
+            {
                 $this->affected = pg_fetch_row($this->conn);
-            } else {
+            } else
+            {
                 $this->records  = 0;
                 $this->affected = 0;
             }
 
-            if($this->affected > 0){
+            if($this->affected > 0)
+            {
                 $this->arrayResults();
                 $this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
-            }else{
+            } else
+            {
                 $this->CleanBufferResults($this->conn);
                 return true;
             }
             //echo "Query eseguita correttamente !";
-        }else{
+        } else
+        {
             $this->lastError = pg_last_error($this->conn);
             return false;
         }
     }
 
     //Ritorna il numero di righe della query
-    public function countRows($query){
+    public function countRows($query)
+    {
         $result = $this->executeSQL($query);
         return $this->records;
     }
 
     //Singolo array
-    public function arrayResult(){
+    public function arrayResult()
+    {
         $this->arrayedResult = pg_fetch_assoc($this->result) or die (pg_last_error($this->conn));
         return $this->arrayedResult;
     }
 
     //Array multiplo
-    public function arrayResults(){
-        if($this->records == 1){
+    public function arrayResults()
+    {
+        if($this->records == 1)
+        {
             return $this->arrayResult();
         }
 
         $this->arrayedResult = array();
-        while ($data = pg_fetch_assoc($this->result)){
+        while ($data = pg_fetch_assoc($this->result))
+        {
             $this->arrayedResult[] = $data;
         }
         return $this->arrayedResult;
     }
 
     //Funzione che mi esporta il risultato della query in JSON
-    public function exportJSON($query){
+    public function exportJSON($query)
+    {
         $this->executeSQL($query);
 
         return json_encode($this->arrayedResult);//, JSON_NUMERIC_CHECK );

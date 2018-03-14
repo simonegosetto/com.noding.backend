@@ -6,14 +6,14 @@
  * Time: 20:05
  */
 
-class FD_Random {
+class FD_Random
+{
 
-    function FD_Random(){
-
-    }
+    function FD_Random(){}
 
     //Ritorna una stringa random della dimensione desiderata
-    public function Generate($length=16){
+    public function Generate($length=16)
+    {
         $salt       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $len        = strlen($salt);
         $makepass   = '';

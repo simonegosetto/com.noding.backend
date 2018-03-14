@@ -32,7 +32,8 @@ final class FD_SSH
     private var $log;
 
 
-    function FD_SSH($host,$user,$pass,$port = 22){
+    function FD_SSH($host,$user,$pass,$port = 22)
+    {
         $this->host = $host;
         $this->user = $user;
         $this->pass = $pass;

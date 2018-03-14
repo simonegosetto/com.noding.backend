@@ -6,7 +6,8 @@
  * Time: 14.26
  */
 
-class FD_Url {
+class FD_Url
+{
 
 
     var $SERVER_PORT;
@@ -59,7 +60,8 @@ class FD_Url {
     'ORIG_PATH_INFO'
     */
 
-    function FD_Url($defLocale="it"){
+    function FD_Url($defLocale="it")
+    {
         $this->SERVER_PORT = $_SERVER['SERVER_PORT'];
         $this->SERVER_NAME = $_SERVER['SERVER_NAME'];
         $this->REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
@@ -67,27 +69,35 @@ class FD_Url {
         $this->INFO = $_SERVER['HTTP_USER_AGENT'];
 
         //Trovo il browser
-        if(stristr($this->INFO,'MSIE') == TRUE){
+        if(stristr($this->INFO,'MSIE') == TRUE)
+        {
             $this->BROWSER = "Internet Explorer";
-        } else if(stristr($this->INFO,'Firefox') == TRUE){
+        } else if(stristr($this->INFO,'Firefox') == TRUE)
+        {
             $this->BROWSER = "Mozilla Firefox";
-        } else if(stristr($this->INFO,'Chrome') == TRUE){
+        } else if(stristr($this->INFO,'Chrome') == TRUE)
+        {
             $this->BROWSER = "Google Chrome";
         } else{
             $this->BROWSER = "Non definito";
         }
 
         //Trovo il tipo di Device
-        if( strstr($this->INFO,'Android') ||  strstr($this->INFO,'webOS') || strstr($this->INFO,'iPhone') || strstr($this->INFO,'iPod') || strstr($this->INFO,'iPad')){
+        if( strstr($this->INFO,'Android') ||  strstr($this->INFO,'webOS') || strstr($this->INFO,'iPhone') || strstr($this->INFO,'iPod') || strstr($this->INFO,'iPad'))
+        {
             $this->DEVICE = "Mobile";
-            if(strstr($this->INFO,'Android')){
+            if(strstr($this->INFO,'Android'))
+            {
                 $this->MOBILE_TYPE="Android";
-            }else if(strstr($this->INFO,'iPhone') || strstr($this->INFO,'iPod') || strstr($this->INFO,'iPad')){
+            } else if(strstr($this->INFO,'iPhone') || strstr($this->INFO,'iPod') || strstr($this->INFO,'iPad'))
+            {
                 $this->MOBILE_TYPE="iOS";
-            }else{
+            } else
+            {
                 $this->MOBILE_TYPE="Altro";
             }
-        }else{
+        } else
+        {
             $this->DEVICE = "Web";
         }
 
