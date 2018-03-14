@@ -37,7 +37,7 @@ if (!isset($_GET["gest"]))
     return;
 }
 
-include "FD_Random.php";
+include "Tools/FD_Random.php";
 
 $gest = $_GET["gest"];
 $token = '';
