@@ -259,9 +259,6 @@ if ($_FILES["file"]["error"] > 0) {
             "suffix" => "volontapp"
         );
     }
-    if($tipo != 4) {
-        echo httpPost("http://my.volontapp.it/FD_Framework/FD_DataServiceGateway.php?gest=1", $data);
-    }
 } else {
     echo '{"error" : "L\'immagine deve essere in formato JPG o PNG o GIF !"}';
 }

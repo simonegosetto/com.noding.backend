@@ -91,7 +91,7 @@ if ($gest == 1) {
 
 if(strlen($keyRequest)>0) {
     $keyRequest = strtolower($keyRequest);
-    if ($keyRequest != strtolower(md5_file("esatto.mp3"))) {
+    if ($keyRequest != strtolower(md5_file("../Config/esatto.mp3"))) {
         echo '{"error" : "Invalid token !"}';
         return;
     }

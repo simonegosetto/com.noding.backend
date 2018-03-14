@@ -78,7 +78,7 @@ class TTFParser
 			$length = $this->ReadULong(4);
 			$this->tables[$tag] = array('offset'=>$offset, 'length'=>$length, 'checkSum'=>$checkSum);
 		}
-	}	
+	}
 
 	function ParseHead()
 	{

@@ -10,14 +10,14 @@ class FD_Mysql extends FD_DB
 
     //Costruttore
     function FD_Mysql($keyRequest="",$suffix=""){
-        $this->key = strtolower(md5_file("esatto.mp3"));
+        $this->key = strtolower(md5_file("../Config/esatto.mp3"));
         if($keyRequest == $this->key){
             $this->validatedRequest=true;
 
             if(strlen($suffix) > 0){
-                $ini_array = parse_ini_file("config.inc_".$suffix.".ini");
+                $ini_array = parse_ini_file("../Config/config.inc_".$suffix.".ini");
             }else {
-                $ini_array = parse_ini_file("config.inc.ini");
+                $ini_array = parse_ini_file("../Config/config.inc.ini");
             }
             $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
             $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
