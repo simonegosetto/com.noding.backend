@@ -47,6 +47,7 @@ include "FD_Crypt.php";
 include "FD_Mailer.php";
 include "FD_PushNotification.php";
 include "FD_Random.php";
+include "FD_JWT.php";
 
 if(!isset($_GET["gest"])){
     echo '{"error" : "Invalid request !"}';
@@ -160,15 +161,21 @@ try {
     }
 
     //Prendo il token di sessione dell'utente e controllo che sia valido
+    $jwt = new FD_JWT();
     if(strlen($token)>0){
-        $token2 = $crypt->simple_crypt($token,"decrypt");
+        $keyRequest = $jwt->decode($token,strtolower(md5_file("esatto.mp3"))); //ritorna il payload
+        if(strlen($keyRequest) == 0) {
+            echo '{"error" : "Invalid token !"}';
+            return;
+        }
+        /*$token2 = $crypt->simple_crypt($token,"decrypt");
         $token_array = explode(",",$token2);
         if(count($token_array) == 3) {
             $keyRequest = strtolower($token_array[1]);
         }else{
             echo '{"error" : "Invalid token !"}';
             return;
-        }
+        }*/
     }else{
         echo '{"error" : "Invalid token !"}';
         return;
@@ -184,10 +191,10 @@ try {
         return;
     }
 
-    if($keyRequest != strtolower(md5_file("esatto.mp3"))){
+    /*if($keyRequest != strtolower(md5_file("esatto.mp3"))){
         echo '{"error" : "Invalid token !"}';
         return;
-    }
+    }*/
 
     if(strlen($process) == 0){
         echo '{"error" : "Invalid process !"}';

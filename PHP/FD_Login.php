@@ -29,6 +29,7 @@ include "FD_Mysql.php";
 include "FD_Random.php";
 include "FD_Crypt.php";
 include "FD_Url.php";
+include "FD_JWT.php";
 
 if (!isset($_GET["gest"])) {
     echo '{"error" : "Invalid request !"}';
@@ -153,7 +154,9 @@ if (strlen($keyRequest) > 0) {
     $crypt = new FD_Crypt();
     $array = json_decode($result, true);
     $date = new DateTime();
-    $token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
+    $jwt = new FD_JWT();
+    $token = $jwt->encode($random->Generate(25),$keyRequest);
+    //$token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
 
     //Inizializzo la sessione
     /*

@@ -53,17 +53,17 @@ class FD_PushNotifications {
 		if($tipo == 0 || $tipo == 1){
 			echo 'Device Android<br/>';
 			$ids =  array();
-		
+
 			if(strlen($token)==0){
 				$rs = mysql_query("SELECT * FROM PUSH_android WHERE app_id = $app_id");
 			}else{
 				$rs = mysql_query("SELECT * FROM PUSH_android WHERE device = '$token'");
 			}
-			
+
 			while($row = mysql_fetch_array( $rs ) ){
 				$ids[] = $row['device'];
 			}
-				
+
 			$fields = array(
 				'registration_ids'  => $ids,
 				'data'              =>  array('title' => $android_title, 'alert' => $mess, 'type' => 'sketch_created', 'id' => $android_key)
@@ -88,7 +88,7 @@ class FD_PushNotifications {
 
 			// Execute post
 			$result = curl_exec($ch);
-			
+
 			//Controllo errore
 			if ( curl_errno( $ch ) ){
 				echo 'GCM error: ' . curl_error( $ch );
@@ -104,13 +104,13 @@ class FD_PushNotifications {
 		if($tipo == 0 || $tipo == 2){
 			if(strlen($ios_pass) > 0 && strlen($ios_pem) > 0){
 				echo 'Device Apple<br>';
-				
+
 				if(strlen($token)==0){
 					$rs = mysql_query("SELECT * FROM PUSH_ios WHERE app_id = $app_id");
 				}else{
 					$rs = mysql_query("SELECT * FROM PUSH_ios WHERE device = '$token'");
 				}
-				
+
 				////////////////////////////////////////////////////////////////////////////////
 
 				while($row = mysql_fetch_array( $rs ) ){
@@ -124,7 +124,7 @@ class FD_PushNotifications {
 					$message = $mess;
 
 					////////////////////////////////////////////////////////////////////////////////
-					
+
 					//Controllo esistenza del certificato
 					if(file_exists($ios_pem)){
 						echo "File esistente !";
@@ -132,9 +132,9 @@ class FD_PushNotifications {
 						echo "File non esiste !";
 						break;
 					}
-					
+
 					echo $ios_pem;
-					
+
 					$ctx = stream_context_create();
 					stream_context_set_option($ctx, 'ssl', 'local_cert', $ios_pem);
 					stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
@@ -175,14 +175,14 @@ class FD_PushNotifications {
 				}
 				mysql_close($conn);
 			}
-		}	
-		
+		}
+
 		//Redirect alla pagina interessata
 		if(strlen($redirect_page)>0){
 			//echo "<a href='".$redirect_page."'>Indietro</a>";
 			header("Location: $redirect_page");
 		}
     }
-} 
+}
 
 ?>

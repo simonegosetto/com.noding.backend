@@ -7,21 +7,21 @@
  * Time: 00:56
  */
 
-class FD_PushNotification
+abstract class FD_OneSignal extends FD_PushNotification
 {
-    var $url = '';
-    var $app_id = '';
-    var $Authorization = '';
+    public var $url = '';
+    public var $app_id = '';
+    public var $Authorization = '';
 
     //Costruttore
-    function FD_PushNotification($url,$app_id,$Authorization=''){
+    function FD_OneSignal($url,$app_id,$Authorization=''){
         $this->url = $url;
         $this->app_id = $app_id;
         $this->Authorization = $Authorization;
     }
 
     //Metodo per la richiesta POST
-    public function SendOneSignal($data,$push){
+    abstract public function Send($data,$push){
         $curl = curl_init($this->url);
         //curl_setopt($curl, CURLOPT_HTTPHEADER, $request_headers);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Basic '.$this->Authorization));

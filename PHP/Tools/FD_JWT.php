@@ -7,7 +7,7 @@
  * Time: 20:05
  * @link     https://github.com/firebase/php-jwt
  */
-class FD_JWT
+final class FD_JWT
 {
     /**
      * Decodes a JWT string into a PHP object.

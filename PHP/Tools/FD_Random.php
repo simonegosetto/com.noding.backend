@@ -14,7 +14,7 @@ class FD_Random {
 
     //Ritorna una stringa random della dimensione desiderata
     public function Generate($length=16){
-        $salt       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678';
+        $salt       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $len        = strlen($salt);
         $makepass   = '';
         mt_srand(10000000*(double)microtime());
@@ -23,4 +23,4 @@ class FD_Random {
         }
         return $makepass;
     }
-} 
+}

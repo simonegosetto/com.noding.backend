@@ -8,7 +8,7 @@
 
 include 'PHPMailer/PHPMailerAutoload.php';
 
-class FD_Mailer {
+final class FD_Mailer {
 
     function FD_Mailer(){
         $this->mail = new PHPMailer;

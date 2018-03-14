@@ -1,38 +1,15 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 20/09/2016
- * Time: 20:45
- */
-class FD_PostgreSQL
+class FD_Mysql extends FD_DB
 {
-//Variabili
-    var $hostname = "";
-    var $username = "";
-    var $password = "";
-    var $database = "";
-    var $port = "";
-    var $conn;      // Connessione al DB
 
-    var $lastError = "";         // Ultimo errore
-    var $lastQuery;         // Ultima query (eseguita/richiesta)
-    var $result;            // Ultimo risultato
-    var $records;           // Numero di record estratti
-    var $affected;          // Numero di righe aggiornate
-    var $rawResults;        //
-    var $arrayedResult;     // Ultimo array di risultati
-    var $key;               // key
-    var $validatedRequest;  //Richiesta al server validata si/no
-    var $connected;         //Connesso si/no
 
     /* *******************
 	 * Private
 	 * *******************/
 
     //Costruttore
-    function FD_PostgreSQL($keyRequest="",$suffix=""){
+    function FD_Mysql($keyRequest="",$suffix=""){
         $this->key = strtolower(md5_file("esatto.mp3"));
         if($keyRequest == $this->key){
             $this->validatedRequest=true;
@@ -42,7 +19,6 @@ class FD_PostgreSQL
             }else {
                 $ini_array = parse_ini_file("config.inc.ini");
             }
-            $this->port = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["port"]),$this->key)));
             $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
             $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
             if(strlen($ini_array["password"]) > 0){
@@ -60,20 +36,22 @@ class FD_PostgreSQL
 
     //Connessione al DB
     private function Connect(){
-        $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
+        $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn){
-            $this->lastError = 'Nessuna connessione al server';
+            $this->lastError = 'Nessuna connessione al server: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }
 
         if(!$this->UseDB($this->database)){
-            $this->lastError = 'Nessun DB selezionato';
+            $this->lastError = 'Nessun DB selezionato: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }
 
         $this->connected = true;
+        //Imposto il charset che mi aiuta nell'estrazione corretta dei dati
+        mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
 
@@ -86,19 +64,84 @@ class FD_PostgreSQL
         return $decrypted_string;
     }
 
-    function cleanData(&$str) {
+    //Gestione array/stringhe
+    private function SecureData($data, $types){
+        if(is_array($data)){
+            $i = 0;
+            foreach($data as $key=>$val){
+                if(!is_array($data[$key])){
+                    $data[$key] = $this->CleanData($data[$key], $types[$i]);
+                    $data[$key] = mysqli_real_escape_string($this->conn,$data[$key]);
+                    $i++;
+                }
+            }
+        }else{
+            $data = $this->CleanData($data, $types);
+            $data = mysqli_real_escape_string($this->conn,$data);
+        }
+        return $data;
+    }
+
+    private function cleanData(&$str) {
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
         if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
     }
 
+    // Pulizia delle variabili a seconda del tipo
+    // possible types: none, str, int, float, bool, datetime, ts2dt
+    private function CleanData_test($data, $type = ''){
+        switch($type) {
+            case 'none':
+                $data = $data;
+                break;
+            case 'str':
+                $data = settype( $data, 'string');
+                break;
+            case 'int':
+                $data = settype( $data, 'integer');
+                break;
+            case 'float':
+                $data = settype( $data, 'float');
+                break;
+            case 'bool':
+                $data = settype( $data, 'boolean');
+                break;
+            // Y-m-d H:i:s
+            // 2014-01-01 12:30:30
+            case 'datetime':
+                $data = trim( $data );
+                $data = preg_replace('/[^\d\-: ]/i', '', $data);
+                preg_match( '/^([\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2})$/', $data, $matches );
+                $data = $matches[1];
+                break;
+            case 'ts2dt':
+                $data = settype( $data, 'integer');
+                $data = date('Y-m-d H:i:s', $data);
+                break;
+
+            // bonus types
+            case 'hexcolor':
+                preg_match( '/(#[0-9abcdef]{6})/i', $data, $matches );
+                $data = $matches[1];
+                break;
+            case 'email':
+                $data = filter_var($data, FILTER_VALIDATE_EMAIL);
+                break;
+            default:
+                $data = '';
+                break;
+        }
+        return $data;
+    }
+
     /* *******************
-	 * Pubbliche
+	 * PUBLIC
 	 * *******************/
 
     //Chiusura connessione al DB
     public function closeConnection(){
-        pg_close($this->conn);
+        mysqli_close($this->conn);
     }
 
     //Pulisce il buffer della connessione dalle precedenti query
@@ -121,16 +164,16 @@ class FD_PostgreSQL
     //Esecuzione della query
     public function executeSQL($query){
         $this->lastQuery = $query;
-        if($this->result = pg_query($this->conn,$query)){
+        if($this->result = mysqli_query($this->conn,$query)){
             if ($this->result) {
-                $this->affected = pg_fetch_row($this->conn);
-                //$this->records  = @mysqli_num_rows($this->result);
+                $this->affected = mysqli_affected_rows($this->conn);
+                $this->records  = @mysqli_num_rows($this->result);
             } else {
                 $this->records  = 0;
                 $this->affected = 0;
             }
 
-            if($this->affected > 0){
+            if($this->records > 0){
                 $this->arrayResults();
                 $this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
@@ -153,7 +196,7 @@ class FD_PostgreSQL
 
     //Singolo array
     public function arrayResult(){
-        $this->arrayedResult = pg_fetch_assoc($this->result) or die (pg_last_error());
+        $this->arrayedResult = mysqli_fetch_assoc($this->result) or die (mysqli_error($this->conn));
         return $this->arrayedResult;
     }
 
@@ -164,7 +207,7 @@ class FD_PostgreSQL
         }
 
         $this->arrayedResult = array();
-        while ($data = pg_fetch_assoc($this->result)){
+        while ($data = mysqli_fetch_assoc($this->result)){
             $this->arrayedResult[] = $data;
         }
         return $this->arrayedResult;
@@ -174,14 +217,14 @@ class FD_PostgreSQL
     public function UseDB($db){
         if(strlen($this->database) > 0){
             if(!mysqli_select_db($this->conn,$db)){
-                $this->lastError = 'Nessun DB selezionato: ' . pg_last_error();
+                $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
             }else{
                 return true;
             }
         }else{
             if(!mysqli_select_db($this->conn,$db)){
-                $this->lastError = 'Nessun DB selezionato: ' .pg_last_error();
+                $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
             }else{
                 return true;
@@ -239,8 +282,19 @@ class FD_PostgreSQL
             $table[]=$row;
             unset($row);
         }*/
+        /*
+        $rows = array();
+        while($r = mysqli_fetch_assoc($this->result)) {
+            $rows[] = $r;
+        }
+        */
+        if($this->affected == 1){
+            $rows[] = $this->arrayedResult;
+        }else{
+            $rows = $this->arrayedResult;
+        }
 
-        return json_encode($this->arrayedResult);//, JSON_NUMERIC_CHECK );
+        return json_encode($rows, JSON_NUMERIC_CHECK);
     }
 
     //Funzione che mi esporta il risultato della query in XLS

@@ -9,7 +9,7 @@ class FD_Session
 {
   private $alive = true;
   private $dbc = NULL;
- 
+
   function FD_Session()
   {
     session_set_save_handler(
@@ -19,10 +19,10 @@ class FD_Session
       array(&$this, 'write'),
       array(&$this, 'destroy'),
       array(&$this, 'clean'));
- 
+
     session_start();
   }
- 
+
   function __destruct()
   {
     if($this->alive)
@@ -31,7 +31,7 @@ class FD_Session
       $this->alive = false;
     }
   }
- 
+
   function delete()
   {
     if(ini_get('session.use_cookies'))
@@ -42,34 +42,34 @@ class FD_Session
         $params['secure'], $params['httponly']
       );
     }
- 
+
     session_destroy();
- 
+
     $this->alive = false;
   }
- 
+
   private function open()
-  {    
+  {
     $this->dbc = new MYSQLi(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME)
       OR die('Could not connect to database.');
- 
+
     return true;
   }
- 
+
   private function close()
   {
     return $this->dbc->close();
   }
- 
+
   private function read($sid)
   {
     $q = "SELECT `data` FROM `sessions` WHERE `id` = '".$this->dbc->real_escape_string($sid)."' LIMIT 1";
     $r = $this->dbc->query($q);
- 
+
     if($r->num_rows == 1)
     {
       $fields = $r->fetch_assoc();
- 
+
       return $fields['data'];
     }
     else
@@ -77,30 +77,30 @@ class FD_Session
       return '';
     }
   }
- 
+
   private function write($sid, $data)
   {
     $q = "REPLACE INTO `sessions` (`id`, `data`) VALUES ('".$this->dbc->real_escape_string($sid)."', '".$this->dbc->real_escape_string($data)."')";
     $this->dbc->query($q);
- 
+
     return $this->dbc->affected_rows;
   }
- 
+
   private function destroy($sid)
   {
-    $q = "DELETE FROM `sessions` WHERE `id` = '".$this->dbc->real_escape_string($sid)."'"; 
+    $q = "DELETE FROM `sessions` WHERE `id` = '".$this->dbc->real_escape_string($sid)."'";
     $this->dbc->query($q);
- 
+
     $_SESSION = array();
- 
+
     return $this->dbc->affected_rows;
   }
- 
+
   private function clean($expire)
   {
-    $q = "DELETE FROM `sessions` WHERE DATE_ADD(`last_accessed`, INTERVAL ".(int) $expire." SECOND) < NOW()"; 
+    $q = "DELETE FROM `sessions` WHERE DATE_ADD(`last_accessed`, INTERVAL ".(int) $expire." SECOND) < NOW()";
     $this->dbc->query($q);
- 
+
     return $this->dbc->affected_rows;
   }
 
