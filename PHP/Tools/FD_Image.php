@@ -9,22 +9,22 @@
 final class FD_Image
 {
 
-    //Dichiarazione variabili
-    $name = '';
-    $size = '';
-    $error = '';
 
     function FD_Image(){}
+
+    /* *******************
+	 * Public
+	 * *******************/
 
     /*
      * Metodo di compressione delle immagini
      */
     public function compress_image($source_url, $destination_url, $quality)
     {
-        $this->info = getimagesize($source_url);
-        if ($this->info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
-        elseif ($this->info['mime'] == 'image/gif') $image = imagecreatefromgif($source_url);
-        elseif ($this->info['mime'] == 'image/png') $image = imagecreatefrompng($source_url);
+        $info = getimagesize($source_url);
+        if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
+        elseif ($info['mime'] == 'image/gif') $image = imagecreatefromgif($source_url);
+        elseif ($info['mime'] == 'image/png') $image = imagecreatefrompng($source_url);
         imagejpeg($image, $destination_url, $quality);
         return $destination_url;
     }
@@ -115,11 +115,23 @@ final class FD_Image
                 exit;
                 break;
         }
-        /* cleanup memory
-        imagedestroy($image);
-        imagedestroy($tmp);
-        */
+
+        /* cleanup memory */
+        cleanup_memory($image);
+        cleanup_memory($tmp);
 
         return compress_image($path,$destination_url,$quality);
     }
+
+
+    /* *******************
+	 * Private
+	 * *******************/
+
+    private function cleanup_memory($image)
+    {
+        imagedestroy($image);
+    }
+
+}
 }

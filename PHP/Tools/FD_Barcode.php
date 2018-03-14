@@ -89,9 +89,7 @@ class FD_Barcode {
      * @access    public
      *
      */
-    function FD_Barcode( )
-    {
-    }
+    function FD_Barcode( ){}
 
     /**
      *

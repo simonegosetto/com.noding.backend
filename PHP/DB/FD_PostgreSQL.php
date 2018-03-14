@@ -6,7 +6,7 @@
  * Date: 20/09/2016
  * Time: 20:45
  */
-class FD_PostgreSQL extends FD_DB
+final class FD_PostgreSQL extends FD_DB
 {
 
     /* *******************

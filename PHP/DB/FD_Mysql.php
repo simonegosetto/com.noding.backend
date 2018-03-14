@@ -1,6 +1,6 @@
 <?php
 
-class FD_Mysql extends FD_DB
+final class FD_Mysql extends FD_DB
 {
 
 
