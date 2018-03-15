@@ -17,7 +17,6 @@ abstract class FD_DB {
     var $rawResults;        //
     var $arrayedResult;     // Ultimo array di risultati
     var $key;               // key
-    var $validatedRequest;  //Richiesta al server validata si/no
     var $connected;         //Connesso si/no
 
     //Costruttore
@@ -31,11 +30,7 @@ abstract class FD_DB {
 
     private function decrypt($encrypted_string, $encryption_key) {}
 
-    private function SecureData($data, $types){}
-
     private function cleanData(&$str) {}
-
-    private function CleanData_test($data, $type = ''){}
 
     /* *******************
 	 * PUBLIC
@@ -45,23 +40,17 @@ abstract class FD_DB {
 
     public function CleanBufferResults($conn){}
 
-    public function CheckDB($token,$db){}
-
     abstract public function executeSQL($query){}
 
     public function countRows($query){}
 
     public function arrayResult(){}
 
-    public function UseDB($db){}
-
     public function exportXML($query){}
 
     public function exportCSV($query){}
 
     abstract public function exportJSON($query){}
-
-    public function exportXLS($query){}
 
 }
 

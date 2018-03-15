@@ -9,34 +9,22 @@ final class FD_Mysql extends FD_DB
 	 * *******************/
 
     //Costruttore
-    function FD_Mysql($keyRequest="",$suffix="")
+    function FD_Mysql()
     {
         $this->key = strtolower(md5_file("../Config/esatto.mp3"));
-        if($keyRequest == $this->key){
-            $this->validatedRequest=true;
+        $ini_array = parse_ini_file("../Config/config.inc.ini");
 
-            if(strlen($suffix) > 0)
-            {
-                $ini_array = parse_ini_file("../Config/config.inc_".$suffix.".ini");
-            } else {
-                $ini_array = parse_ini_file("../Config/config.inc.ini");
-            }
-            $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
-            $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
-            if(strlen($ini_array["password"]) > 0)
-            {
-                $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
-            } else
-            {
-                $this->password = "";
-            }
-            $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
-            $this->Connect();
+        $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
+        $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
+        if(strlen($ini_array["password"]) > 0)
+        {
+            $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
         } else
         {
-            $this->validatedRequest=false;
-            $this->lastError="Richiesta al server non valida";
+            $this->password = "";
         }
+        $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
+        $this->Connect();
     }
 
     //Connessione al DB
@@ -73,83 +61,12 @@ final class FD_Mysql extends FD_DB
         return $decrypted_string;
     }
 
-    //Gestione array/stringhe
-    private function SecureData($data, $types)
-    {
-        if(is_array($data))
-        {
-            $i = 0;
-            foreach($data as $key=>$val)
-            {
-                if(!is_array($data[$key]))
-                {
-                    $data[$key] = $this->CleanData($data[$key], $types[$i]);
-                    $data[$key] = mysqli_real_escape_string($this->conn,$data[$key]);
-                    $i++;
-                }
-            }
-        } else
-        {
-            $data = $this->CleanData($data, $types);
-            $data = mysqli_real_escape_string($this->conn,$data);
-        }
-        return $data;
-    }
 
     private function cleanData(&$str)
     {
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
         if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-
-    // Pulizia delle variabili a seconda del tipo
-    // possible types: none, str, int, float, bool, datetime, ts2dt
-    private function CleanData_test($data, $type = '')
-    {
-        switch($type)
-        {
-            case 'none':
-                $data = $data;
-                break;
-            case 'str':
-                $data = settype( $data, 'string');
-                break;
-            case 'int':
-                $data = settype( $data, 'integer');
-                break;
-            case 'float':
-                $data = settype( $data, 'float');
-                break;
-            case 'bool':
-                $data = settype( $data, 'boolean');
-                break;
-            // Y-m-d H:i:s
-            // 2014-01-01 12:30:30
-            case 'datetime':
-                $data = trim( $data );
-                $data = preg_replace('/[^\d\-: ]/i', '', $data);
-                preg_match( '/^([\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2})$/', $data, $matches );
-                $data = $matches[1];
-                break;
-            case 'ts2dt':
-                $data = settype( $data, 'integer');
-                $data = date('Y-m-d H:i:s', $data);
-                break;
-
-            // bonus types
-            case 'hexcolor':
-                preg_match( '/(#[0-9abcdef]{6})/i', $data, $matches );
-                $data = $matches[1];
-                break;
-            case 'email':
-                $data = filter_var($data, FILTER_VALIDATE_EMAIL);
-                break;
-            default:
-                $data = '';
-                break;
-        }
-        return $data;
     }
 
     /* *******************
@@ -173,13 +90,6 @@ final class FD_Mysql extends FD_DB
                 $res->free();
             }
         }
-    }
-
-    //Controllo abilitazione DB
-    public function CheckDB($token,$db)
-    {
-        $this->executeSQL("call spFD_CheckDB('"+$token+"','"+$db+"'')");
-        //echo "call spFD_CheckDB('"+$token+"','"+$db+"');";
     }
 
     //Esecuzione della query
@@ -318,19 +228,7 @@ final class FD_Mysql extends FD_DB
     public function exportJSON($query)
     {
         $this->executeSQL($query);
-        //var_dump($this->arrayedResult);
 
-        /*$table=array();
-        while($row=mysql_fetch_object($this->result)){
-            $table[]=$row;
-            unset($row);
-        }*/
-        /*
-        $rows = array();
-        while($r = mysqli_fetch_assoc($this->result)) {
-            $rows[] = $r;
-        }
-        */
         if($this->affected == 1)
         {
             $rows[] = $this->arrayedResult;
@@ -342,28 +240,4 @@ final class FD_Mysql extends FD_DB
         return json_encode($rows, JSON_NUMERIC_CHECK);
     }
 
-    //Funzione che mi esporta il risultato della query in XLS
-    public function exportXLS($query)
-    {
-        $this->executeSQL($query);
-        $fcount = mysqli_num_fields($this->result);
-        $export = "";
-        while($row = mysqli_fetch_array($this->result) )
-        {
-            for($i=0; $i< $fcount; $i++)
-            {
-                $tag = mysqli_fetch_field_direct($this->result, $i)->name;//mysql_field_name( $this->result, $i );
-                $export .= mysqli_real_escape_string($this->conn,$row[$i])."\t";
-            }
-            $export .= "\n";
-        }
-        $export .= "\n";
-
-        // filename for download
-        $filename = "XLS_" . date('Ymd') . ".xls";
-        header("Content-Disposition: attachment; filename=\"$filename\"");
-        header("Content-Type: application/vnd.ms-excel");
-
-        return $export;
-    }
 }

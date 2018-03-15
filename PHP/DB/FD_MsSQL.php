@@ -1,25 +1,19 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: simon
- * Date: 20/09/2016
- * Time: 20:45
- */
-final class FD_PostgreSQL extends FD_DB
+final class FD_MsSQL extends FD_DB
 {
+
 
     /* *******************
 	 * Private
 	 * *******************/
 
     //Costruttore
-    function FD_PostgreSQL()
+    function FD_MsSQL()
     {
         $this->key = strtolower(md5_file("../Config/esatto.mp3"));
         $ini_array = parse_ini_file("../Config/config.inc.ini");
 
-        $this->port = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["port"]),$this->key)));
         $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
         $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
         if(strlen($ini_array["password"]) > 0)
@@ -36,10 +30,17 @@ final class FD_PostgreSQL extends FD_DB
     //Connessione al DB
     private function Connect()
     {
-        $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
+        $this->conn = mssql_connect($this->hostname, $this->username, $this->password);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server';
+            $this->lastError = 'Nessuna connessione al server: ' . mssql_get_last_message   ().PHP_EOL;
+            $this->connected = false;
+            return false;
+        }
+
+        if(!$this->UseDB($this->database))
+        {
+            $this->lastError = 'Nessun DB selezionato: ' . mssql_get_last_message().PHP_EOL;
             $this->connected = false;
             return false;
         }
@@ -58,7 +59,8 @@ final class FD_PostgreSQL extends FD_DB
         return $decrypted_string;
     }
 
-    function cleanData(&$str)
+
+    private function cleanData(&$str)
     {
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
@@ -66,19 +68,20 @@ final class FD_PostgreSQL extends FD_DB
     }
 
     /* *******************
-	 * Pubbliche
+	 * PUBLIC
 	 * *******************/
 
     //Chiusura connessione al DB
     public function closeConnection()
     {
-        pg_close($this->conn);
+        mssql_close($this->conn);
     }
 
     //Pulisce il buffer della connessione dalle precedenti query
     public function CleanBufferResults($conn)
     {
-        while($conn->more_results()){
+        while($conn->more_results())
+        {
             $conn->next_result();
             if($res = $conn->store_result())
             {
@@ -91,18 +94,19 @@ final class FD_PostgreSQL extends FD_DB
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
-        if($this->result = pg_query($this->conn,$query))
+        if($this->result = mssql_query($this->conn,$query))
         {
             if ($this->result)
             {
-                $this->affected = pg_fetch_row($this->conn);
+                $this->affected = mssql_num_rows($this->conn);
+                $this->records  = @mssql_num_rows($this->result);
             } else
             {
                 $this->records  = 0;
                 $this->affected = 0;
             }
 
-            if($this->affected > 0)
+            if($this->records > 0)
             {
                 $this->arrayResults();
                 $this->CleanBufferResults($this->conn);
@@ -115,7 +119,7 @@ final class FD_PostgreSQL extends FD_DB
             //echo "Query eseguita correttamente !";
         } else
         {
-            $this->lastError = pg_last_error($this->conn);
+            $this->lastError = mssql_get_last_message($this->conn);
             return false;
         }
     }
@@ -130,7 +134,7 @@ final class FD_PostgreSQL extends FD_DB
     //Singolo array
     public function arrayResult()
     {
-        $this->arrayedResult = pg_fetch_assoc($this->result) or die (pg_last_error($this->conn));
+        $this->arrayedResult = mssql_fetch_assoc($this->result) or die (mssql_get_last_message($this->conn));
         return $this->arrayedResult;
     }
 
@@ -143,11 +147,37 @@ final class FD_PostgreSQL extends FD_DB
         }
 
         $this->arrayedResult = array();
-        while ($data = pg_fetch_assoc($this->result))
+        while ($data = mssql_fetch_assoc($this->result))
         {
             $this->arrayedResult[] = $data;
         }
         return $this->arrayedResult;
+    }
+
+    //Seleziona il DB interessato (di dafault non importa)
+    public function UseDB($db)
+    {
+        if(strlen($this->database) > 0)
+        {
+            if(!mssql_select_db($this->conn,$db))
+            {
+                $this->lastError = 'Nessun DB selezionato: ' . mssql_get_last_message($this->conn);
+                return false;
+            } else
+            {
+                return true;
+            }
+        } else
+        {
+            if(!mssql_select_db($this->conn,$db))
+            {
+                $this->lastError = 'Nessun DB selezionato: ' . mssql_get_last_message($this->conn);
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
     }
 
     //Funzione che mi esporta il risultato della query in JSON
@@ -155,8 +185,15 @@ final class FD_PostgreSQL extends FD_DB
     {
         $this->executeSQL($query);
 
-        return json_encode($this->arrayedResult);//, JSON_NUMERIC_CHECK );
-    }
+        if($this->affected == 1)
+        {
+            $rows[] = $this->arrayedResult;
+        } else
+        {
+            $rows = $this->arrayedResult;
+        }
 
+        return json_encode($rows, JSON_NUMERIC_CHECK);
+    }
 
 }

@@ -27,8 +27,6 @@ final class FD_SQLite extends FD_DB
         }
 
         $this->connected = true;
-        //Imposto il charset che mi aiuta nell'estrazione corretta dei dati
-        mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
 
@@ -40,29 +38,6 @@ final class FD_SQLite extends FD_DB
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
         return $decrypted_string;
-    }
-
-    //Gestione array/stringhe
-    private function SecureData($data, $types)
-    {
-        if(is_array($data))
-        {
-            $i = 0;
-            foreach($data as $key=>$val)
-            {
-                if(!is_array($data[$key]))
-                {
-                    $data[$key] = $this->CleanData($data[$key], $types[$i]);
-                    $data[$key] = sqlite_escape_string($this->conn,$data[$key]);
-                    $i++;
-                }
-            }
-        } else
-        {
-            $data = $this->CleanData($data, $types);
-            $data = sqlite_escape_string($this->conn,$data);
-        }
-        return $data;
     }
 
     private function cleanData(&$str)
