@@ -20,7 +20,7 @@ abstract class FD_DB {
     var $connected;         //Connesso si/no
 
     //Costruttore
-    function FD_DB($keyRequest="",$suffix=""){}
+    function FD_DB(){}
 
     /* *******************
 	 * Private
