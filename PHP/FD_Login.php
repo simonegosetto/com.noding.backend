@@ -56,9 +56,6 @@ if ($gest == 1) {
     if (isset($_POST["password"])) {
         $password = $_POST["password"];
     }
-    if (isset($_POST["suffix"])) {
-        $suffix = $_POST["suffix"];
-    }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
@@ -71,9 +68,6 @@ if ($gest == 1) {
     if(property_exists((object) $objData,"password")) {
         $password = $objData->password;
     }
-    if(property_exists((object) $objData,"suffix")) {
-        $suffix = $objData->suffix;
-    }
 } else if ($gest == 3) {
     if (isset($_GET["token"])) {
         $keyRequest = $_GET["token"];
@@ -83,9 +77,6 @@ if ($gest == 1) {
     }
     if (isset($_GET["password"])) {
         $password = $_GET["password"];
-    }
-    if (isset($_GET["suffix"])) {
-        $suffix = $_GET["suffix"];
     }
 }
 
@@ -104,7 +95,7 @@ if (strlen($keyRequest) > 0) {
     //echo $username." ".$password." ".$keyRequest;
     //echo getcwd();
     //Inizializzo componente SQL
-    $sql = new FD_Mysql($keyRequest,$suffix);
+    $sql = new FD_Mysql();
 
     //Controllo che la connessione al DB sia andata a buon fine
     if (strlen($sql->lastError) > 0) {
@@ -151,50 +142,15 @@ if (strlen($keyRequest) > 0) {
 
     //Alloco variabile di sessione
     $random = new FD_Random();
-    $crypt = new FD_Crypt();
+    //$crypt = new FD_Crypt();
     $array = json_decode($result, true);
-    $date = new DateTime();
+    //$date = new DateTime();
     $jwt = new FD_JWT();
     $token = $jwt->encode($random->Generate(25),$keyRequest);
     //$token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
 
-    //Inizializzo la sessione
-    /*
-    session_start();
-    $_SESSION['user_id'] = $array["id"];
-    $_SESSION['username'] = $username;
-    $_SESSION['email'] = $array["email"];
-    $_SESSION['admin'] = $array["admin"];
-    $_SESSION['ID'] = $random->Generate(50);
-    */
-
-    /*
-    //Gestisco l'ID di sessione con lo standard JWT
-    $token = (new Builder())->setIssuer('http://example.com')// Configures the issuer (iss claim)
-    ->setAudience('http://example.org')// Configures the audience (aud claim)
-    ->setId('4f1g23a12aa', true)// Configures the id (jti claim), replicating as a header item
-    ->setIssuedAt(time())// Configures the time that the token was issue (iat claim)
-    ->setNotBefore(time() + 60)// Configures the time that the token can be used (nbf claim)
-    ->setExpiration(time() + 3600)// Configures the expiration time of the token (exp claim)
-    ->set('uid', 1)// Configures a new claim, called "uid"
-    ->getToken(); // Retrieves the generated token
-    $token->getHeaders(); // Retrieves the token headers
-    $token->getClaims(); // Retrieves the token claims
-    echo $token; // The string representation of the object is a JWT string (pretty easy, right?)
-    */
-    /*
-     * unset($_SESSION['username']);
-          unset($_SESSION['email']);
-          unset($_SESSION['name']);
-          unset($_SESSION['userid']);
-          session_destroy();
-          session_regenerate_id();
-     *
-     */
-
     //Prendo IP client
     $url = new FD_Url();
-
     //Salvo nel log delle sessioni
     $sql->executeSQL("call spFD_session_log(" . $array["id"] . ",'" . $token . "','".$url->IP_ADDRESS."');");
 

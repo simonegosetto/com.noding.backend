@@ -10,17 +10,20 @@
  * Per la gestione di tutte le richieste al DB
  *
  * INPUT:
- * token per autenticare la richiesta
+ * token -> per autenticare la richiesta (implementato formato JWT)
  * process -> stored sql cryptata
  * params -> parametri per stored sql
- * tipo di query (query/non query) - OK
+ * type -> tipo di query (query/non query)
  *
  * OUTPUT:
- * messaggio di errore - OK
- * recordset - OK
- * righe affected - da implementare
+ * messaggio di errore
+ * recordset
+ * righe affected - DA CONTROLLARE
  *
- * VERSIONE 2.0.0
+ * VERSIONE 2.5.0
+ *
+ * CREARE ENUMERATIVA PER QUERY/NON QUERY
+ * CREARE POLIMORFISMO PER PUSH / MAIL
  *
  */
 
@@ -45,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 include "DB/FD_Mysql.php";
 include "Tools/FD_Crypt.php";
 include "WebTools/FD_Mailer.php";
-include "PushNotification/FD_PushNotification.php";
+include "PushNotification/FD_OneSignal.php";
 include "Tools/FD_Random.php";
 include "Tools/FD_JWT.php";
 
@@ -88,12 +91,6 @@ try {
         if(isset($_POST["database"])) {
             $database = $_POST["database"];
         }
-        if (isset($_POST["suffix"])) {
-            $suffix = $_POST["suffix"];
-        }
-        if (isset($_POST["totem"])) {
-            $totem = $_POST["totem"];
-        }
         if (isset($_POST["mail"])) {
             $mail = $_POST["mail"];
         }
@@ -118,12 +115,6 @@ try {
         if(property_exists((object) $objData,"database")) {
             $database = $objData->database;
         }
-        if(property_exists((object) $objData,"suffix")) {
-            $suffix = $objData->suffix;
-        }
-        if(property_exists((object) $objData,"totem")) {
-            $totem = $objData->totem;
-        }
         if(property_exists((object) $objData,"mail")) {
             $mail = $objData->mail;
         }
@@ -145,12 +136,6 @@ try {
         }
         if(isset($_GET["database"])) {
             $database = $_GET["database"];
-        }
-        if (isset($_GET["suffix"])) {
-            $suffix = $_GET["suffix"];
-        }
-        if (isset($_GET["totem"])) {
-            $totem = $_GET["totem"];
         }
         if (isset($_GET["mail"])) {
             $mail = $_GET["mail"];
@@ -248,7 +233,7 @@ try {
     if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
         //Inizializzo componente SQL
-        $sql = new FD_Mysql($keyRequest,$suffix);
+        $sql = new FD_Mysql();
 
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0){
@@ -258,22 +243,7 @@ try {
             }
             return;
         }
-        
-    /*
-        //Check abilitazione DB
-        $sql->CheckDB($token,$database);
-        if(strlen($sql->lastError) > 0){
-            echo '{"error" : "'.$sql->lastError.'"}';
-            if($sql->connected){
-                $sql->closeConnection();
-            }
-            return;
-        }
-        if($sql->affected == 0){
-            echo '{"error" : "Invalid db for this user !"}';
-            return;
-        }
-    */
+
         //Seleziono il DB
         if(!$sql->UseDB($database)){
             echo '{"error" : "Invalid database"}';
@@ -320,7 +290,7 @@ try {
 
         //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
         if(isset($push)) {
-            $pushNotification = new FD_PushNotification('https://onesignal.com/api/v1/notifications','5683f6e0-4499-4b0e-b797-0ed2a6b1509b','MjhlZTJmNGItMWQ1YS00NTAzLTljZTMtZmNlNTZiNzQzMDQz');
+            $pushNotification = new FD_OneSignal('https://onesignal.com/api/v1/notifications','5683f6e0-4499-4b0e-b797-0ed2a6b1509b','MjhlZTJmNGItMWQ1YS00NTAzLTljZTMtZmNlNTZiNzQzMDQz');
             $array_push = json_decode($result, true);
             $array_push_length = count($array_push);
             if($array_push_length > 0) {
@@ -333,7 +303,7 @@ try {
                     }
                 }
                 $app = implode(",", $ids);
-                $pushNotification->SendOneSignal($app,$push);
+                $pushNotification->Send($app,$push);
             }
         }
 
