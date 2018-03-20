@@ -212,15 +212,6 @@ try {
         $take[2] = "'".$password."'";
         $query = implode($take,",");
     }
-    $pos = strpos($query,"registration_associazione(");
-    if($pos > 0){
-        $take = explode(",",$query);
-        $password = $take[2];
-        $password = str_replace("'","",$password);
-        $password = $crypt->Django_Crypt($password,$random->Generate(12),20000);
-        $take[2] = "'".$password."'";
-        $query = implode($take,",");
-    }
 
     if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 

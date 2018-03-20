@@ -46,59 +46,76 @@ if (!isset($_GET["gest"])) {
 $gest = $_GET["gest"];
 $keyRequest = "";
 
-if ($gest == 1) {
-    if (isset($_POST["token"])) {
+if ($gest == 1)
+{
+    if (isset($_POST["token"]))
+    {
         $keyRequest = $_POST["token"];
     }
-    if (isset($_POST["username"])) {
+    if (isset($_POST["username"]))
+    {
         $username = $_POST["username"];
     }
-    if (isset($_POST["password"])) {
+    if (isset($_POST["password"]))
+    {
         $password = $_POST["password"];
     }
-} else if ($gest == 2) {
+} else if ($gest == 2)
+{
     $data = file_get_contents("php://input");
     $objData = json_decode($data);
-    if(property_exists((object) $objData,"token")) {
+    if(property_exists((object) $objData,"token"))
+    {
         $keyRequest = $objData->token;
     }
-    if(property_exists((object) $objData,"username")) {
+    if(property_exists((object) $objData,"username"))
+    {
         $username = $objData->username;
     }
-    if(property_exists((object) $objData,"password")) {
+    if(property_exists((object) $objData,"password"))
+    {
         $password = $objData->password;
     }
-} else if ($gest == 3) {
-    if (isset($_GET["token"])) {
+} else if ($gest == 3)
+{
+    if (isset($_GET["token"]))
+    {
         $keyRequest = $_GET["token"];
     }
-    if (isset($_GET["username"])) {
+    if (isset($_GET["username"]))
+    {
         $username = $_GET["username"];
     }
-    if (isset($_GET["password"])) {
+    if (isset($_GET["password"]))
+    {
         $password = $_GET["password"];
     }
 }
 
-if(strlen($keyRequest)>0) {
+if(strlen($keyRequest)>0)
+{
     $keyRequest = strtolower($keyRequest);
-    if ($keyRequest != strtolower(md5_file("../Config/esatto.mp3"))) {
+    if ($keyRequest != strtolower(md5_file("../Config/esatto.mp3")))
+    {
         echo '{"error" : "Invalid token !"}';
         return;
     }
-}else{
+} else
+{
     echo '{"error" : "Invalid token !"}';
     return;
 }
 
-if (strlen($keyRequest) > 0) {
+if (strlen($keyRequest) > 0)
+{
     //echo $username." ".$password." ".$keyRequest;
     //echo getcwd();
     //Inizializzo componente SQL
     $sql = new FD_Mysql();
 
     //Controllo che la connessione al DB sia andata a buon fine
-    if (strlen($sql->lastError) > 0) {
+    if (strlen($sql->lastError) > 0)
+    {
         echo '{"error" : "' . $sql->lastError . '"}';
         if ($sql->connected) {
             $sql->closeConnection();
@@ -106,6 +123,7 @@ if (strlen($keyRequest) > 0) {
         return;
     }
 
+    /*
     //salt
     $result = $sql->exportJSON("call spFD_Salt('".$username."')");
     //Controllo che la connessione al DB sia andata a buon fine
@@ -119,20 +137,25 @@ if (strlen($keyRequest) > 0) {
     $salt = json_decode($result, true);
     $crypt = new FD_Crypt();
     $password = $crypt->Django_Crypt($password,$salt["salt"],20000);
+    */
+    $password = $crypt->simple_crypt($password);
 
     //Eseguo la query di login
     $result = $sql->exportJSON("call spFD_login('" . $username . "','" . $password . "');");
 
-    if (strlen($sql->lastError) > 0) {
+    if (strlen($sql->lastError) > 0)
+    {
         echo '{"error" : "' . $sql->lastError . '"}';
-        if ($sql->connected) {
+        if ($sql->connected)
+        {
             $sql->closeConnection();
         }
         return;
     }
 
     //Se l'utente non esiste o le credenziali immesse sono errate
-    if ($sql->affected == 0) {
+    if ($sql->affected == 0)
+    {
         echo '{"error" : "Le credenziali inserite non sono corrette !"}';
         if ($sql->connected) {
             $sql->closeConnection();
@@ -158,7 +181,8 @@ if (strlen($keyRequest) > 0) {
     $sql->closeConnection();
 
     echo '{"user":' . $result .',"token": {"token" : "'.$token.'"}}';
-} else {
+} else
+{
     echo '{"error" : "Invalid request !"}';
 }
 
