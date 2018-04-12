@@ -28,7 +28,7 @@ final class SG_MsSQL extends SG_DB
             $this->password = "";
         }
         $this->database = $ini_array["MS_DATABASE"];
-        $this->Connect();
+        $this->connect();
     }
 
      /* *******************
@@ -57,9 +57,9 @@ final class SG_MsSQL extends SG_DB
 	 * *******************/
 
     //Connessione al DB
-    public function Connect()
+    public function connect()
     {
-        $this->conn = sqlsrv_connect($this->hostname, array("Database"=>$this->database, "UID"=>$this->username, "PWD"=>$this->password));
+        $this->conn = sqlsrv_connect($this->hostname, array("Database"=>$this->database, "UID"=>$this->username, "PWD"=>$this->password, "CharacterSet" => "UTF-8"));
         if(!$this->conn)
         {
             $this->lastError = 'Nessuna connessione al server: ' . $this->GetError();
@@ -77,25 +77,12 @@ final class SG_MsSQL extends SG_DB
         sqlsrv_close($this->conn);
     }
 
-    //Pulisce il buffer della connessione dalle precedenti query
-    public function CleanBufferResults($conn)
-    {
-        while($conn->more_results())
-        {
-            $conn->next_result();
-            if($res = $conn->store_result())
-            {
-                $res->free();
-            }
-        }
-    }
-
     //Esecuzione della query
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
         $params = array();
-        $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
+        $options =  array( "Scrollable" => SQLSRV_CURSOR_CLIENT_BUFFERED );
         if($this->result = sqlsrv_query($this->conn,$query,$params,$options))
         {
             if ($this->result)
@@ -111,11 +98,9 @@ final class SG_MsSQL extends SG_DB
             if($this->affected > 0)
             {
                 $this->arrayResults();
-                //$this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
             } else
             {
-                //$this->CleanBufferResults($this->conn);
                 return true;
             }
             //echo "Query eseguita correttamente !";
@@ -136,7 +121,8 @@ final class SG_MsSQL extends SG_DB
     //Singolo array
     public function arrayResult()
     {
-        $this->arrayedResult = sqlsrv_fetch_object($this->result) or die ($this->GetError());
+        $this->arrayedResult = sqlsrv_fetch_array( $this->result, SQLSRV_FETCH_ASSOC ) or die ($this->GetError());
+        sqlsrv_free_stmt($this->result);
         return $this->arrayedResult;
     }
 
@@ -147,12 +133,14 @@ final class SG_MsSQL extends SG_DB
         {
             return $this->arrayResult();
         }
-
         $this->arrayedResult = array();
-        while ($data = sqlsrv_fetch_object($this->result))
-        {
-            $this->arrayedResult[] = $data;
-        }
+        do {
+            while ($row = sqlsrv_fetch_array($this->result, SQLSRV_FETCH_ASSOC)){
+               $this->arrayedResult[] = $row;
+            }
+        } while (sqlsrv_next_result($this->result));
+
+        sqlsrv_free_stmt($this->result);
         return $this->arrayedResult;
     }
 
@@ -164,12 +152,12 @@ final class SG_MsSQL extends SG_DB
         if($this->affected == 1)
         {
             $rows[] = $this->arrayedResult;
-        } else
+        }
+        else
         {
             $rows = $this->arrayedResult;
         }
-
-        return json_encode($rows, JSON_NUMERIC_CHECK);
+        return json_encode($rows, JSON_NUMERIC_CHECK );
     }
 
 }

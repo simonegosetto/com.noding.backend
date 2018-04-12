@@ -1,5 +1,7 @@
 <?php
 
+include "SG_DB.php";
+
 final class SG_SQLite extends SG_DB
 {
 
@@ -12,16 +14,53 @@ final class SG_SQLite extends SG_DB
     function SG_SQLite($dbName="")
     {
         $this->hostname = $dbName;
-        $this->Connect();
+        $this->connect();
     }
 
-    //Connessione al DB
-    private function Connect()
+    private function sqlite_open($location)
     {
-        $this->conn = sqlite_open ($this->hostname);
+        $handle = new SQLite3($location);
+        return $handle;
+    }
+
+    private function sqlite_query($dbhandle,$query)
+    {
+        $array['dbhandle'] = $dbhandle;
+        $array['query'] = $query;
+        $result = $dbhandle->query($query);
+        return $result;
+    }
+
+    private function sqlite_fetch_array(&$result)
+    {
+        #Get Columns
+        $i = 0;
+        while ($result->columnName($i))
+        {
+            $columns[ ] = $result->columnName($i);
+            $i++;
+        }
+
+        $resx = $result->fetchArray(SQLITE3_ASSOC);
+        return $resx;
+    }
+
+    private function sqlite_close($dbhandle)
+    {
+        $dbhandle->close();
+    }
+
+    /* *******************
+	 * PUBLIC
+	 * *******************/
+
+    //Connessione al DB
+    public function connect()
+    {
+        $this->conn = $this->sqlite_open($this->hostname);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al DB: ' . sqlite_error_string().PHP_EOL;
+            $this->lastError = 'Nessuna connessione al DB: ' . lastErrorMsg();
             $this->connected = false;
             return false;
         }
@@ -30,60 +69,34 @@ final class SG_SQLite extends SG_DB
         return true;
     }
 
-
-    /* *******************
-	 * PUBLIC
-	 * *******************/
-
     //Chiusura connessione al DB
     public function closeConnection()
     {
-        sqlite_close($this->conn);
+        $this->sqlite_close($this->conn);
     }
 
-    //Pulisce il buffer della connessione dalle precedenti query
-    public function CleanBufferResults($conn)
-    {
-        while($conn->more_results())
-        {
-            $conn->next_result();
-            if($res = $conn->store_result())
-            {
-                $res->free();
-            }
-        }
-    }
 
     //Esecuzione della query
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
-        if($this->result = sqlite_query($this->conn,$query))
+        if($this->result = $this->sqlite_query($this->conn,$query))
         {
             if ($this->result)
             {
-                $this->affected = sqlite_num_rows($this->conn);
-                $this->records  = @sqlite_num_rows($this->result);
+                $this->records  = 0;
+                $this->affected = 0;
+                $this->arrayResults();
             } else
             {
                 $this->records  = 0;
                 $this->affected = 0;
             }
 
-            if($this->records > 0)
-            {
-                $this->arrayResults();
-                $this->CleanBufferResults($this->conn);
-                return $this->arrayedResult;
-            } else
-            {
-                $this->CleanBufferResults($this->conn);
-                return true;
-            }
             //echo "Query eseguita correttamente !";
         } else
         {
-            $this->lastError = sqlite_error_string($this->conn);
+            $this->lastError = lastErrorMsg();
             return false;
         }
     }
@@ -95,26 +108,19 @@ final class SG_SQLite extends SG_DB
         return $this->records;
     }
 
-    //Singolo array
-    public function arrayResult()
-    {
-        $this->arrayedResult = sqlite_fetch_array($this->result) or die (sqlite_error_string($this->conn));
-        return $this->arrayedResult;
-    }
 
     //Array multiplo
     public function arrayResults()
     {
-        if($this->records == 1)
-        {
-            return $this->arrayResult();
-        }
-
         $this->arrayedResult = array();
-        while ($data = sqlite_fetch_array($this->result))
+        $count = 0;
+        while ($data = $this->sqlite_fetch_array($this->result))
         {
+            $count = $count + 1;
             $this->arrayedResult[] = $data;
         }
+        $this->records = $count;
+        $this->affected = $count;
         return $this->arrayedResult;
     }
 
