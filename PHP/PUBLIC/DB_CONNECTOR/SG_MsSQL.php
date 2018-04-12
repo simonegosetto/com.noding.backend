@@ -1,9 +1,5 @@
 <?php
 
-// guida https://www.microsoft.com/en-us/download/confirmation.aspx?id=56567
-//https://www.microsoft.com/en-us/download/confirmation.aspx?id=56567
-//https://www.microsoft.com/en-us/download/confirmation.aspx?id=56729
-
 include "SG_DB.php";
 
 final class SG_MsSQL extends SG_DB
