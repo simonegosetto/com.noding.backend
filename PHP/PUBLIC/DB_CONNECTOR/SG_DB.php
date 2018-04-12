@@ -7,48 +7,35 @@ abstract class SG_DB {
     var $username = "";
     var $password = "";
     var $database = "";
-    var $conn;      // Connessione al DB
+    var $port = "";
+    var $conn;               // Connessione al DB
 
-    var $lastError = "";         // Ultimo errore
+    var $lastError = "";    // Ultimo errore
     var $lastQuery;         // Ultima query (eseguita/richiesta)
     var $result;            // Ultimo risultato
     var $records;           // Numero di record estratti
     var $affected;          // Numero di righe aggiornate
     var $rawResults;        //
     var $arrayedResult;     // Ultimo array di risultati
-    var $key;               // key
     var $connected;         //Connesso si/no
 
-    //Costruttore
-    function SG_DB(){}
-
     /* *******************
-	 * Private
-	 * *******************/
+    * Construct
+    * *******************/
 
-    abstract public function Connect();
-
-    private function decrypt($encrypted_string, $encryption_key) {}
-
-    private function cleanData(&$str) {}
+    function SG_DB(){}
 
     /* *******************
 	 * PUBLIC
 	 * *******************/
 
-    abstract public function closeConnection();
+    abstract public function Connect();
 
-    public function CleanBufferResults($conn){}
+    abstract public function closeConnection();
 
     abstract public function executeSQL($query);
 
-    public function countRows($query){}
-
-    public function arrayResult(){}
-
-    public function exportXML($query){}
-
-    public function exportCSV($query){}
+    abstract public function countRows($query);
 
     abstract public function exportJSON($query);
 

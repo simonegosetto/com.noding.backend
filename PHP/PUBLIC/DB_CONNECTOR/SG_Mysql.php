@@ -1,11 +1,13 @@
 <?php
 
+include "SG_DB.php";
+
 final class SG_Mysql extends SG_DB
 {
 
 
     /* *******************
-	 * Private
+	 * Construct
 	 * *******************/
 
     //Costruttore
@@ -23,11 +25,19 @@ final class SG_Mysql extends SG_DB
             $this->password = "";
         }
         $this->database = $ini_array["MY_DATABASE"];
-        $this->Connect();
+        $this->connect();
     }
 
+    /* *******************
+	 * Private
+	 * *******************/
+
+    /* *******************
+	 * PUBLIC
+	 * *******************/
+
     //Connessione al DB
-    private function Connect()
+    public function connect()
     {
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
@@ -49,10 +59,6 @@ final class SG_Mysql extends SG_DB
         mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
-
-    /* *******************
-	 * PUBLIC
-	 * *******************/
 
     //Chiusura connessione al DB
     public function closeConnection()
@@ -99,7 +105,6 @@ final class SG_Mysql extends SG_DB
                 $this->CleanBufferResults($this->conn);
                 return true;
             }
-            //echo "Query eseguita correttamente !";
         } else
         {
             $this->lastError = mysqli_error($this->conn);

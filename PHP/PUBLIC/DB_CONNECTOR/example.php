@@ -34,6 +34,7 @@ else
 
 
 #SQLITE
+/*
 include "SG_SQLite.php";
 
 $lite = new SG_SQLite("SQLite_db_test.db");
@@ -41,8 +42,9 @@ $lite = new SG_SQLite("SQLite_db_test.db");
 if($lite->connected)
 {
     //$result = $lite->executeSQL("CREATE TABLE test1(id int, desc varchar(10))");
-    //$result = $lite->executeSQL("INSERT INTO test1(id,desc) VALUES(1,'test')");
+    //$result = $lite->executeSQL("INSERT INTO test1(id,desc) VALUES(3,'test 3')");
     $result = $lite->exportJSON("SELECT * FROM test1");
+    //$result = $lite->countRows("select * from test1");
 
 
     if(strlen($lite->lastError) > 0)
@@ -63,3 +65,69 @@ else
 {
     echo $lite->lastError;
 }
+*/
+
+#MYSQL
+/*
+include "SG_Mysql.php";
+
+$my = new SG_Mysql();
+
+if($my->connected)
+{
+    //$result = $my->executeSQL("CREATE TABLE test1(id int, description varchar(10));");
+    //$result = $my->executeSQL("INSERT INTO test1(id,description) VALUES(3,'test 3');");
+    $result = $my->exportJSON("SELECT * FROM test1");
+
+    if(strlen($my->lastError) > 0)
+    {
+        echo $my->lastError;
+        if($my->connected)
+        {
+            $my->closeConnection();
+        }
+    }
+    else
+    {
+        echo $result;
+        $my->closeConnection();
+    }
+}
+else
+{
+    echo $my->lastError;
+}
+*/
+
+#POSTGRESSQL
+/*
+include "SG_PostgreSQL.php";
+
+$pg = new SG_PostgreSQL();
+
+if($pg->connected)
+{
+    //$result = $pg->executeSQL("CREATE TABLE test1(id int, description varchar(10));");
+    //$result = $pg->executeSQL("INSERT INTO test1(id,description) VALUES(3,'test 3');");
+    //$result = $pg->exportJSON("SELECT * FROM test1");
+    $result = $pg->countRows("SELECT * FROM test1");
+
+    if(strlen($pg->lastError) > 0)
+    {
+        echo $pg->lastError;
+        if($pg->connected)
+        {
+            $pg->closeConnection();
+        }
+    }
+    else
+    {
+        echo $result;
+        $pg->closeConnection();
+    }
+}
+else
+{
+    echo $pg->lastError;
+}
+*/

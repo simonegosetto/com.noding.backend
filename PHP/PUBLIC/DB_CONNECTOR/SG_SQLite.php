@@ -7,15 +7,18 @@ final class SG_SQLite extends SG_DB
 
 
     /* *******************
-	 * Private
-	 * *******************/
+    * Construct
+    * *******************/
 
-    //Costruttore
     function SG_SQLite($dbName="")
     {
         $this->hostname = $dbName;
         $this->connect();
     }
+
+    /* *******************
+    * Private
+    * *******************/
 
     private function sqlite_open($location)
     {
@@ -25,8 +28,7 @@ final class SG_SQLite extends SG_DB
 
     private function sqlite_query($dbhandle,$query)
     {
-        $array['dbhandle'] = $dbhandle;
-        $array['query'] = $query;
+        echo $query."\n";
         $result = $dbhandle->query($query);
         return $result;
     }
@@ -80,25 +82,7 @@ final class SG_SQLite extends SG_DB
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
-        if($this->result = $this->sqlite_query($this->conn,$query))
-        {
-            if ($this->result)
-            {
-                $this->records  = 0;
-                $this->affected = 0;
-                $this->arrayResults();
-            } else
-            {
-                $this->records  = 0;
-                $this->affected = 0;
-            }
-
-            //echo "Query eseguita correttamente !";
-        } else
-        {
-            $this->lastError = lastErrorMsg();
-            return false;
-        }
+        $this->result = $this->sqlite_query($this->conn,$query);
     }
 
     //Ritorna il numero di righe della query
@@ -129,14 +113,25 @@ final class SG_SQLite extends SG_DB
     public function exportJSON($query)
     {
         $this->executeSQL($query);
-
-        if($this->affected == 1)
+        if($this->result)
         {
-            $rows[] = $this->arrayedResult;
+            if ($this->result)
+            {
+                $this->records  = 0;
+                $this->affected = 0;
+                $this->arrayResults();
+            } else
+            {
+                $this->records  = 0;
+                $this->affected = 0;
+            }
         } else
         {
-            $rows = $this->arrayedResult;
+            $this->lastError = lastErrorMsg();
+            return false;
         }
+
+        $rows = $this->arrayedResult;
 
         return json_encode($rows, JSON_NUMERIC_CHECK);
     }
