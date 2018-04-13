@@ -1,7 +1,5 @@
 <?php
 
-include "SG_DB.php";
-
 final class SG_Mysql extends SG_DB
 {
 
@@ -179,7 +177,7 @@ final class SG_Mysql extends SG_DB
             $export.="\t<record>\n\t\t";
             for($i=0; $i< $fcount; $i++)
             {
-                $tag = mysqli_fetch_field_direct($this->result, $i)->name;//mysql_field_name( $this->result, $i );
+                $tag = mysqli_fetch_field_direct($this->result, $i)->name;
                 $export.="<$tag>".mysqli_real_escape_string($this->conn,$row[$i])."</$tag>";
             }
             $export.="\n\t</record>";
@@ -200,7 +198,7 @@ final class SG_Mysql extends SG_DB
         {
             for($i=0; $i< $fcount; $i++)
             {
-                $tag = mysqli_fetch_field_direct($this->result, $i)->name;//mysql_field_name( $this->result, $i );
+                $tag = mysqli_fetch_field_direct($this->result, $i)->name;
                 $export .= mysqli_real_escape_string($this->conn,$row[$i])."\t";
             }
             $export .= "\n";

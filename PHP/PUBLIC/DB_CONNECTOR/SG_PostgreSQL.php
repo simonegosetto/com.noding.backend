@@ -1,7 +1,5 @@
 <?php
 
-include "SG_DB.php";
-
 final class SG_PostgreSQL extends SG_DB
 {
 

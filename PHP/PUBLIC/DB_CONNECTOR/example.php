@@ -1,5 +1,7 @@
 <?php
 
+include "SG_DB.php";
+
 #MICROSOFT SQL SERVER
 /*
 include "SG_MsSql.php";
@@ -131,3 +133,47 @@ else
     echo $pg->lastError;
 }
 */
+
+
+include "SG_SQLite.php";
+include "SG_MsSql.php";
+
+$lite = new SG_SQLite("SQLite_db_test.db");
+$ms = new SG_MsSql();
+
+if($lite->connected && $ms->connected)
+{
+    //prepare parent
+    $lite->prepareForCrossJoin(
+        'select * from test1',
+        'id',
+        null
+    );
+
+    //prepare child
+    $ms->prepareForCrossJoin(
+        'select * from stato',
+        'Stato',
+        'Descr'
+    );
+
+    $resultJoin = $lite->joinQuery($ms).toJSON();
+
+    if(strlen($lite->lastError) > 0)
+    {
+        echo $lite->lastError;
+        if($lite->connected)
+        {
+            $lite->closeConnection();
+        }
+    }
+    else
+    {
+        echo $resultJoin;
+        $lite->closeConnection();
+    }
+}
+else
+{
+    echo $lite->lastError;
+}

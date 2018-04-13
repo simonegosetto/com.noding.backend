@@ -1,7 +1,5 @@
 <?php
 
-include "SG_DB.php";
-
 final class SG_MsSQL extends SG_DB
 {
 
@@ -36,11 +34,6 @@ final class SG_MsSQL extends SG_DB
         if( ($errors = sqlsrv_errors() ) != null)
         {
             return $errors[count($errors)-1][ 'message'];
-            /*foreach( $errors as $error ) {
-                echo "SQLSTATE: ".$error[ 'SQLSTATE']."<br />";
-                echo "code: ".$error[ 'code']."<br />";
-                echo "message: ".$error[ 'message']."<br />";
-            }*/
         }
         else
         {
@@ -154,6 +147,15 @@ final class SG_MsSQL extends SG_DB
             $rows = $this->arrayedResult;
         }
         return json_encode($rows, JSON_NUMERIC_CHECK );
+    }
+
+    public function prepareForCrossJoin($query,$fieldID,$fieldDesc)
+    {
+        $this->arrayForCrossJoin = array(
+            'query' => $query,
+            'fieldID' => $fieldID,
+            'fieldDesc' => $fieldDesc // ONLY USED IN SLAVE OBJECT (if '*' take all fields)
+        );
     }
 
 }

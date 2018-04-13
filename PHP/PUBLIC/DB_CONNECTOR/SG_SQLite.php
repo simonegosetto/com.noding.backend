@@ -1,7 +1,5 @@
 <?php
 
-include "SG_DB.php";
-
 final class SG_SQLite extends SG_DB
 {
 
@@ -28,7 +26,6 @@ final class SG_SQLite extends SG_DB
 
     private function sqlite_query($dbhandle,$query)
     {
-        echo $query."\n";
         $result = $dbhandle->query($query);
         return $result;
     }
@@ -134,6 +131,15 @@ final class SG_SQLite extends SG_DB
         $rows = $this->arrayedResult;
 
         return json_encode($rows, JSON_NUMERIC_CHECK);
+    }
+
+    public function prepareForCrossJoin($query,$fieldID,$fieldDesc)
+    {
+        $this->arrayForCrossJoin = array(
+            'query' => $query,
+            'fieldID' => $fieldID,
+            'fieldDesc' => $fieldDesc // ONLY USED IN SLAVE OBJECT (if '*' take all fields)
+        );
     }
 
 }
