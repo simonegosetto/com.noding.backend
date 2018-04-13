@@ -157,7 +157,7 @@ if($lite->connected && $ms->connected)
         'Descr'
     );
 
-    $resultJoin = $lite->joinQuery($ms).toJSON();
+    $resultJoin = $lite->executeCrossQuery($ms).toJSON();
 
     if(strlen($lite->lastError) > 0)
     {

@@ -50,7 +50,7 @@ abstract class SG_DB {
 
     abstract public function prepareForCrossJoin($query,$fieldID,$fieldDesc /*ONLY USED IN SLAVE OBJECT (if '*' take all fields)*/);
 
-    public function joinQuery($child)
+    public function executeCrossQuery($child)
     {
 
         //controllo validità dei parametri in ingresso
