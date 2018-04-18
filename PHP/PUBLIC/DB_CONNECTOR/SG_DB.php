@@ -54,7 +54,7 @@ abstract class SG_DB {
     {
 
         //controllo validità dei parametri in ingresso
-        if(!$child)
+        if (!$child)
         {
             return "Impossibile eseguire il JOIN CROSS DB perchè l'oggetto passato non è valido";
         }
@@ -62,12 +62,12 @@ abstract class SG_DB {
         //altri controlli volendo...
 
         //first query
-        $first_query = $this->executeSQL($this->arrayForCrossJoin["query"]);
+        $first_query = $this->exportJSON($this->arrayForCrossJoin["query"]);
 
-        if(strlen($this->lastError) > 0)
+        if (strlen($this->lastError) > 0)
         {
             echo $this->lastError;
-            if($this->connected)
+            if ($this->connected)
             {
                 $this->closeConnection();
             }
@@ -76,30 +76,70 @@ abstract class SG_DB {
         {
 
             //second query
-           $second_query = $child->executeSQL($child->arrayForCrossJoin["query"]);
+            $second_query = $child->exportJSON($child->arrayForCrossJoin["query"]);
 
-            if(strlen($child->lastError) > 0)
+            if (strlen($child->lastError) > 0)
             {
                 echo $child->lastError;
-                if($child->connected)
+                if ($child->connected)
                 {
                     $child->closeConnection();
                 }
             }
 
             //join of recordsets
-            $this->result = '';
+            $a = json_decode($first_query, true);
+            $b = json_decode($second_query, true);
+            //var_dump($a) . "\n" . var_dump($b);
 
-            //close all DB connection
-            $this->closeConnection();
-            $child->closeConnection();
+            for ($i = 0; $i < count($a); $i++)
+            {
+                //check if the property of master array exist
+                if (isset($a[$i][$this->arrayForCrossJoin["fieldID"]]) && array_key_exists($this->arrayForCrossJoin["fieldID"], $a[$i]))
+                {
+                    $value_a = $a[$i][$this->arrayForCrossJoin["fieldID"]];
+                    // now check if the child property exist for join
+                    if (array_search($value_a, array_column($b,$child->arrayForCrossJoin["fieldID"])))
+                    {
+                        if ($child->arrayForCrossJoin["fieldDesc"] == "*")
+                        {
+                            $a[$i] = array_merge($a[$i], $b[array_search($value_a, array_column($b,$child->arrayForCrossJoin["fieldID"]))]);
+                        }
+                        else
+                        {
+                            $a[$i][$child->arrayForCrossJoin["fieldDesc"]] = $b[array_search($value_a, array_column($b,$child->arrayForCrossJoin["fieldID"]))][$child->arrayForCrossJoin["fieldDesc"]];
+                        }
+                    }
+                    else
+                    {
+                        echo "The fieldID specified in the child connection for join not exist !";
+                        //close all DB connection
+                        $this->closeConnection();
+                        $child->closeConnection();
+                        return;
+                    }
+                }
+                else
+                {
+                    echo "The fieldID specified in the master connection not exist !";
+                    //close all DB connection
+                    $this->closeConnection();
+                    $child->closeConnection();
+                    return;
+                }
+            }
+
+            $this->result = $a;
+            return $this->result;
         }
 
 
-        /*function toJSON()
+        /*
+        function toJSON($result)
         {
             return json_encode($result, JSON_NUMERIC_CHECK);
-        }*/
+        }
+        */
     }
 
 }

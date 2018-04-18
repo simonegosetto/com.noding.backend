@@ -72,6 +72,7 @@ final class SG_SQLite extends SG_DB
     public function closeConnection()
     {
         $this->sqlite_close($this->conn);
+        $this->connected = false;
     }
 
 

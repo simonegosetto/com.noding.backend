@@ -2,6 +2,9 @@
 
 include "SG_DB.php";
 
+// For hide notice
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 #MICROSOFT SQL SERVER
 /*
 include "SG_MsSql.php";
@@ -137,11 +140,13 @@ else
 
 include "SG_SQLite.php";
 include "SG_MsSql.php";
+include "SG_Mysql.php";
 
 $lite = new SG_SQLite("SQLite_db_test.db");
-$ms = new SG_MsSql();
+//$ms = new SG_MsSql();
+$my = new SG_MySql();
 
-if($lite->connected && $ms->connected)
+if($lite->connected && $my->connected)
 {
     //prepare parent
     $lite->prepareForCrossJoin(
@@ -151,13 +156,13 @@ if($lite->connected && $ms->connected)
     );
 
     //prepare child
-    $ms->prepareForCrossJoin(
-        'select * from stato',
-        'Stato',
-        'Descr'
+    $my->prepareForCrossJoin(
+        'select * from test1',
+        'id',
+        '*'
     );
 
-    $resultJoin = $lite->executeCrossQuery($ms).toJSON();
+    $resultJoin = $lite->executeCrossQuery($my)/*.toJSON()*/;
 
     if(strlen($lite->lastError) > 0)
     {
@@ -169,8 +174,10 @@ if($lite->connected && $ms->connected)
     }
     else
     {
-        echo $resultJoin;
+        //echo $resultJoin;
+        var_dump($resultJoin);
         $lite->closeConnection();
+        $my->closeConnection();
     }
 }
 else

@@ -64,6 +64,7 @@ final class SG_MsSQL extends SG_DB
     public function closeConnection()
     {
         sqlsrv_close($this->conn);
+        $this->connected = false;
     }
 
     //Esecuzione della query

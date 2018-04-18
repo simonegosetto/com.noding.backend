@@ -53,6 +53,7 @@ final class SG_PostgreSQL extends SG_DB
     public function closeConnection()
     {
         pg_close($this->conn);
+        $this->connected = false;
     }
 
     //Esecuzione della query
