@@ -19,10 +19,7 @@ if($ms->connected)
     if(strlen($ms->lastError) > 0)
     {
         echo $ms->lastError;
-        if($ms->connected)
-        {
-            $ms->closeConnection();
-        }
+        $ms->closeConnection();
     }
     else
     {
@@ -55,10 +52,7 @@ if($lite->connected)
     if(strlen($lite->lastError) > 0)
     {
         echo $lite->lastError;
-        if($lite->connected)
-        {
-            $lite->closeConnection();
-        }
+        $lite->closeConnection();
     }
     else
     {
@@ -87,10 +81,7 @@ if($my->connected)
     if(strlen($my->lastError) > 0)
     {
         echo $my->lastError;
-        if($my->connected)
-        {
-            $my->closeConnection();
-        }
+        $my->closeConnection();
     }
     else
     {
@@ -120,10 +111,7 @@ if($pg->connected)
     if(strlen($pg->lastError) > 0)
     {
         echo $pg->lastError;
-        if($pg->connected)
-        {
-            $pg->closeConnection();
-        }
+        $pg->closeConnection();
     }
     else
     {
@@ -137,16 +125,17 @@ else
 }
 */
 
+#TEST CROSS JOIN
 
 include "SG_SQLite.php";
 include "SG_MsSql.php";
 include "SG_Mysql.php";
 
 $lite = new SG_SQLite("SQLite_db_test.db");
-//$ms = new SG_MsSql();
-$my = new SG_MySql();
+$ms = new SG_MsSql();
+//$my = new SG_MySql();
 
-if($lite->connected && $my->connected)
+if($lite->connected && $ms->connected)
 {
     //prepare parent
     $lite->prepareForCrossJoin(
@@ -156,31 +145,29 @@ if($lite->connected && $my->connected)
     );
 
     //prepare child
-    $my->prepareForCrossJoin(
-        'select * from test1',
-        'id',
-        '*'
+    $ms->prepareForCrossJoin(
+        'select * from stato',
+        'Stato',
+        'Descr'
     );
 
-    $resultJoin = $lite->executeCrossQuery($my)/*.toJSON()*/;
+    $resultJoin = $lite->executeCrossQuery($ms).toJSON();
 
-    if(strlen($lite->lastError) > 0)
+    if(strlen($lite->lastError) > 0 || strlen($ms->lastError) > 0)
     {
-        echo $lite->lastError;
-        if($lite->connected)
-        {
-            $lite->closeConnection();
-        }
+        echo $lite->lastError." ".$ms->lastError;
+        $lite->closeConnection();
+        $ms->closeConnection();
     }
     else
     {
         //echo $resultJoin;
         var_dump($resultJoin);
         $lite->closeConnection();
-        $my->closeConnection();
+        $ms->closeConnection();
     }
 }
 else
 {
-    echo $lite->lastError;
+    echo $lite->lastError." ".$ms->lastError;
 }

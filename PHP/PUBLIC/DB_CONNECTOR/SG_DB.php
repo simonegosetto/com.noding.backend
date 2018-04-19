@@ -21,13 +21,6 @@ abstract class SG_DB {
 
     var $arrayForCrossJoin;
 
-    //Object for crossjoin
-    /*public var $prepareForCrossJoin = array (
-        'query' => '',
-        'fieldID' => '',
-        'fieldDesc' => ''
-    );*/
-
     /* *******************
     * Construct
     * *******************/
@@ -48,7 +41,14 @@ abstract class SG_DB {
 
     abstract public function exportJSON($query);
 
-    abstract public function prepareForCrossJoin($query,$fieldID,$fieldDesc /*ONLY USED IN SLAVE OBJECT (if '*' take all fields)*/);
+    public function prepareForCrossJoin($query,$fieldID,$fieldDesc)
+    {
+        $this->arrayForCrossJoin = array(
+            'query' => $query,
+            'fieldID' => $fieldID,
+            'fieldDesc' => $fieldDesc // ONLY USED IN CHILD OBJECT (if '*' take all fields)
+        );
+    }
 
     public function executeCrossQuery($child)
     {
@@ -134,12 +134,10 @@ abstract class SG_DB {
         }
 
 
-        /*
-        function toJSON($result)
+        function toJSON()
         {
-            return json_encode($result, JSON_NUMERIC_CHECK);
+            return json_encode($_GLOBAL['result'], JSON_NUMERIC_CHECK);
         }
-        */
     }
 
 }

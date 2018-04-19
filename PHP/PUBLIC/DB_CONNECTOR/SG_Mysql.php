@@ -225,13 +225,4 @@ final class SG_Mysql extends SG_DB
         return json_encode($rows, JSON_NUMERIC_CHECK);
     }
 
-    public function prepareForCrossJoin($query,$fieldID,$fieldDesc)
-    {
-        $this->arrayForCrossJoin = array(
-            'query' => $query,
-            'fieldID' => $fieldID,
-            'fieldDesc' => $fieldDesc // ONLY USED IN SLAVE OBJECT (if '*' take all fields)
-        );
-    }
-
 }
