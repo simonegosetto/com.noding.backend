@@ -129,29 +129,27 @@ else
 
 include "SG_SQLite.php";
 include "SG_MsSql.php";
-include "SG_Mysql.php";
 
 $lite = new SG_SQLite("SQLite_db_test.db");
 $ms = new SG_MsSql();
-//$my = new SG_MySql();
 
 if($lite->connected && $ms->connected)
 {
     //prepare parent
     $lite->prepareForCrossJoin(
-        'select * from test1',
-        'id',
+        'select * from test1', //query master
+        'id', // master field name for join
         null
     );
 
     //prepare child
     $ms->prepareForCrossJoin(
-        'select * from stato',
-        'Stato',
-        'Descr'
+        'select * from stato', //query child
+        'Stato', // child field name for join
+        'Descr' // child field name to exstract (description) ONLY USED IN CHILD OBJECT (if '*' take all fields of RecordSet)
     );
 
-    $resultJoin = $lite->executeCrossQuery($ms).toJSON();
+    $resultJoin = $lite->executeCrossQuery($ms);
 
     if(strlen($lite->lastError) > 0 || strlen($ms->lastError) > 0)
     {

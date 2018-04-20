@@ -8,16 +8,16 @@ abstract class SG_DB {
     var $password = "";
     var $database = "";
     var $port = "";
-    var $conn;               // Connessione al DB
+    var $conn;               // connection handler
 
-    var $lastError = "";    // Ultimo errore
-    var $lastQuery;         // Ultima query (eseguita/richiesta)
-    var $result;            // Ultimo risultato
-    var $records;           // Numero di record estratti
-    var $affected;          // Numero di righe aggiornate
-    var $rawResults;        //
-    var $arrayedResult;     // Ultimo array di risultati
-    var $connected;         //Connesso si/no
+    var $lastError = "";
+    var $lastQuery;
+    var $result;
+    var $records;
+    var $affected;
+    var $rawResults;
+    var $arrayedResult;
+    var $connected;
 
     var $arrayForCrossJoin;
 
@@ -53,13 +53,13 @@ abstract class SG_DB {
     public function executeCrossQuery($child)
     {
 
-        //controllo validità dei parametri in ingresso
+        //check of child istance
         if (!$child)
         {
-            return "Impossibile eseguire il JOIN CROSS DB perchè l'oggetto passato non è valido";
+            return "Invalid child Object !";
         }
 
-        //altri controlli volendo...
+        //we can implements others check for more solidity...
 
         //first query
         $first_query = $this->exportJSON($this->arrayForCrossJoin["query"]);
@@ -85,12 +85,12 @@ abstract class SG_DB {
                 {
                     $child->closeConnection();
                 }
+                return;
             }
 
             //join of recordsets
             $a = json_decode($first_query, true);
             $b = json_decode($second_query, true);
-            //var_dump($a) . "\n" . var_dump($b);
 
             for ($i = 0; $i < count($a); $i++)
             {
@@ -133,11 +133,6 @@ abstract class SG_DB {
             return $this->result;
         }
 
-
-        function toJSON()
-        {
-            return json_encode($_GLOBAL['result'], JSON_NUMERIC_CHECK);
-        }
     }
 
 }

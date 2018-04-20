@@ -1,6 +1,8 @@
 
 Ho pensato di realizzare un insieme di classi "connector" per i vari DB partendo da un'unica classe astratta in modo che abbiamo pressocchè le stesse funzioni. 
 
+La funzionalità aggiuntiva che a me è servita e per il quale ho pensato di realizzare tutto questo è quella di poter fare un JOIN tra query di diversi connector (l'esempio è presente nell'apposita pagina), in modo da avere in output un array completo con il merge di quello che abbiamo indicato nella configurazione della CROSS QUERY.
+
 Configurazione:
 
 nel file "config.inc.ini" dovete andare a configurare le credenziali dei vari DB a cui volete acccedere, esse verranno usate dalle relative classi.

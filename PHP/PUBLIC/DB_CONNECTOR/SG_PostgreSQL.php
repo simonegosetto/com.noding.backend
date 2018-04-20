@@ -34,13 +34,12 @@ final class SG_PostgreSQL extends SG_DB
 	 * Public
 	 * *******************/
 
-    //Connessione al DB
     public function connect()
     {
         $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server';
+            $this->lastError = 'No connection for the server !';
             $this->connected = false;
             return false;
         }
@@ -49,14 +48,12 @@ final class SG_PostgreSQL extends SG_DB
         return true;
     }
 
-    //Chiusura connessione al DB
     public function closeConnection()
     {
         pg_close($this->conn);
         $this->connected = false;
     }
 
-    //Esecuzione della query
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
@@ -87,21 +84,18 @@ final class SG_PostgreSQL extends SG_DB
         }
     }
 
-    //Ritorna il numero di righe della query
     public function countRows($query)
     {
         $result = $this->executeSQL($query);
         return $this->records;
     }
 
-    //Singolo array
     public function arrayResult()
     {
         $this->arrayedResult = pg_fetch_assoc($this->result) or die (pg_last_error($this->conn));
         return $this->arrayedResult;
     }
 
-    //Array multiplo
     public function arrayResults()
     {
         if($this->records == 1)
@@ -117,7 +111,6 @@ final class SG_PostgreSQL extends SG_DB
         return $this->arrayedResult;
     }
 
-    //Funzione che mi esporta il risultato della query in JSON
     public function exportJSON($query)
     {
         $this->executeSQL($query);

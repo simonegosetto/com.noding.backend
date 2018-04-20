@@ -53,13 +53,12 @@ final class SG_SQLite extends SG_DB
 	 * PUBLIC
 	 * *******************/
 
-    //Connessione al DB
     public function connect()
     {
         $this->conn = $this->sqlite_open($this->hostname);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al DB: ' . lastErrorMsg();
+            $this->lastError = 'No connection to DB: ' . lastErrorMsg();
             $this->connected = false;
             return false;
         }
@@ -68,7 +67,6 @@ final class SG_SQLite extends SG_DB
         return true;
     }
 
-    //Chiusura connessione al DB
     public function closeConnection()
     {
         $this->sqlite_close($this->conn);
@@ -76,14 +74,12 @@ final class SG_SQLite extends SG_DB
     }
 
 
-    //Esecuzione della query
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
         $this->result = $this->sqlite_query($this->conn,$query);
     }
 
-    //Ritorna il numero di righe della query
     public function countRows($query)
     {
         $result = $this->executeSQL($query);
@@ -91,7 +87,6 @@ final class SG_SQLite extends SG_DB
     }
 
 
-    //Array multiplo
     public function arrayResults()
     {
         $this->arrayedResult = array();
@@ -107,7 +102,6 @@ final class SG_SQLite extends SG_DB
     }
 
 
-    //Funzione che mi esporta il risultato della query in JSON
     public function exportJSON($query)
     {
         $this->executeSQL($query);

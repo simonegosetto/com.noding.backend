@@ -34,38 +34,35 @@ final class SG_Mysql extends SG_DB
 	 * PUBLIC
 	 * *******************/
 
-    //Connessione al DB
     public function connect()
     {
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server: ' . mysqli_connect_error().PHP_EOL;
+            $this->lastError = 'No connection for the server !: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }
 
         if(!$this->UseDB($this->database))
         {
-            $this->lastError = 'Nessun DB selezionato: ' . mysqli_connect_error().PHP_EOL;
+            $this->lastError = 'No DB selected: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }
 
         $this->connected = true;
-        //Imposto il charset che mi aiuta nell'estrazione corretta dei dati
+        //Force the charset for the extracrtion of data
         mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
 
-    //Chiusura connessione al DB
     public function closeConnection()
     {
         mysqli_close($this->conn);
         $this->connected = false;
     }
 
-    //Pulisce il buffer della connessione dalle precedenti query
     public function CleanBufferResults($conn)
     {
         while($conn->more_results())
@@ -78,7 +75,6 @@ final class SG_Mysql extends SG_DB
         }
     }
 
-    //Esecuzione della query
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
@@ -111,21 +107,18 @@ final class SG_Mysql extends SG_DB
         }
     }
 
-    //Ritorna il numero di righe della query
     public function countRows($query)
     {
         $result = $this->executeSQL($query);
         return $this->records;
     }
 
-    //Singolo array
     public function arrayResult()
     {
         $this->arrayedResult = mysqli_fetch_assoc($this->result) or die (mysqli_error($this->conn));
         return $this->arrayedResult;
     }
 
-    //Array multiplo
     public function arrayResults()
     {
         if($this->records == 1)
@@ -141,14 +134,13 @@ final class SG_Mysql extends SG_DB
         return $this->arrayedResult;
     }
 
-    //Seleziona il DB interessato (di dafault non importa)
     public function UseDB($db)
     {
         if(strlen($this->database) > 0)
         {
             if(!mysqli_select_db($this->conn,$db))
             {
-                $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
+                $this->lastError = 'No DB selected: ' . mysqli_error($this->conn);
                 return false;
             } else
             {
@@ -158,7 +150,7 @@ final class SG_Mysql extends SG_DB
         {
             if(!mysqli_select_db($this->conn,$db))
             {
-                $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
+                $this->lastError = 'No DB selected: ' . mysqli_error($this->conn);
                 return false;
             } else
             {
@@ -167,7 +159,6 @@ final class SG_Mysql extends SG_DB
         }
     }
 
-    //Funzione che mi esporta il risultato della query in XML
     public function exportXML($query)
     {
         $this->executeSQL($query);
@@ -189,7 +180,6 @@ final class SG_Mysql extends SG_DB
         return $export;
     }
 
-    //Funzione che mi esporta il risultato della query in CSV
     public function exportCSV($query)
     {
         $this->executeSQL($query);
@@ -209,7 +199,6 @@ final class SG_Mysql extends SG_DB
         return $export;
     }
 
-    //Funzione che mi esporta il risultato della query in JSON
     public function exportJSON($query)
     {
         $this->executeSQL($query);
