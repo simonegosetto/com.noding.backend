@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 ini_set('display_errors', 1);
 
+include "DB/FD_DB.php";
 include "DB/FD_Mysql.php";
 include "Tools/FD_Random.php";
 include "Tools/FD_Crypt.php";

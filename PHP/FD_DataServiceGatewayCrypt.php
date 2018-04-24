@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+include "DB/FD_DB.php";
 include "DB/FD_Mysql.php";
 include "Tools/FD_Crypt.php";
 include "WebTools/FD_Mailer.php";
@@ -247,7 +248,7 @@ try {
 
         //Seleziono il DB
         if(!$sql->UseDB($database)){
-            echo '{"error" : "Invalid database"}';
+            echo '{"error" : "Invalid database !"}';
             return;
         }
 

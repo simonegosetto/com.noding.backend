@@ -23,24 +23,18 @@ abstract class FD_DB {
     function FD_DB(){}
 
     /* *******************
-	 * Private
-	 * *******************/
-
-    abstract private function Connect(){}
-
-    private function decrypt($encrypted_string, $encryption_key) {}
-
-    private function cleanData(&$str) {}
-
-    /* *******************
 	 * PUBLIC
 	 * *******************/
 
-    abstract public function closeConnection(){}
+    abstract public function Connect();
+
+    public function decrypt($encrypted_string, $encryption_key) {}
+
+    abstract public function closeConnection();
 
     public function CleanBufferResults($conn){}
 
-    abstract public function executeSQL($query){}
+    abstract public function executeSQL($query);
 
     public function countRows($query){}
 
@@ -50,7 +44,7 @@ abstract class FD_DB {
 
     public function exportCSV($query){}
 
-    abstract public function exportJSON($query){}
+    abstract public function exportJSON($query);
 
 }
 
