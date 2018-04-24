@@ -19,11 +19,6 @@ Useful Links for the download and the configurarion of the library srvsql for PH
  - https://www.microsoft.com/en-us/download/confirmation.aspx?id=56567 
  - https://www.microsoft.com/en-us/download/confirmation.aspx?id=56729
  
- Useful files:
-  - SG_MsSQL_msodbcsql_17.1.0.1_x64.msi -> dll per estensione PHP a 64bit
-  - SG_MsSQL_msodbcsql_17.1.0.1_x86.msi -> dll per estensione PHP a 32bit
-  - SG_MsSQL_SQLSRV52.EXE -> driver ODBC per PHP 7
-  
 ############################ SQLITE ############################
 
 Extension: "extension=php_sqlite3.dll"
