@@ -150,7 +150,7 @@ try {
     //Prendo il token di sessione dell'utente e controllo che sia valido
     $jwt = new FD_JWT();
     if(strlen($token)>0){
-        $keyRequest = $jwt->decode($token,strtolower(md5_file("../Config/esatto.mp3"))); //ritorna il payload
+        $keyRequest = $jwt->decode($token,strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3"))); //ritorna il payload
         if(strlen($keyRequest) == 0) {
             echo '{"error" : "Invalid token !"}';
             return;

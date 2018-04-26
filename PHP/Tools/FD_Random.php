@@ -9,7 +9,7 @@
 class FD_Random
 {
 
-    function FD_Random(){}
+    function __constructor(){}
 
     //Ritorna una stringa random della dimensione desiderata
     public function Generate($length=16)

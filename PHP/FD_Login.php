@@ -96,7 +96,7 @@ if ($gest == 1)
 if(strlen($keyRequest)>0)
 {
     $keyRequest = strtolower($keyRequest);
-    if ($keyRequest != strtolower(md5_file("../Config/esatto.mp3")))
+    if ($keyRequest != strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3")))
     {
         echo '{"error" : "Invalid token !"}';
         return;
@@ -136,9 +136,10 @@ if (strlen($keyRequest) > 0)
         return;
     }
     $salt = json_decode($result, true);
-    $crypt = new FD_Crypt();
+
     $password = $crypt->Django_Crypt($password,$salt["salt"],20000);
     */
+    $crypt = new FD_Crypt();
     $password = $crypt->simple_crypt($password);
 
     //Eseguo la query di login

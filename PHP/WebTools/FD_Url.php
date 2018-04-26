@@ -60,7 +60,7 @@ class FD_Url
     'ORIG_PATH_INFO'
     */
 
-    function FD_Url($defLocale="it")
+    function __constructor($defLocale="it")
     {
         $this->SERVER_PORT = $_SERVER['SERVER_PORT'];
         $this->SERVER_NAME = $_SERVER['SERVER_NAME'];

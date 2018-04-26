@@ -9,10 +9,11 @@ final class FD_Mysql extends FD_DB
 	 * *******************/
 
     //Costruttore
-    function FD_Mysql()
+    function __constructor()
     {
-        $this->key = strtolower(md5_file("../Config/esatto.mp3"));
-        $ini_array = parse_ini_file("../Config/config.inc.ini");
+        $ini_array = parse_ini_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/config.inc.ini");
+        $this->key = strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3"));
+
 
         $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
         $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
@@ -27,8 +28,22 @@ final class FD_Mysql extends FD_DB
         $this->Connect();
     }
 
+    /* *******************
+	 * PUBLIC
+	 * *******************/
+
+     //Ritorna il valore decriptato
+    public function decrypt($encrypted_string, $encryption_key)
+    {
+        $encrypted_string = base64_decode($encrypted_string);
+        $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
+        $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
+        $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
+        return $decrypted_string;
+    }
+
     //Connessione al DB
-    private function Connect()
+    public function Connect()
     {
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
@@ -50,21 +65,6 @@ final class FD_Mysql extends FD_DB
         mysqli_set_charset($this->conn, 'utf8');
         return true;
     }
-
-    //Ritorna il valore decriptato
-    private function decrypt($encrypted_string, $encryption_key)
-    {
-        $encrypted_string = base64_decode($encrypted_string);
-        $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
-        $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
-        $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;
-    }
-
-
-    /* *******************
-	 * PUBLIC
-	 * *******************/
 
     //Chiusura connessione al DB
     public function closeConnection()
