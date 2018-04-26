@@ -8,11 +8,10 @@ final class FD_Mysql extends FD_DB
 	 * *******************/
 
     //Costruttore
-    function __constructor()
+    function __construct()
     {
         $ini_array = parse_ini_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/config.inc.ini");
         $this->key = strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3"));
-
 
         $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
         $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
@@ -25,7 +24,6 @@ final class FD_Mysql extends FD_DB
             $this->password = "";
         }
         $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
-        echo $this->hostname.$this->username.$this->password.$this->database;
         $this->Connect();
     }
 
@@ -46,7 +44,7 @@ final class FD_Mysql extends FD_DB
     //Connessione al DB
     public function Connect()
     {
-        echo $this->hostname.$this->username.$this->password.$this->database;
+        //echo $this->hostname.$this->username.$this->password.$this->database;
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
         {
