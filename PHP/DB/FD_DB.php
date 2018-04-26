@@ -3,21 +3,21 @@
 abstract class FD_DB {
 
     //Variabili
-    var $hostname = "";
-    var $username = "";
-    var $password = "";
-    var $database = "";
-    var $conn;      // Connessione al DB
+    public $hostname = "";
+    public $username = "";
+    public $password = "";
+    public $database = "";
+    public $conn;      // Connessione al DB
 
-    var $lastError = "";         // Ultimo errore
-    var $lastQuery;         // Ultima query (eseguita/richiesta)
-    var $result;            // Ultimo risultato
-    var $records;           // Numero di record estratti
-    var $affected;          // Numero di righe aggiornate
-    var $rawResults;        //
-    var $arrayedResult;     // Ultimo array di risultati
-    var $key;               // key
-    var $connected;         //Connesso si/no
+    public $lastError = "";         // Ultimo errore
+    public $lastQuery;         // Ultima query (eseguita/richiesta)
+    public $result;            // Ultimo risultato
+    public $records;           // Numero di record estratti
+    public $affected;          // Numero di righe aggiornate
+    public $rawResults;        //
+    public $arrayedResult;     // Ultimo array di risultati
+    public $key;               // key
+    public $connected;         //Connesso si/no
 
     //Costruttore
     function __constructor(){}

@@ -90,9 +90,6 @@ try {
         if(isset($_POST["token"])) {
             $token = $_POST["token"];
         }
-        if(isset($_POST["database"])) {
-            $database = $_POST["database"];
-        }
         if (isset($_POST["mail"])) {
             $mail = $_POST["mail"];
         }
@@ -114,9 +111,6 @@ try {
         if(property_exists((object) $objData,"token")) {
             $token = $objData->token;
         }
-        if(property_exists((object) $objData,"database")) {
-            $database = $objData->database;
-        }
         if(property_exists((object) $objData,"mail")) {
             $mail = $objData->mail;
         }
@@ -135,9 +129,6 @@ try {
         }
         if(isset($_GET["token"])) {
             $token = $_GET["token"];
-        }
-        if(isset($_GET["database"])) {
-            $database = $_GET["database"];
         }
         if (isset($_GET["mail"])) {
             $mail = $_GET["mail"];
@@ -165,11 +156,6 @@ try {
         }*/
     }else{
         echo '{"error" : "Invalid token !"}';
-        return;
-    }
-
-    if(strlen($database) == 0){
-        echo '{"error" : "Invalid database !"}';
         return;
     }
 
@@ -232,7 +218,7 @@ try {
         $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
     }
 
-    if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
+    if(strlen($query) > 0 && strlen($type) > 0){
 
         //Inizializzo componente SQL
         $sql = new FD_Mysql();
@@ -243,12 +229,6 @@ try {
             if($sql->connected){
                 $sql->closeConnection();
             }
-            return;
-        }
-
-        //Seleziono il DB
-        if(!$sql->UseDB($database)){
-            echo '{"error" : "Invalid database !"}';
             return;
         }
 

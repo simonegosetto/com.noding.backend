@@ -3,7 +3,6 @@
 final class FD_Mysql extends FD_DB
 {
 
-
     /* *******************
 	 * Private
 	 * *******************/
@@ -20,11 +19,13 @@ final class FD_Mysql extends FD_DB
         if(strlen($ini_array["password"]) > 0)
         {
             $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
-        } else
+        }
+        else
         {
             $this->password = "";
         }
         $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
+        echo $this->hostname.$this->username.$this->password.$this->database;
         $this->Connect();
     }
 
@@ -45,6 +46,7 @@ final class FD_Mysql extends FD_DB
     //Connessione al DB
     public function Connect()
     {
+        echo $this->hostname.$this->username.$this->password.$this->database;
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
         {
