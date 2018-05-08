@@ -72,7 +72,7 @@ class FD_ReportService extends FPDF
                 $xml = simplexml_load_file($this->template);
                 $this->content = json_decode(json_encode($xml),TRUE);
 
-                //var_dump($this->content);
+                //var_dump($this->content);return;
 
                 if(in_array($this->content["@attributes"]["orientation"],(new PAGE_ORIENTATION())->getConst()) &&
                    in_array($this->content["@attributes"]["unit"],(new PAGE_UNIT())->getConst()) &&
@@ -85,40 +85,66 @@ class FD_ReportService extends FPDF
 
                     //GESTIRE EVENTUALE HEADER
 
-                    //insert labels
-                    for($i=0;$i<count($this->content["label"]);$i++)
+                    //insert the keys of array
+                    $keys = array_keys($this->content);
+                    for($i=0;$i<count($keys);$i++)
                     {
-                        if(in_array($this->content["label"][$i]["@attributes"]["font"],(new FONT_FAMILY())->getConst()) &&
-                           in_array($this->content["label"][$i]["@attributes"]["font-style"],(new FONT_STYLE())->getConst()))
+                        if($keys[$i] == "@attributes" || $keys[$i] == "comment" || $keys[$i] == "header" || $keys[$i] == "footer") continue;
+
+                        //check id properties exist in data
+                        if(array_key_exists($keys[$i],$this->data_object))
                         {
-                            $this->pdf->SetFont($this->content["label"][$i]["@attributes"]["font"],
-                                                $this->content["label"][$i]["@attributes"]["font-style"],
-                                                $this->content["label"][$i]["@attributes"]["font-size"]);
 
-                            //check id properties exist in data
-                            if(array_key_exists($this->content["label"][$i]["@attributes"]["field"],$this->data_object))
+                            ////////////////////////////// TEXT ////////////////////////////////////
+                            if($this->content[$keys[$i]]["@attributes"]["type"] == "text")
                             {
-                                $this->pdf->SetXY($this->content["label"][$i]["@attributes"]["x"],
-                                                  $this->content["label"][$i]["@attributes"]["y"]);
+                                if(in_array($this->content[$keys[$i]]["@attributes"]["font"],(new FONT_FAMILY())->getConst()) &&
+                                   in_array($this->content[$keys[$i]]["@attributes"]["font-style"],(new FONT_STYLE())->getConst()))
+                                {
+                                    $this->pdf->SetFont($this->content[$keys[$i]]["@attributes"]["font"],
+                                                        $this->content[$keys[$i]]["@attributes"]["font-style"],
+                                                        $this->content[$keys[$i]]["@attributes"]["font-size"]);
 
-                                $this->pdf->Cell($this->content["label"][$i]["@attributes"]["w"],
-                                           $this->content["label"][$i]["@attributes"]["h"],
-                                           $this->data_object[$this->content["label"][$i]["@attributes"]["field"]],
-                                           intval($this->content["label"][$i]["@attributes"]["border"]),
-                                           $this->content["label"][$i]["@attributes"]["ln"],
-                                           $this->content["label"][$i]["@attributes"]["align"],
-                                           $this->content["label"][$i]["@attributes"]["fill"]
-                                          );
+                                        if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
+                                            $this->pdf->SetX($this->content[$keys[$i]]["@attributes"]["x"]);
+
+                                        if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
+                                           $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
+
+                                        $this->pdf->Cell($this->content[$keys[$i]]["@attributes"]["w"],
+                                                   $this->content[$keys[$i]]["@attributes"]["h"],
+                                                   $this->data_object[$keys[$i]],
+                                                   $this->content[$keys[$i]]["@attributes"]["border"],
+                                                   $this->content[$keys[$i]]["@attributes"]["ln"],
+                                                   $this->content[$keys[$i]]["@attributes"]["align"],
+                                                   $this->content[$keys[$i]]["@attributes"]["fill"]
+                                                  );
+                                }
+                                else
+                                {
+                                    echo '{"error" : "Any '.$keys[$i].'\'s attribute is invalid or missing"}';
+                                    return;
+                                }
                             }
-                            else
-                            {
-                                echo '{"error" : "The property '.$this->content["label"][$i]["@attributes"]["field"].' is not defined in data object"}';
-                                return;
-                            }
+
+                            ////////////////////////////// IMAGE ////////////////////////////////////
+
+
+
+
+
+
+
+                            ////////////////////////////// TABLE ////////////////////////////////////
+
+
+
+
+
                         }
                         else
                         {
-                            echo '{"error" : "Any < label >\'s attribute is invalid or missing"}';
+                            echo '{"error" : "The property '.$keys[$i].' is not defined in data object"}';
                             return;
                         }
                     }

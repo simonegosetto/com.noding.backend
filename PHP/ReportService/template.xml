@@ -4,20 +4,20 @@
 
     <!-- http://www.fpdf.org/it/doc/setfont.htm -->
     <!-- http://www.fpdf.org/it/doc/cell.htm -->
-    <label font="Arial" font-size="16" font-style="B" field="titolo" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></label>
+    <titolo type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></titolo>
 
-    <image src="image" x="10" y="40" w="200" h="200" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
+    <image type="image" src="image" x="10" y="40" w="200" h="200" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
 
     <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
-    <table>
-        <record field="nome" headertext="Ingrediente" ></record>
-        <record field="quantita" headertext="Quantità (gr)" ></record>
-        <record field="perc" headertext="% sul totale" ></record>
-    </table>
+    <ingredienti type="table">
+        <nome headertext="Ingrediente" ></nome>
+        <quantita headertext="Quantità (gr)" ></quantita>
+        <perc headertext="% sul totale" ></perc>
+    </ingredienti>
 
-    <label font="Arial" font-size="12" font-style="" field="procedimento" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="-100" ></label>
+    <procedimento type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" ></procedimento>
 
-    <label font="Arial" font-size="12" font-style="I" field="chef" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-30" ></label>
+    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-30" ></chef>
 
     <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->
 </report>
