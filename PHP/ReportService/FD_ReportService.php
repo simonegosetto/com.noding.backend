@@ -94,6 +94,7 @@ class FD_ReportService extends FPDF
                         //check id properties exist in data
                         if(array_key_exists($keys[$i],$this->data_object))
                         {
+                            /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
                             ////////////////////////////// TEXT ////////////////////////////////////
                             if($this->content[$keys[$i]]["@attributes"]["type"] == "text")
@@ -112,13 +113,13 @@ class FD_ReportService extends FPDF
                                            $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
 
                                         $this->pdf->Cell($this->content[$keys[$i]]["@attributes"]["w"],
-                                                   $this->content[$keys[$i]]["@attributes"]["h"],
-                                                   $this->data_object[$keys[$i]],
-                                                   $this->content[$keys[$i]]["@attributes"]["border"],
-                                                   $this->content[$keys[$i]]["@attributes"]["ln"],
-                                                   $this->content[$keys[$i]]["@attributes"]["align"],
-                                                   $this->content[$keys[$i]]["@attributes"]["fill"]
-                                                  );
+                                                         $this->content[$keys[$i]]["@attributes"]["h"],
+                                                         $this->data_object[$keys[$i]],
+                                                         $this->content[$keys[$i]]["@attributes"]["border"],
+                                                         $this->content[$keys[$i]]["@attributes"]["ln"],
+                                                         $this->content[$keys[$i]]["@attributes"]["align"],
+                                                         $this->content[$keys[$i]]["@attributes"]["fill"]
+                                                      );
                                 }
                                 else
                                 {
@@ -128,18 +129,26 @@ class FD_ReportService extends FPDF
                             }
 
                             ////////////////////////////// IMAGE ////////////////////////////////////
+                            else if($this->content[$keys[$i]]["@attributes"]["type"] == "image")
+                            {
 
 
 
 
 
-
-
+                            }
                             ////////////////////////////// TABLE ////////////////////////////////////
+                            else if($this->content[$keys[$i]]["@attributes"]["type"] == "table")
+                            {
 
 
 
 
+
+
+
+                            }
+                            /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
                         }
                         else
