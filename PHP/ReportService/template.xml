@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?><!-- Documentazione completa http://www.fpdf.org/ -->
+<!-- http://www.fpdf.org/it/doc/__construct.htm -->
+<report size="A4" orientation="P" unit="mm" >
+
+    <!-- http://www.fpdf.org/it/doc/setfont.htm -->
+    <!-- http://www.fpdf.org/it/doc/cell.htm -->
+    <label font="Arial" font-size="16" font-style="B" field="titolo" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></label>
+
+    <image src="image" x="10" y="40" w="200" h="200" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
+
+    <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
+    <table>
+        <record field="nome" headertext="Ingrediente" ></record>
+        <record field="quantita" headertext="Quantità (gr)" ></record>
+        <record field="perc" headertext="% sul totale" ></record>
+    </table>
+
+    <label font="Arial" font-size="12" font-style="" field="procedimento" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="-100" ></label>
+
+    <label font="Arial" font-size="12" font-style="I" field="chef" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-30" ></label>
+
+    <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->
+</report>

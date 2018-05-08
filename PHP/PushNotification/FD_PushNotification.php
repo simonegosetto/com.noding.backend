@@ -11,9 +11,9 @@ abstract class FD_PushNotification
 {
 
     //Costruttore
-    function FD_PushNotification(){}
+    function __construct(){}
 
     //Metodo per la richiesta POST
-    abstract public function Send($data,$push){}
+    abstract public function Send($data,$push);
 
 }

@@ -7,7 +7,7 @@
  * Time: 00:56
  */
 
-abstract class FD_OneSignal extends FD_PushNotification
+class FD_OneSignal extends FD_PushNotification
 {
     public var $url = '';
     public var $app_id = '';
