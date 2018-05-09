@@ -18,8 +18,7 @@
     </ingredienti>
 
     <procedimento type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" ></procedimento>
-
-    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-30" ></chef>
+    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-2" ></chef>
 
     <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->
 </report>

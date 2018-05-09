@@ -50,16 +50,12 @@ class FD_ReportService extends FPDF
     // Page footer
     function Footer()
     {
-        var_dump($this->content["footer"]);//["@attributes"]["showPages"]);
-        if($this->content["footer"]["@attributes"]["showPages"] == "true")
-        {
-            // Va a 1.5 cm dal fondo della pagina
-            $this->SetY(-15);
-            // Seleziona Arial corsivo 8
-            $this->SetFont('Arial','I',8);
-            // Stampa il numero di pagina centrato
-            $this->Cell(0,10,'Page '.$this->PageNo(),0,0,'C');
-        }
+        // Va a 1.5 cm dal fondo della pagina
+        $this->pdf->SetY(-35);
+        // Seleziona Arial corsivo 8
+        $this->pdf->SetFont('Arial','I',8);
+        // Stampa il numero di pagina centrato
+        $this->pdf->Cell(0,10,'Page '.$this->pdf->PageNo(),0,0,'R');
     }
 
     public function createPDF()
