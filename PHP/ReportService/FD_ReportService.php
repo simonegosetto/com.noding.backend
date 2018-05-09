@@ -92,7 +92,7 @@ class FD_ReportService extends FPDF
                         if($keys[$i] == "@attributes" || $keys[$i] == "comment" || $keys[$i] == "header" || $keys[$i] == "footer") continue;
 
                         //check id properties exist in data
-                        if(array_key_exists($keys[$i],$this->data_object))
+                        if(array_key_exists($keys[$i],$this->data_object) || substr($keys[$i],0,2) == "ln")
                         {
                             /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -131,29 +131,63 @@ class FD_ReportService extends FPDF
                             ////////////////////////////// IMAGE ////////////////////////////////////
                             else if($this->content[$keys[$i]]["@attributes"]["type"] == "image")
                             {
-
-
-
-
-
+                                //take image format
+                                $formato = pathinfo($this->data_object[$keys[$i]], PATHINFO_EXTENSION);
+                                if(in_array(strtolower($formato),(new IMAGE_FORMAT())->getConst()))
+                                {
+                                    if(!$this->IsNullOrEmptyString($this->data_object[$keys[$i]]))
+                                        $this->pdf->Image($this->data_object[$keys[$i]],
+                                                          $this->content[$keys[$i]]["@attributes"]["x"],
+                                                          $this->content[$keys[$i]]["@attributes"]["y"],
+                                                          $this->content[$keys[$i]]["@attributes"]["w"],
+                                                          $this->content[$keys[$i]]["@attributes"]["h"]);
+                                }
+                                else
+                                {
+                                    echo '{"error" : "The image '.$keys[$i].' have invalid extension"}';
+                                    return;
+                                }
+                            }
+                            ////////////////////////////// LN ////////////////////////////////////
+                            else if($this->content[$keys[$i]]["@attributes"]["type"] == "ln")
+                            {
+                                $this->pdf->Ln($this->content[$keys[$i]]["@attributes"]["h"]);
                             }
                             ////////////////////////////// TABLE ////////////////////////////////////
                             else if($this->content[$keys[$i]]["@attributes"]["type"] == "table")
                             {
+                                //imposto coordinate
+                                if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
+                                    $this->pdf->SetX($this->content[$keys[$i]]["@attributes"]["x"]);
 
+                                if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
+                                   $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
 
+                                // Header
+                                foreach($this->content[$keys[$i]] as $name => $col)
+                                {
+                                    if(array_key_exists("type",$col)) continue;
+                                    $this->pdf->Cell(40,6,$col["@attributes"]["headertext"],1);
+                                }
+                                $this->pdf->Ln();
 
-
-
-
-
+                                // Data
+                                foreach($this->data_object[$keys[$i]] as $row)
+                                {
+                                    foreach($this->content[$keys[$i]] as $name => $col)
+                                    {
+                                        if(array_key_exists("type",$col)) continue;
+                                        $this->pdf->Cell(40,6,$row[$name],1);
+                                    }
+                                    $this->pdf->Ln();
+                                }
                             }
                             /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
                         }
                         else
                         {
-                            echo '{"error" : "The property '.$keys[$i].' is not defined in data object"}';
+                            echo '{"error" : "The property '.$keys[$i].' is not defined in data array"}';
                             return;
                         }
                     }
@@ -169,12 +203,14 @@ class FD_ReportService extends FPDF
                 else
                 {
                     echo '{"error" : "Any < report >\'s attribute is invalid or missing"}';
+                    return;
                 }
 
             }
             else
             {
                 echo '{"error" : "Failed to open the template"}';
+                return;
             }
         }
         catch (Exception $e)

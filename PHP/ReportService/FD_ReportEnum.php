@@ -57,3 +57,11 @@ final class FONT_STYLE extends Enum
     const ITALIC = "I";
     const UNDERLINE = "U";
 }
+
+final class IMAGE_FORMAT extends Enum
+{
+    const JPG = 'jpg';
+    const JPEG = 'jpeg';
+    const PNG = 'png';
+    const GIF = 'gif';
+}

@@ -6,10 +6,12 @@
     <!-- http://www.fpdf.org/it/doc/cell.htm -->
     <titolo type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></titolo>
 
-    <image type="image" src="image" x="10" y="40" w="200" h="200" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
+    <image type="image" x="10" y="20" w="50" h="50" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
+
+    <ln1 type="ln" h="3"></ln1>
 
     <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
-    <ingredienti type="table">
+    <ingredienti type="table" x="10" y="30">
         <nome headertext="Ingrediente" ></nome>
         <quantita headertext="Quantità (gr)" ></quantita>
         <perc headertext="% sul totale" ></perc>
