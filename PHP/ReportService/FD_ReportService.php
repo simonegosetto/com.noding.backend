@@ -160,19 +160,30 @@ class FD_ReportService extends FPDF
                                    $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
 
                                 // Header
+                                //$this->pdf->SetFont('Arial');
+                                $this->pdf->SetFillColor(225);
+                                $this->pdf->SetTextColor(100);
                                 foreach($this->content[$keys[$i]] as $name => $col)
                                 {
                                     if(array_key_exists("type",$col)) continue;
-                                    $this->pdf->Cell(40,6,$col["@attributes"]["headertext"],1);
+                                    $this->pdf->SetFont($col["@attributes"]["font"],
+                                                        $col["@attributes"]["font-style"],
+                                                        $col["@attributes"]["font-size"]);
+                                    $this->pdf->Cell(40,6,$col["@attributes"]["headertext"],1,0 ,'C',1);
                                 }
                                 $this->pdf->Ln();
 
                                 // Data
+                                $this->pdf->SetFillColor(255);
+                                $this->pdf->SetTextColor(0);
                                 foreach($this->data_object[$keys[$i]] as $row)
                                 {
                                     foreach($this->content[$keys[$i]] as $name => $col)
                                     {
                                         if(array_key_exists("type",$col)) continue;
+                                        $this->pdf->SetFont($col["@attributes"]["font"],
+                                                            $col["@attributes"]["font-style"],
+                                                            $col["@attributes"]["font-size"]);
                                         $this->pdf->Cell(40,6,$row[$name],1);
                                     }
                                     $this->pdf->Ln();

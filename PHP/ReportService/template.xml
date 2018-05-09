@@ -11,14 +11,14 @@
     <ln1 type="ln" h="3"></ln1>
 
     <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
-    <ingredienti type="table" x="10" y="30">
-        <nome headertext="Ingrediente" ></nome>
-        <quantita headertext="Quantità (gr)" ></quantita>
-        <perc headertext="% sul totale" ></perc>
+    <ingredienti type="table" x="10" y="30" >
+        <nome headertext="Ingrediente" font="Arial" font-size="12" font-style="" align="L" ></nome>
+        <quantita headertext="Quantità (gr)" font="Arial" font-size="12" font-style="" align="L" ></quantita>
+        <perc headertext="% sul totale" font="Arial" font-size="12" font-style="" align="L" ></perc>
     </ingredienti>
 
     <procedimento type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" ></procedimento>
-    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-2" ></chef>
+    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-30" ></chef>
 
     <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->
 </report>

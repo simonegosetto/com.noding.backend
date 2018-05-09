@@ -13,5 +13,5 @@ $pdf = new FD_ReportService("ReportService/template.xml",
                                     array("nome" => "olio", "quantita" => 70, "perc" => 20)
                                )
                               ));
-//echo $pdf->createPDF();
+echo $pdf->createPDF();
 
