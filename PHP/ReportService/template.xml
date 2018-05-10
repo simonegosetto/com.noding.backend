@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" ?><!-- Documentazione completa http://www.fpdf.org/ -->
+<?xml version="1.0" encoding="UTF-8" ?><!-- Complete documentation http://www.fpdf.org/ -->
 <!-- http://www.fpdf.org/it/doc/__construct.htm -->
 <report size="A4" orientation="P" unit="mm" >
     <author>Simone Gosetto</author>
     <title>Ricetta</title>
+
     <!-- http://www.fpdf.org/it/doc/setfont.htm -->
     <!-- http://www.fpdf.org/it/doc/cell.htm -->
     <titolo type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></titolo>
@@ -16,10 +17,12 @@
         <perc headertext="% sul totale" font="Arial" font-size="12" font-style="" align="L" ></perc>
     </ingredienti>
 
-    <!-- LN have to have an ID ex: "ln"+1 = "ln1", second "ln"+2 = "ln2" etc... -->
-    <ln1 type="ln" h="3"></ln1>
-
     <procedimento type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" yy="40" ></procedimento>
+
+    <!-- LN must to be unique into the file, so have an ID ex: "ln"+1 = "ln1", second "ln"+2 = "ln2" etc... -->
+    <ln1 type="ln" h="6"></ln1>
+    <ln2 type="ln" h="6"></ln2>
+
     <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-25" ></chef>
 
     <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->

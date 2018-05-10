@@ -36,7 +36,8 @@ class FD_ReportService extends PDF
     var $pdf;
 
     // Function for basic field validation (present and neither empty nor only white space
-    private function IsNullOrEmptyString($question){
+    private function IsNullOrEmptyString($question)
+    {
         return (!isset($question) || trim($question)==='');
     }
 
@@ -190,7 +191,7 @@ class FD_ReportService extends PDF
                                         $this->pdf->SetXY($this->content[$keys[$i]]["@attributes"]["x"],$this->pdf->GetY());
 
                                     if(array_key_exists("xx",$this->content[$keys[$i]]["@attributes"]))
-                                            $this->pdf->SetXY($this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"],$this->pdf->GetY());
+                                        $this->pdf->SetXY($this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"],$this->pdf->GetY());
 
                                     foreach($this->content[$keys[$i]] as $name => $col)
                                     {
