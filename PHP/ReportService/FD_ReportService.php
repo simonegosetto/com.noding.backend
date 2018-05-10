@@ -2,7 +2,33 @@
 
 require("ReportService/FD_ReportEnum.php");
 
-class FD_ReportService extends FPDF
+class PDF extends FPDF
+{
+    // Page header
+    function Header()
+    {
+        /*
+        $this->SetFont('Arial','I',8);
+        // Title
+        $this->Cell(30,10,'Title',1,0,'C');
+        // Line break
+        $this->Ln(20);
+        */
+    }
+
+    // Page footer
+    function Footer()
+    {
+        // Va a 1.5 cm dal fondo della pagina
+        $this->SetY(-25);
+        // Seleziona Arial corsivo 8
+        $this->SetFont('Arial','I',8);
+        // Stampa il numero di pagina centrato
+        $this->Cell(0,10,'P.'.$this->PageNo(),0,0,'R');
+    }
+}
+
+class FD_ReportService extends PDF
 {
     var $data_object;
     var $template = "";
@@ -32,36 +58,12 @@ class FD_ReportService extends FPDF
         $this->data_object = $data_object;
     }
 
-    // Page header
-    function Header()
-    {
-        // Logo
-        $this->Image('logo.png',10,6,30);
-        // Arial bold 15
-        $this->SetFont('Arial','B',15);
-        // Move to the right
-        $this->Cell(80);
-        // Title
-        $this->Cell(30,10,'Title',1,0,'C');
-        // Line break
-        $this->Ln(20);
-    }
-
-    // Page footer
-    function Footer()
-    {
-        // Va a 1.5 cm dal fondo della pagina
-        $this->pdf->SetY(-35);
-        // Seleziona Arial corsivo 8
-        $this->pdf->SetFont('Arial','I',8);
-        // Stampa il numero di pagina centrato
-        $this->pdf->Cell(0,10,'Page '.$this->pdf->PageNo(),0,0,'R');
-    }
-
     public function createPDF()
     {
         try
         {
+            ob_end_clean();
+
             if (file_exists($this->template))
             {
                 //take xml template
@@ -76,7 +78,7 @@ class FD_ReportService extends FPDF
                 {
 
 
-                    $this->pdf = new FPDF($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
+                    $this->pdf = new PDF($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
                     $this->pdf->AddPage();
 
                     //GESTIRE EVENTUALE HEADER
@@ -87,7 +89,12 @@ class FD_ReportService extends FPDF
                     {
                         if($keys[$i] == "@attributes" || $keys[$i] == "comment" || $keys[$i] == "header" || $keys[$i] == "footer") continue;
 
-                        //check id properties exist in data
+                        if($keys[$i] == "author") $this->pdf->SetAuthor($this->content[$keys[$i]]);
+                        else if ($keys[$i] == "title") $this->pdf->SetTitle($this->content[$keys[$i]]);
+                        else
+
+                        //sviluppare campo CUSTOM !!!!!!!!!
+                        //check id properties exist in data array
                         if(array_key_exists($keys[$i],$this->data_object) || substr($keys[$i],0,2) == "ln")
                         {
                             /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -105,12 +112,18 @@ class FD_ReportService extends FPDF
                                         if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
                                             $this->pdf->SetX($this->content[$keys[$i]]["@attributes"]["x"]);
 
+                                        if(array_key_exists("xx",$this->content[$keys[$i]]["@attributes"]))
+                                            $this->pdf->SetX($this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"]);
+
                                         if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
                                            $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
 
+                                        if(array_key_exists("yy",$this->content[$keys[$i]]["@attributes"]))
+                                           $this->pdf->SetY($this->pdf->GetY()+$this->content[$keys[$i]]["@attributes"]["yy"]);
+
                                         $this->pdf->Cell($this->content[$keys[$i]]["@attributes"]["w"],
                                                          $this->content[$keys[$i]]["@attributes"]["h"],
-                                                         $this->data_object[$keys[$i]],
+                                                         iconv('UTF-8', 'windows-1252',$this->data_object[$keys[$i]]),
                                                          $this->content[$keys[$i]]["@attributes"]["border"],
                                                          $this->content[$keys[$i]]["@attributes"]["ln"],
                                                          $this->content[$keys[$i]]["@attributes"]["align"],
@@ -153,14 +166,10 @@ class FD_ReportService extends FPDF
                             else if($this->content[$keys[$i]]["@attributes"]["type"] == "table")
                             {
                                 //imposto coordinate
-                                if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
-                                    $this->pdf->SetX($this->content[$keys[$i]]["@attributes"]["x"]);
-
-                                if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
-                                   $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
+                                if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]) && array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
+                                    $this->pdf->SetXY($this->content[$keys[$i]]["@attributes"]["x"],$this->content[$keys[$i]]["@attributes"]["y"]);
 
                                 // Header
-                                //$this->pdf->SetFont('Arial');
                                 $this->pdf->SetFillColor(225);
                                 $this->pdf->SetTextColor(100);
                                 foreach($this->content[$keys[$i]] as $name => $col)
@@ -169,7 +178,7 @@ class FD_ReportService extends FPDF
                                     $this->pdf->SetFont($col["@attributes"]["font"],
                                                         $col["@attributes"]["font-style"],
                                                         $col["@attributes"]["font-size"]);
-                                    $this->pdf->Cell(40,6,$col["@attributes"]["headertext"],1,0 ,'C',1);
+                                    $this->pdf->Cell(40,6,iconv('UTF-8', 'windows-1252',$col["@attributes"]["headertext"]),1,0 ,'C',1);
                                 }
                                 $this->pdf->Ln();
 
@@ -178,8 +187,13 @@ class FD_ReportService extends FPDF
                                 $this->pdf->SetTextColor(0);
                                 foreach($this->data_object[$keys[$i]] as $row)
                                 {
+                                    //force the x
+                                    if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
+                                        $this->pdf->SetXY($this->content[$keys[$i]]["@attributes"]["x"],$this->pdf->GetY());
+
                                     foreach($this->content[$keys[$i]] as $name => $col)
                                     {
+
                                         if(array_key_exists("type",$col)) continue;
                                         $this->pdf->SetFont($col["@attributes"]["font"],
                                                             $col["@attributes"]["font-style"],
