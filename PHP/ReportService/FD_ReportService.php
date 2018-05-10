@@ -98,6 +98,11 @@ class FD_ReportService extends PDF
                         if(array_key_exists($keys[$i],$this->data_object) || substr($keys[$i],0,2) == "ln")
                         {
                             /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+                            //imposto coordinate
+                            if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"])) $x=$this->content[$keys[$i]]["@attributes"]["x"];
+                            if(array_key_exists("xx",$this->content[$keys[$i]]["@attributes"])) $x=$this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"];
+                            if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"])) $y=$this->content[$keys[$i]]["@attributes"]["y"];
+                            if(array_key_exists("yy",$this->content[$keys[$i]]["@attributes"])) $y=$this->pdf->GetY()+$this->content[$keys[$i]]["@attributes"]["yy"];
 
                             ////////////////////////////// TEXT ////////////////////////////////////
                             if($this->content[$keys[$i]]["@attributes"]["type"] == "text")
@@ -109,26 +114,20 @@ class FD_ReportService extends PDF
                                                         $this->content[$keys[$i]]["@attributes"]["font-style"],
                                                         $this->content[$keys[$i]]["@attributes"]["font-size"]);
 
-                                        if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
-                                            $this->pdf->SetX($this->content[$keys[$i]]["@attributes"]["x"]);
+                                    if(isset($x))
+                                        $this->pdf->SetX($x);
 
-                                        if(array_key_exists("xx",$this->content[$keys[$i]]["@attributes"]))
-                                            $this->pdf->SetX($this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"]);
+                                    if(isset($y))
+                                        $this->pdf->SetY($y);
 
-                                        if(array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
-                                           $this->pdf->SetY($this->content[$keys[$i]]["@attributes"]["y"]);
-
-                                        if(array_key_exists("yy",$this->content[$keys[$i]]["@attributes"]))
-                                           $this->pdf->SetY($this->pdf->GetY()+$this->content[$keys[$i]]["@attributes"]["yy"]);
-
-                                        $this->pdf->Cell($this->content[$keys[$i]]["@attributes"]["w"],
-                                                         $this->content[$keys[$i]]["@attributes"]["h"],
-                                                         iconv('UTF-8', 'windows-1252',$this->data_object[$keys[$i]]),
-                                                         $this->content[$keys[$i]]["@attributes"]["border"],
-                                                         $this->content[$keys[$i]]["@attributes"]["ln"],
-                                                         $this->content[$keys[$i]]["@attributes"]["align"],
-                                                         $this->content[$keys[$i]]["@attributes"]["fill"]
-                                                      );
+                                    $this->pdf->Cell($this->content[$keys[$i]]["@attributes"]["w"],
+                                                     $this->content[$keys[$i]]["@attributes"]["h"],
+                                                     iconv('UTF-8', 'windows-1252',$this->data_object[$keys[$i]]),
+                                                     $this->content[$keys[$i]]["@attributes"]["border"],
+                                                     $this->content[$keys[$i]]["@attributes"]["ln"],
+                                                     $this->content[$keys[$i]]["@attributes"]["align"],
+                                                     $this->content[$keys[$i]]["@attributes"]["fill"]
+                                                  );
                                 }
                                 else
                                 {
@@ -146,8 +145,8 @@ class FD_ReportService extends PDF
                                 {
                                     if(!$this->IsNullOrEmptyString($this->data_object[$keys[$i]]))
                                         $this->pdf->Image($this->data_object[$keys[$i]],
-                                                          $this->content[$keys[$i]]["@attributes"]["x"],
-                                                          $this->content[$keys[$i]]["@attributes"]["y"],
+                                                          $x,
+                                                          $y,
                                                           $this->content[$keys[$i]]["@attributes"]["w"],
                                                           $this->content[$keys[$i]]["@attributes"]["h"]);
                                 }
@@ -165,9 +164,8 @@ class FD_ReportService extends PDF
                             ////////////////////////////// TABLE ////////////////////////////////////
                             else if($this->content[$keys[$i]]["@attributes"]["type"] == "table")
                             {
-                                //imposto coordinate
-                                if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]) && array_key_exists("y",$this->content[$keys[$i]]["@attributes"]))
-                                    $this->pdf->SetXY($this->content[$keys[$i]]["@attributes"]["x"],$this->content[$keys[$i]]["@attributes"]["y"]);
+                                if(isset($x) && isset($y))
+                                    $this->pdf->SetXY($x,$y);
 
                                 // Header
                                 $this->pdf->SetFillColor(225);
@@ -191,6 +189,9 @@ class FD_ReportService extends PDF
                                     if(array_key_exists("x",$this->content[$keys[$i]]["@attributes"]))
                                         $this->pdf->SetXY($this->content[$keys[$i]]["@attributes"]["x"],$this->pdf->GetY());
 
+                                    if(array_key_exists("xx",$this->content[$keys[$i]]["@attributes"]))
+                                            $this->pdf->SetXY($this->pdf->GetX()+$this->content[$keys[$i]]["@attributes"]["xx"],$this->pdf->GetY());
+
                                     foreach($this->content[$keys[$i]] as $name => $col)
                                     {
 
@@ -211,6 +212,9 @@ class FD_ReportService extends PDF
                             echo '{"error" : "The property '.$keys[$i].' is not defined in data array"}';
                             return;
                         }
+
+                        unset($x);
+                        unset($y);
                     }
 
 
