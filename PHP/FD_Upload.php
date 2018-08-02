@@ -41,12 +41,8 @@ include "Tools/FD_Random.php";
 
 $gest = $_GET["gest"];
 $token = '';
-/**
- * 1 -> Avatar
- * 2 -> Logo
- * 3 -> Post
- */
-$tipo = 0;
+$tipo = "";
+$url_gateway = $_SERVER["HTTP_REFERER"].explode("/",$_SERVER['REQUEST_URI'])[1]."/";
 
 
 if ($gest == 1)
@@ -59,13 +55,9 @@ if ($gest == 1)
     {
         $token = $_POST["token"];
     }
-    if (isset($_POST["avatar"]))
+    if (isset($_POST["cod_p"]))
     {
-        $avatar = $_POST["avatar"];
-    }
-    if (isset($_POST["post_id"]))
-    {
-        $post = $_POST["post_id"];
+        $cod_p = $_POST["cod_p"];
     }
 } else if ($gest == 2) {
     $data = file_get_contents("php://input");
@@ -78,13 +70,9 @@ if ($gest == 1)
     {
         $token = $objData->token;
     }
-    if (property_exists((object)$objData, "avatar"))
+    if (property_exists((object)$objData, "cod_p"))
     {
-        $avatar = $objData->avatar;
-    }
-    if (property_exists((object)$objData, "post_id"))
-    {
-        $post = $objData->post_id;
+        $cod_p = $objData->cod_p;
     }
 } else if ($gest == 3) {
     if (isset($_GET["tipo"]))
@@ -95,13 +83,9 @@ if ($gest == 1)
     {
         $token = $_GET["token"];
     }
-    if (isset($_GET["avatar"]))
+    if (isset($_GET["cod_p"]))
     {
-        $avatar = $_GET["avatar"];
-    }
-    if (isset($_GET["post_id"]))
-    {
-        $post = $_GET["post_id"];
+        $cod_p = $_GET["cod_p"];
     }
 }
 
@@ -136,7 +120,7 @@ function resize($width, $height)
     $x = ($w - $width / $ratio) / 2;
     $w = ceil($width / $ratio);
     /* new file name */
-    $path = '../upload/avatar/'.$width.'x'.$height.'_'.$_FILES['file']['name'];
+    $path = '../Upload/'.$width.'x'.$height.'_'.$_FILES['file']['name'];
     /* read binary data from image file */
     $imgString = file_get_contents($_FILES['file']['tmp_name']);
     /* create image from string */
@@ -228,68 +212,51 @@ function httpPost($url, $data)
     return $response;
 }
 
+
+//INIT
 if ($_FILES["file"]["error"] > 0)
 {
-    if($_FILES["file"]["error"] == 1){
-        echo '{"error" : "Superato il limite di 10MB per le immagini !"}';
-    }else if($_FILES["file"]["error"] == 4) {
+    if($_FILES["file"]["error"] == 1)
+    {
+        echo '{"error" : "Superato il limite di 10MB !"}';
+    }
+    else if($_FILES["file"]["error"] == 4)
+    {
         echo '{"error" : "Nessun file caricato !"}';
-    }else{
-        echo '{"error" : "Errore durante il caricamento delle immagini('.$_FILES["file"]["error"].')"}';
+    }
+    else
+    {
+        echo '{"error" : "Errore durante il caricamento del file('.$_FILES["file"]["error"].')"}';
     }
     return;
-} else if (($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/pjpeg"))
+}
+else //if (($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/png") || ($_FILES["file"]["type"] == "image/pjpeg"))
 {
     $random = new FD_Random();
     $name = $random->Generate(20);
-    if($tipo == 1)
-    {
-        $url = '../upload/avatar/'.$name.'.jpg';
-        $filename = resize_and_compression(150 ,150, $url, 90);
-    } else if($tipo == 2)
-    {
-        $url = '../upload/logo/'.$name.'.jpg';
-        $filename = resize_and_compression(150 ,150, $url, 90);//compress_image($_FILES["file"]["tmp_name"], $url, 90);
-    } else if ($tipo == 3)
-    {
-        $url = '../upload/post/'.$name.'.jpg';
-        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 30);
-    } else
-    {
-        $url = '../upload/timbrature/'.$name.'.jpg';
-        $filename = compress_image($_FILES["file"]["tmp_name"], $url, 30);
-    }
+    $imageFileType = strtolower(pathinfo($_FILES['file']['name'],PATHINFO_EXTENSION));
+    $url = '../Upload/'.$name.'.'.$imageFileType;
+    move_uploaded_file($_FILES['file']['tmp_name'], $url);
+    //$filename = resize_and_compression(150 ,150, $url, 90);
 
-    //Chiamata al databox per il salvataggio dell'immagine nel db
-    if($tipo == 1)
+    //Chiamata al databox per il salvataggio del file nel db
+    if($cod_p > 0)
     {
         $data = array(
             "type" => "1",
-            "query" => "call spFD_updateAvatar('" . $token . "','" . $name . "');",
             "token" => $token,
-            "database" => "authDB",
-            "suffix" => "volontapp"
-        );
-    } else if($tipo == 2)
-    {
-        $data = array(
-            "type" => "1",
-            "query" => "call spFD_updateLogo('" . $token . "','" . $name . "');",
-            "token" => $token,
-            "database" => "authDB",
-            "suffix" => "volontapp"
-        );
-    } else if($tipo == 3)
-    {
-        $data = array(
-            "type" => "1",
-            "query" => "call spFD_immaginePost('" . $token . "','" . $name . "',".$post.");",
-            "token" => $token,
-            "database" => "authDB",
-            "suffix" => "volontapp"
+            "process" => "yXttChwR18PsutyQwqmD84J41+C5cTOdm/gu+jbG3qEtWy0tSVYtWy0Re7hHXn4Ns4zHYLP6L9QbeenqSIDFtjFliOjvxpsJmw@@",
+            "params" => "'" . $_SERVER["HTTP_REFERER"]. "Upload/" . $name.'.'.$imageFileType . "'," . $cod_p
         );
     }
-} else
-{
-    echo '{"error" : "L\'immagine deve essere in formato JPG o PNG o GIF !"}';
+    else
+    {
+        $data = array(
+            "type" => "1",
+            "token" => $token,
+            "process" => "aQWu1SmmaITFs0wPPtAi4mvH+ZEphShyYYeUM98pg4ItWy0tSVYtWy1e+2qzPC9u9O9elSJdaZHz9f7O3jqBQcRNBlkfcApwog@@",
+            "params" => "'" . $_FILES['file']['name'] . "','" . $name.'.'.$imageFileType . "','" . $tipo . "'," . $_FILES['file']['size'] . ",'" . $_FILES['file']['type'] . "'"
+        );
+    }
+    echo httpPost($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
 }

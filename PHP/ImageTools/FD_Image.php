@@ -10,7 +10,7 @@ final class FD_Image
 {
 
 
-    function FD_Image(){}
+    function __construct(){}
 
     /* *******************
 	 * Public
@@ -133,5 +133,4 @@ final class FD_Image
         imagedestroy($image);
     }
 
-}
 }

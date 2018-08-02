@@ -7,10 +7,10 @@
  */
 final class FD_Cookie {
 
-    function FD_Cookie(){}
+    function __construct(){}
 
     //Set the coockie
-    public function SetCoockie($name,$value,$time = null)()
+    public function SetCoockie($name,$value,$time = null)
     {
         if($time != null){
             setcookie($name, $value, $time, "/");
@@ -20,7 +20,7 @@ final class FD_Cookie {
     }
 
     //Remove the coockie
-    public function RemoveCoockie($name)()
+    public function RemoveCoockie($name)
     {
         unset($_COOKIE[$name]);
     }

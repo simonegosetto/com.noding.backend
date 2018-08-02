@@ -6,12 +6,12 @@
  * Time: 23:54
  */
 
-include 'PHPMailer/PHPMailerAutoload.php';
+require 'PHPMailer/PHPMailerAutoload.php';
 
 final class FD_Mailer
 {
 
-    function FD_Mailer()
+    function __construct()
     {
         $this->mail = new PHPMailer;
     }

@@ -10,7 +10,7 @@ class FD_Session
   private $alive = true;
   private $dbc = NULL;
 
-  function FD_Session()
+  function __construct()
   {
     session_set_save_handler(
       array(&$this, 'open'),

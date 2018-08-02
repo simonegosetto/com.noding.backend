@@ -10,8 +10,8 @@ final class FD_Mysql extends FD_DB
     //Costruttore
     function __construct()
     {
-        $ini_array = parse_ini_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/config.inc.ini");
-        $this->key = strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3"));
+        $ini_array = parse_ini_file("Config/config.inc.ini");
+        $this->key = strtolower(md5_file("Config/esatto.mp3"));
 
         $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
         $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
@@ -70,6 +70,20 @@ final class FD_Mysql extends FD_DB
     public function closeConnection()
     {
         mysqli_close($this->conn);
+    }
+
+    //Controllo coerenza token
+    public function tokenCheck($token)
+    {
+        $this->executeSQL("call sys_token_check('".$token."');");
+        if($this->affected > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     //Pulisce il buffer della connessione dalle precedenti query

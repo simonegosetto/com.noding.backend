@@ -26,7 +26,7 @@ class FD_Serial{
          *
          * @return PhpSerial
          */
-        public function FD_Serial()
+        public function __construct()
         {
             setlocale(LC_ALL, "en_US");
 

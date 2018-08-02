@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<report size="A4" orientation="P" unit="mm" >
+    <author>EasyQuotation</author>
+    <title>Preventivo</title>
+    <bmargin>35</bmargin>
+
+    <!-- dati preventivo -->
+    <label1 type="label" text="Preventivo N:            " font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="130" y="45" ></label1>
+    <id type="text" font="Arial" font-size="12" font-style="BI" border="0" w="0" h="0" ln="1" align="R" fill="false" x="190" y="46" ></id>
+    <label4 type="label" text="del:                           " font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="130" y="52" ></label4>
+    <data_inserimento type="text" font="Arial" font-size="12" font-style="BI" border="0" w="0" h="0" ln="1" align="R" fill="false" x="175" y="53" ></data_inserimento>
+
+    <descrizione type="text" font="Arial" font-size="14" font-style="BI" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="61" ></descrizione>
+    <note type="cell" font="Arial" font-size="10" font-style="I" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="67" wordwrap="true" ></note>
+
+    <label5 type="label" text="da pagare entro il: " font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="85" ></label5>
+    <data_pag type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="92" ></data_pag>
+    <bonifico type="text" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="98" ></bonifico>
+    <iban type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" y="106" ></iban>
+
+    <!-- dati cliente -->
+    <label2 type="label" text="Spettabile" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="80" ></label2>
+    <cliente_descrizione type="cell" font="Arial" font-size="12" font-style="BI" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="88" ></cliente_descrizione>
+    <cliente_indirizzo type="cell" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="94" ></cliente_indirizzo>
+
+    <!--<label3 type="label" text="C.F. / P.IVA" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="99" ></label3>-->
+    <cliente_codicefiscale type="cell" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="35" y="100" ></cliente_codicefiscale>
+    <cliente_contatti type="cell" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" y="106" ></cliente_contatti>
+
+    <!-- articolo fittizio totale -->
+    <righe type="table" x="10" y="120" >
+        <nome headertext="Articolo" font="Arial" font-size="8" font-style="" align="L" w="120" h="6" border="1" suffix="" drawcolor="169,169,169" ></nome>
+        <prezzo headertext="Prezzo" font="Arial" font-size="10" font-style="" align="R" w="20" h="6" border="1" suffix=" €" drawcolor="169,169,169" ></prezzo>
+        <quantita headertext="Quantità" font="Arial" font-size="10" font-style="" align="R" w="20" h="6" border="1" suffix="" drawcolor="169,169,169" ></quantita>
+        <totale headertext="Prezzo" font="Arial" font-size="10" font-style="" align="R" w="30" h="6" border="1" suffix=" €" drawcolor="169,169,169" ></totale>
+    </righe>
+
+    <!-- totali -->
+    <totali type="table" x="90" yy="0" >
+        <nome font="Arial" font-size="10" font-style="" align="L" w="80" h="6" border="1" suffix="" drawcolor="169,169,169" ></nome>
+        <prezzo font="Arial" font-size="12" font-style="B" align="R" w="30" h="6" border="1" suffix=" €" drawcolor="169,169,169" ></prezzo>
+    </totali>
+
+    <!-- box firme -->
+    <label7 type="label" text="firma per approvazione" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="10" yy="20" ></label7>
+    <box_firma type="image" border="0" w="100" h="30" ln="1" fill="false" x="102" yy="5" ></box_firma>
+
+</report>

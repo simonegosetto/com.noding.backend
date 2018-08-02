@@ -24,13 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 ini_set('display_errors', 1);
+//remove the notice
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 include "DB/FD_DB.php";
 include "DB/FD_Mysql.php";
 include "Tools/FD_Random.php";
 include "Tools/FD_Crypt.php";
 include "WebTools/FD_Url.php";
+require("WebTools/FD_Logger.php");
 include "Tools/FD_JWT.php";
+
+//istanzio logger
+$log = new FD_Logger(null);
 
 if (!isset($_GET["gest"])) {
     echo '{"error" : "Invalid request !"}';
@@ -96,7 +102,7 @@ if ($gest == 1)
 if(strlen($keyRequest)>0)
 {
     $keyRequest = strtolower($keyRequest);
-    if ($keyRequest != strtolower(md5_file("/home/vol13_8/0fees.net/fees0_11553437/htdocs/nuovo/BackEnd/Config/esatto.mp3")))
+    if ($keyRequest != strtolower(md5_file("Config/esatto.mp3")))
     {
         echo '{"error" : "Invalid token !"}';
         return;
@@ -109,8 +115,6 @@ if(strlen($keyRequest)>0)
 
 if (strlen($keyRequest) > 0)
 {
-    //echo $username." ".$password." ".$keyRequest;
-    //echo getcwd();
     //Inizializzo componente SQL
     $sql = new FD_Mysql();
 
@@ -124,26 +128,11 @@ if (strlen($keyRequest) > 0)
         return;
     }
 
-    /*
-    //salt
-    $result = $sql->exportJSON("call spFD_Salt('".$username."')");
-    //Controllo che la connessione al DB sia andata a buon fine
-    if (strlen($sql->lastError) > 0) {
-        echo '{"error" : "' . $sql->lastError . '"}';
-        if ($sql->connected) {
-            $sql->closeConnection();
-        }
-        return;
-    }
-    $salt = json_decode($result, true);
-
-    $password = $crypt->Django_Crypt($password,$salt["salt"],20000);
-    */
     $crypt = new FD_Crypt();
-    $password = $crypt->simple_crypt($password);
+    $password = md5($password);//$crypt->simple_crypt($password);
 
     //Eseguo la query di login
-    $result = $sql->exportJSON("call spFD_login('" . $username . "','" . $password . "');");
+    $result = $sql->exportJSON("call sys_login('" . $username . "','" . $password . "');");
 
     if (strlen($sql->lastError) > 0)
     {
@@ -159,6 +148,7 @@ if (strlen($keyRequest) > 0)
     if ($sql->affected == 0)
     {
         echo '{"error" : "Le credenziali inserite non sono corrette !"}';
+        $log->lwrite('[ERRORE] - Le credenziali inserite non sono corrette ! - '.$username.' '.$password);
         if ($sql->connected) {
             $sql->closeConnection();
         }
@@ -172,18 +162,21 @@ if (strlen($keyRequest) > 0)
     //$date = new DateTime();
     $jwt = new FD_JWT();
     $token = $jwt->encode($random->Generate(25),$keyRequest);
-    //$token = $crypt->simple_crypt($random->Generate(10).",".$keyRequest.",".$date->format('Y-m-d H:i:s'));
 
     //Prendo IP client
     $url = new FD_Url();
     //Salvo nel log delle sessioni
-    $sql->executeSQL("call spFD_session_log(" . $array["id"] . ",'" . $token . "','".$url->IP_ADDRESS."');");
+    $sql->executeSQL("call sys_session_log(" . $array[0]["cod_u"] . ",'" . $token . "','".$url->IP_ADDRESS."','".$url->USER_AGENT["platform"]."','".$url->USER_AGENT["browser"]."','".$url->USER_AGENT["version"]."');");
+
+    //logger
+    $log->lwrite('[INFO] - Login effettuato ! - ('.$token.') - ('.$array[0]["cod_u"].')<b>'.$username.'</b> - '.$url->USER_AGENT["platform"].' - '.$url->USER_AGENT["browser"].' - '.$url->USER_AGENT["version"]);
 
     //Chiudo connessione
     $sql->closeConnection();
 
     echo '{"user":' . $result .',"token": {"token" : "'.$token.'"}}';
-} else
+}
+else
 {
     echo '{"error" : "Invalid request !"}';
 }

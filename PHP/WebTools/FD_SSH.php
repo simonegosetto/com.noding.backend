@@ -21,18 +21,18 @@ final class FD_SSH
 {
 
     //Parametri di accesso
-    private var $host;
-    private var $user;
-    private var $pass;
-    private var $port = 22;
+    var $host;
+    var $user;
+    var $pass;
+    var $port = 22;
 
     //
-    private var $connection;
-    private var $shell_type;
-    private var $log;
+    var $connection;
+    var $shell_type;
+    var $log;
 
 
-    function FD_SSH($host,$user,$pass,$port = 22)
+    function __construct($host,$user,$pass,$port = 22)
     {
         $this->host = $host;
         $this->user = $user;
