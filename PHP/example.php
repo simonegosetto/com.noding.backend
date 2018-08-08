@@ -1,23 +1,23 @@
 <?php
 
 require("ReportService/fpdf181/fpdf.php");
-require("ReportService/FD_ReportService.php");
+require("WebTools/FD_Logger.php");
 require("WebTools/FD_HTTP.php");
 
 $report = new FD_HTTP();
-$report->Post("ReportService/FD_ReportService.php",
+echo $report->Post("ReportService/FD_ReportService.php",
         array(
             "template" => "ReportService/template.xml",
-            "data_object" =>array('titolo' => 'Titolo di test',
+            "data_object" => array('titolo' => 'Titolo di test',
                                     'chef' => 'Simone Gosetto',
                                     'procedimento' => 'asd sdas fsdf sadf sadf asdf ',
-                                    'image' => 'http://elba.local/Images/logo_gruppo.gif',
+                                    'image' => 'https://www.google.it/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
                                     'ingredienti' => array(
                                         array("nome" => "farina", "quantita" => 100, "perc" => 30),
                                         array("nome" => "olio", "quantita" => 70, "perc" => 20)
                                     )
-                            ),
-            null
+                              ),
+            new FD_Logger(null)
         )
 );
 

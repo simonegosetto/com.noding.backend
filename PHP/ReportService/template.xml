@@ -4,18 +4,32 @@
     <author>Simone Gosetto</author>
     <title>Ricetta</title>
 
+    <header>
+        <![CDATA[
+            $this->Line(10,10,200,10);
+            //$this->SetFont('Arial','B',15);
+            //$this->Cell(190, 10, 'test' , 0, 1, 'C');
+            $this->SetDrawColor(169,169,169);
+            $this->Line(10,37,200,37);
+            $this->SetDrawColor(0,0,0);
+            //forza il margin top (soprattutto per le pagine successive)
+            $this->Ln(35);
+        ]]>
+    </header>
+
     <!-- http://www.fpdf.org/it/doc/setfont.htm -->
     <!-- http://www.fpdf.org/it/doc/cell.htm -->
     <titolo type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></titolo>
 
     <image type="image" x="10" y="20" w="50" h="50" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
 
-    <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
+    <!-- http://www.fpdf.org/en/tutorial/tuto5.htm 
     <ingredienti type="table" x="80" y="30" >
         <nome headertext="Ingrediente" font="Arial" font-size="12" font-style="" align="L" ></nome>
         <quantita headertext="Quantità (gr)" font="Arial" font-size="12" font-style="" align="L" ></quantita>
         <perc headertext="% sul totale" font="Arial" font-size="12" font-style="" align="L" ></perc>
     </ingredienti>
+    -->
 
     <procedimento type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" yy="40" ></procedimento>
 
@@ -23,7 +37,18 @@
     <ln1 type="ln" h="6"></ln1>
     <ln2 type="ln" h="6"></ln2>
 
-    <chef type="text" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="-25" ></chef>
+    <chef type="cell" font="Arial" font-size="12" font-style="I" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="325" ></chef>
 
-    <footer showPages="true" font="Arial" font-size="16" font-style="B" ></footer> <!-- da valutare come implementarlo -->
+    <footer showPages="true" font="Arial" font-size="16" font-style="B" >
+        <![CDATA[
+            $this->SetDrawColor(169,169,169);
+            $this->Line(10,280,200,280);
+            $this->SetDrawColor(0,0,0);
+            $this->SetY(-15);
+            $this->SetFont('Arial','I',8);
+            $this->Cell(0,10,'P.'.$this->PageNo(),0,0,'R');
+            $this->SetY(-15);
+            $this->Cell(0,10,@date('d/m/Y H:i:s'),0,0,'L');
+        ]]>
+    </footer> <!-- da valutare come implementarlo -->
 </report>

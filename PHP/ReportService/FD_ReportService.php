@@ -20,8 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+return "testaaaaaaaaaa";
+
 require("ReportService/FD_ReportEnum.php");
 
+/*
 if (isset($_POST["template"]))
 {
     $template = $_POST["template"];
@@ -34,6 +37,18 @@ if (isset($_POST["logger"]))
 {
     $logger = $_POST["logger"];
 }
+*/
+$template = "ReportService/template.xml";
+$data_object = array('titolo' => 'Titolo di test',
+                        'chef' => 'Simone Gosetto',
+                        'procedimento' => 'asd sdas fsdf sadf sadf asdf ',
+                        'image' => 'https://www.google.it/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+                        'ingredienti' => array(
+                            array("nome" => "farina", "quantita" => 100, "perc" => 30),
+                            array("nome" => "olio", "quantita" => 70, "perc" => 20)
+                        )
+);
+$logger = new FD_Logger(null);
 
 //////////// funzioni globali /////////////////////////////////////
 
@@ -50,6 +65,8 @@ function isAssoc(array $arr)
 
 ////////////////////////////////////////////////////////////////////
 
+try {
+
 $logger = new FD_Logger(null);
 
 if(IsNullOrEmptyString($template))
@@ -62,7 +79,7 @@ if(IsNullOrEmptyString($template))
 $xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
 
 //gestisco header
-if(strpos($xml,"header") !== false)
+if(strpos($xml->asXML(),"<header") !== false)
 {
     $header = 'function Header(){'.json_decode(json_encode($xml),TRUE)["header"].'}';
 }
@@ -72,7 +89,7 @@ else
 }
 
 //gestisco footer
-if(strpos($xml,"footer") !== false)
+if(strpos($xml->asXML(),"<footer") !== false)
 {
     $footer = 'function Footer(){'.json_decode(json_encode($xml),TRUE)["footer"].'}';
 }
@@ -81,7 +98,7 @@ else
     $footer = "";
 }
 
-//global_eval($master_class);
+//definisco il report master (classe padre)
 eval('
     class FD_ReportMaster extends FPDF
     {
@@ -90,10 +107,14 @@ eval('
     }
 ');
 
-$report = new FD_ReportEngine($template,$data_object,$logger);
-echo $report->createPDF();
+}
+catch(Exception $e)
+{
+    echo '{"error" : "Errore durante la generazione del report !, '.$e->getMessage().'"}';
+}
 
-class FD_ReportEngine extends FD_ReportMaster
+//definisco classe di engine del report
+final class FD_ReportEngine extends FD_ReportMaster
 {
     var $data_object;
     var $data_array;
@@ -432,3 +453,6 @@ class FD_ReportEngine extends FD_ReportMaster
 
 }
 
+//lacio il report
+$report = new FD_ReportEngine($template,$data_object,$logger);
+return $report->createPDF();
