@@ -1,16 +1,41 @@
 <?php
 
+//Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+}
+
+//Imposto tutti i metodi come abilitati
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+}
+
+
+//remove the notice
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
 require("ReportService/FD_ReportEnum.php");
 
+if (isset($_POST["template"]))
+{
+    $template = $_POST["template"];
+}
+if (isset($_POST["data_object"]))
+{
+    $data_object = $_POST["data_object"];
+}
+if (isset($_POST["logger"]))
+{
+    $logger = $_POST["logger"];
+}
 
-/*
- potrei fare una classe PADRE->PDF in un file separato e ridefinirla tutte le volte 
- prima di instanziare la classe FIGLIO->FD_ReportEngine (eval)
-
-
- POTREBBE FUNZIONARE !!!!!!!!!!!!!!!
-
-*/
+//////////// funzioni globali /////////////////////////////////////
 
 function IsNullOrEmptyString($question)
 {
@@ -23,58 +48,50 @@ function isAssoc(array $arr)
     return array_keys($arr) !== range(0, count($arr) - 1);
 }
 
-function global_eval($string)
+////////////////////////////////////////////////////////////////////
+
+$logger = new FD_Logger(null);
+
+if(IsNullOrEmptyString($template))
 {
-    eval($string);
+    $logger->lwrite('[ERRORE] - Invalid template');
+    echo '{"error" : "Invalid template"}';
 }
 
-class FD_ReportService
-{
-    var $log;
+//leggo template
+$xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
 
-    //Costruttore
-    function __construct($template,$data_object,$logger)
+//gestisco header
+if(strpos($xml,"header") !== false)
+{
+    $header = 'function Header(){'.json_decode(json_encode($xml),TRUE)["header"].'}';
+}
+else
+{
+    $header = "";
+}
+
+//gestisco footer
+if(strpos($xml,"footer") !== false)
+{
+    $footer = 'function Footer(){'.json_decode(json_encode($xml),TRUE)["footer"].'}';
+}
+else
+{
+    $footer = "";
+}
+
+//global_eval($master_class);
+eval('
+    class FD_ReportMaster extends FPDF
     {
-        $this->log = $logger;
-
-        if(IsNullOrEmptyString($template))
-        {
-            $this->log->lwrite('[ERRORE] - Invalid template');
-            echo '{"error" : "Invalid template"}';
-        }
-
-        //leggo template
-        $xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        //compongo classe master
-        $master_class = file_get_contents("FD_ReportMaster.php");
-
-        //gestisco header
-        if(strpos($master_class,"header") !== false)
-        {
-            $master_class = str_replace("//<%HEADER%>",json_decode(json_encode($xml),TRUE)["header"],$master_class);
-        }
-        else
-        {
-            $master_class = str_replace("//<%HEADER%>","",$master_class);
-        }
-
-        //gestisco footer
-        if(strpos($master_class,"footer") !== false)
-        {
-            $master_class = str_replace("//<%FOOTER%>",json_decode(json_encode($xml),TRUE)["footer"],$master_class);
-        }
-        else
-        {
-            $master_class = str_replace("//<%FOOTER%>","",$master_class);
-        }
-
-        global_eval($master_class);
-
-        $report = new FD_ReportEngine($template,$data_object,$logger);
-        echo $report->createPDF();
+        '.$header.'
+        '.$footer.'
     }
-}
+');
+
+$report = new FD_ReportEngine($template,$data_object,$logger);
+echo $report->createPDF();
 
 class FD_ReportEngine extends FD_ReportMaster
 {
