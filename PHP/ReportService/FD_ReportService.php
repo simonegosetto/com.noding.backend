@@ -2,46 +2,81 @@
 
 require("ReportService/FD_ReportEnum.php");
 
-$header = "";
-$footer = "";
 
-class PDF extends FPDF
+/*
+ potrei fare una classe PADRE->PDF in un file separato e ridefinirla tutte le volte 
+ prima di instanziare la classe FIGLIO->FD_ReportEngine (eval)
+
+
+ POTREBBE FUNZIONARE !!!!!!!!!!!!!!!
+
+*/
+
+function IsNullOrEmptyString($question)
 {
-    // Page header
-    function Header()
-    {
-        //return eval($GLOBALS['header']); 
+    return (!isset($question) || trim($question)==='');
+}
 
-        if(file_exists("Reports/logo.JPG"))
+function isAssoc(array $arr)
+{
+    if (array() === $arr) return false;
+    return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+function global_eval($string)
+{
+    eval($string);
+}
+
+class FD_ReportService
+{
+    var $log;
+
+    //Costruttore
+    function __construct($template,$data_object,$logger)
+    {
+        $this->log = $logger;
+
+        if(IsNullOrEmptyString($template))
         {
-            $this->Image("Reports/logo.JPG",30,10,150);
+            $this->log->lwrite('[ERRORE] - Invalid template');
+            echo '{"error" : "Invalid template"}';
         }
-        //$this->SetFont('Arial','B',15);
-        //$this->Cell(190, 10, 'test' , 0, 1, 'C');
-        $this->SetDrawColor(169,169,169);
-        $this->Line(10,37,200,37);
-        $this->SetDrawColor(0,0,0);
-        //forza il margin top (soprattutto per le pagine successive)
-        $this->Ln(35);
-    }
 
-    // Page footer
-    function Footer()
-    {
-        //return eval($GLOBALS['footer']);
-        $this->SetDrawColor(169,169,169);
-        $this->Line(10,280,200,280);
-        $this->SetDrawColor(0,0,0);
-        $this->SetY(-15);
-        $this->SetFont('Arial','I',8);
-        $this->Cell(0,10,'P.'.$this->PageNo(),0,0,'R');
-        $this->SetY(-15);
-        $this->Cell(0,10,@date('d/m/Y H:i:s'),0,0,'L');
+        //leggo template
+        $xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        //compongo classe master
+        $master_class = file_get_contents("FD_ReportMaster.php");
+
+        //gestisco header
+        if(strpos($master_class,"header") !== false)
+        {
+            $master_class = str_replace("//<%HEADER%>",json_decode(json_encode($xml),TRUE)["header"],$master_class);
+        }
+        else
+        {
+            $master_class = str_replace("//<%HEADER%>","",$master_class);
+        }
+
+        //gestisco footer
+        if(strpos($master_class,"footer") !== false)
+        {
+            $master_class = str_replace("//<%FOOTER%>",json_decode(json_encode($xml),TRUE)["footer"],$master_class);
+        }
+        else
+        {
+            $master_class = str_replace("//<%FOOTER%>","",$master_class);
+        }
+
+        global_eval($master_class);
+
+        $report = new FD_ReportEngine($template,$data_object,$logger);
+        echo $report->createPDF();
     }
 }
 
-
-class FD_ReportService extends PDF
+class FD_ReportEngine extends FD_ReportMaster
 {
     var $data_object;
     var $data_array;
@@ -52,24 +87,12 @@ class FD_ReportService extends PDF
     var $is_array = false;
     var $is_object = false;
 
-    // Function for basic field validation (present and neither empty nor only white space
-    private function IsNullOrEmptyString($question)
-    {
-        return (!isset($question) || trim($question)==='');
-    }
-
-    function isAssoc(array $arr)
-    {
-        if (array() === $arr) return false;
-        return array_keys($arr) !== range(0, count($arr) - 1);
-    }
-
     //Costruttore
     function __construct($template,$data_object,$logger)
     {
         $this->log = $logger;
 
-        if($this->IsNullOrEmptyString($template))
+        if(IsNullOrEmptyString($template))
         {
             $this->log->lwrite('[ERRORE] - Invalid template');
             echo '{"error" : "Invalid template"}';
@@ -83,7 +106,7 @@ class FD_ReportService extends PDF
         }
         else
         {
-            if(!$this->isAssoc($data_object))
+            if(!isAssoc($data_object))
             {
                 $this->is_array = true;
                 $this->is_object = false;
@@ -120,7 +143,7 @@ class FD_ReportService extends PDF
                        in_array($this->content["@attributes"]["size"],(new PAGE_SIZE())->getConst()))
                     {
 
-                        $this->pdf = new PDF($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
+                        $this->pdf = new FD_ReportMaster($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
                         $this->pdf->AliasNbPages();
                         if(isset($this->content["bmargin"])) $this->pdf->SetAutoPageBreak(true, $this->content["bmargin"]);
                         $this->pdf->AddPage();
@@ -134,8 +157,8 @@ class FD_ReportService extends PDF
 
                             if($keys[$i] == "author") $this->pdf->SetAuthor($this->content[$keys[$i]]);
                             else if ($keys[$i] == "title") $this->pdf->SetTitle($this->content[$keys[$i]]);
-                            else if ($keys[$i] == "header") $GLOBALS['header'] = $this->content[$keys[$i]];
-                            else if ($keys[$i] == "footer") $GLOBALS['footer'] = $this->content[$keys[$i]];
+                            else if ($keys[$i] == "header") continue;//$GLOBALS['header'] = $this->content[$keys[$i]];
+                            else if ($keys[$i] == "footer") continue;//$GLOBALS['footer'] = $this->content[$keys[$i]];
                             else
                                 
                             //check id properties exist in data array
@@ -227,7 +250,7 @@ class FD_ReportService extends PDF
                                 else if($this->content[$keys[$i]]["@attributes"]["type"] == "image")
                                 {
                                     //take image format
-                                    if(!$this->IsNullOrEmptyString($this->data_object[$keys[$i]]))
+                                    if(!IsNullOrEmptyString($this->data_object[$keys[$i]]))
                                     {
                                         $formato = pathinfo($this->data_object[$keys[$i]], PATHINFO_EXTENSION);
                                         if(in_array(strtolower($formato),(new IMAGE_FORMAT())->getConst()))

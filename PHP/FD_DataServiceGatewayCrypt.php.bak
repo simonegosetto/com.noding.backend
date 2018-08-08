@@ -21,9 +21,12 @@
  *
  * Tutte le richieste vengono loggate nella cartella "Log" e viene fatto un file per giorno
  *
- * VERSIONE 3.2.1
+ * VERSIONE 3.0.1
  *
+ * CREARE ENUMERATIVA PER QUERY/NON QUERY
  * CREARE POLIMORFISMO PER PUSH / MAIL
+ * CREARE ENUMERATIVA PER TIPOLOGIA DI DB
+ * TOOL PER LA RICERCA NEI LOG ???
  *
  */
 
@@ -50,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-require("Config/FD_Define.php");
 require("DB/FD_DB.php");
 require("DB/FD_Mysql.php");
 require("Tools/FD_Crypt.php");
@@ -81,42 +83,7 @@ if(isset($_GET["log"]))
     }
     return;
 }
-//////////// ricerca nel log /////////////////
-if(isset($_GET["log_search"]))
-{
-    $search = strtolower($_GET["log_search"]);
-    foreach (glob("Log/*.txt") as $file)
-    {
-        $content = file_get_contents($file);
-        if (strpos(strtolower($content), $search) !== false)
-        {
-            //leggo il file di log
-            $handle = fopen($file, "r");
-            if ($handle)
-            {
-                while (($line = fgets($handle)) !== false)
-                {
-                    //trovo la riga del login
-                    if (strpos(strtolower($line), $search) !== false)
-                    {
-                        echo str_replace($search,"<span style=\"font-weight:bold;background-color: orange\">".$search."</span>",
-                                        str_replace(strtoupper($search),"<span style=\"font-weight:bold;background-color: orange\">".strtoupper($search)."</span>",
-                                            $line
-                                        )
-                              )."<br/><br/>";
-                    }
-                }
-                fclose($handle);
-            }
-            else
-            {
-                echo "Nessun risultato per la ricerca";
-            }
-        }
-    }
-    return;
-}
-//////////// consultazione della sessione nel log /////////////////
+//////////// consultazione della sessione /////////////////
 if(isset($_GET["ses"]))
 {
     $ses_id = "(".$_GET["ses"].")";
@@ -455,7 +422,7 @@ try
         }
 
         //Eseguo la query
-        if($type == EXECUTE_TYPE::QUERY)
+        if($type == 1)
         {
             $result = $sql->exportJSON($query);
         }
@@ -564,6 +531,7 @@ try
                 $pdf = new FD_ReportService("Reports/".$report, 
                                             count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
                                             ,$log);
+                echo $pdf->createPDF();
             }
             else
             {
