@@ -530,8 +530,7 @@ try
                 session_start();
                 $_SESSION["ReportData"] = array(
                     "template" => "../Reports/".$report,
-                    "data_object" => count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true),
-                    "logger" => $log
+                    "data_object" => count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
                 );
                 Header("Location: ReportService/FD_ReportService.php");
             }

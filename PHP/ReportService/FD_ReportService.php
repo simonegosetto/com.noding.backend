@@ -21,7 +21,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 require("fpdf181/fpdf.php");
 require("FD_ReportEnum.php");
-//require("../WebTools/FD_Logger.php");
+require("../WebTools/FD_Logger.php");
 
 session_start();
 
@@ -32,10 +32,6 @@ if (isset($_SESSION["ReportData"]["template"]))
 if (isset($_SESSION["ReportData"]["data_object"]))
 {
     $data_object = $_SESSION["ReportData"]["data_object"];
-}
-if (isset($_SESSION["ReportData"]["logger"]))
-{
-    $logger = $_SESSION["ReportData"]["logger"];
 }
 
 session_destroy();
