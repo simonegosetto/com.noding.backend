@@ -16,39 +16,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-return "testaaaaaaaaaa";
+require("fpdf181/fpdf.php");
+require("FD_ReportEnum.php");
+//require("../WebTools/FD_Logger.php");
 
-require("ReportService/FD_ReportEnum.php");
+session_start();
 
-/*
-if (isset($_POST["template"]))
+if (isset($_SESSION["ReportData"]["template"]))
 {
-    $template = $_POST["template"];
+    $template = $_SESSION["ReportData"]["template"];
 }
-if (isset($_POST["data_object"]))
+if (isset($_SESSION["ReportData"]["data_object"]))
 {
-    $data_object = $_POST["data_object"];
+    $data_object = $_SESSION["ReportData"]["data_object"];
 }
-if (isset($_POST["logger"]))
+if (isset($_SESSION["ReportData"]["logger"]))
 {
-    $logger = $_POST["logger"];
+    $logger = $_SESSION["ReportData"]["logger"];
 }
-*/
-$template = "ReportService/template.xml";
-$data_object = array('titolo' => 'Titolo di test',
-                        'chef' => 'Simone Gosetto',
-                        'procedimento' => 'asd sdas fsdf sadf sadf asdf ',
-                        'image' => 'https://www.google.it/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
-                        'ingredienti' => array(
-                            array("nome" => "farina", "quantita" => 100, "perc" => 30),
-                            array("nome" => "olio", "quantita" => 70, "perc" => 20)
-                        )
-);
-$logger = new FD_Logger(null);
+
+session_destroy();
 
 //////////// funzioni globali /////////////////////////////////////
 
@@ -67,11 +57,11 @@ function isAssoc(array $arr)
 
 try {
 
-$logger = new FD_Logger(null);
+$logger = new FD_Logger('../Log/'.@date('d_m_Y').'.txt');
 
 if(IsNullOrEmptyString($template))
 {
-    $logger->lwrite('[ERRORE] - Invalid template');
+    //$logger->lwrite('[ERRORE] - Invalid template');
     echo '{"error" : "Invalid template"}';
 }
 
@@ -228,7 +218,7 @@ final class FD_ReportEngine extends FD_ReportMaster
                                         if((int)$this->content[$keys[$i]]["@attributes"]["border"] == 0)
                                             $this->pdf->SetFillColor(255);
 
-                                        if($this->content[$keys[$i]]["@attributes"]["wordwrap"] == "true")
+                                        if(property_exists((object)$this->content[$keys[$i]]["@attributes"],"wordwrap") && $this->content[$keys[$i]]["@attributes"]["wordwrap"] == "true")
                                         {
                                             $this->pdf->MultiCell($this->content[$keys[$i]]["@attributes"]["w"],
                                                                 strlen($this->data_object[$keys[$i]]) < 100 ? 0 : (strlen($this->data_object[$keys[$i]])/100)*$this->content[$keys[$i]]["@attributes"]["font-size"]/2,
@@ -387,7 +377,7 @@ final class FD_ReportEngine extends FD_ReportMaster
                                             if(isset($col["@attributes"]["drawcolor"]))
                                                 $this->pdf->SetDrawColor($col["@attributes"]["drawcolor"]);
 
-                                            if($col["@attributes"]["wordwrap"] == "true")
+                                            if(property_exists((object)$col["@attributes"],"wordwrap") && $col["@attributes"]["wordwrap"] == "true")
                                             {
                                                 $this->pdf->MultiCell($col["@attributes"]["w"],
                                                                  $col["@attributes"]["h"],
@@ -455,4 +445,4 @@ final class FD_ReportEngine extends FD_ReportMaster
 
 //lacio il report
 $report = new FD_ReportEngine($template,$data_object,$logger);
-return $report->createPDF();
+echo $report->createPDF();

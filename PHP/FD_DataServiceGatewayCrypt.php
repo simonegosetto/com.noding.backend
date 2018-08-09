@@ -61,8 +61,6 @@ require("PushNotification/FD_PushNotification.php");
 require("PushNotification/FD_OneSignal.php");
 require("Tools/FD_Random.php");
 require("Tools/FD_JWT.php");
-require("ReportService/fpdf181/fpdf.php");
-require("ReportService/FD_ReportService.php");
 
 //istanzio logger
 $log = new FD_Logger(null);
@@ -383,39 +381,6 @@ try
 
     if(strlen($query) > 0 && strlen($type) > 0)
     {
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        // verifico che il servizio sia attivo in base alla decorrenza nel DB Admin
-        $http = new FD_HTTP();
-        $post_data = array(
-            "service" => "'".explode(".",$_SERVER["HTTP_HOST"])[0]."'"
-        );
-        $validity = $http->Post("https://admin.costofacile.it/BackEnd/FD_CheckValidityService.php", $post_data);
-
-        $log->lwrite('[INFO] - VALIDITY - '.$validity);
-        
-        // da gestire e da capire la risposta nulla come mai
-        if(strlen($validity) == 0)
-        {
-            $log->lwrite('[METHOD] - '.$_SERVER['REQUEST_METHOD']);
-        }
-        else
-        {
-            if(strpos($validity,"error") !== false)
-            {
-                echo '{"error" : "Errore durante il controllo di validatà del tuo servizio, contatta l\'assistenza all\'indirizzo supporto@costofacile.it per ulteriori informazioni.", "debug": ' . $debug_result . '}}';
-                $log->lwrite('[DENIED] - Errore durante il controllo di validatà del tuo servizio, contatta l\'assistenza all\'indirizzo supporto@costofacile.it per ulteriori informazioni. - '.$debug_result);
-                return;
-            }
-
-            if(json_decode($validity,true)[0]["Attivo"] != 1)
-            {
-                echo '{"error" : "Il tuo servizio non risulta attivo, contatta l\'assistenza all\'indirizzo supporto@costofacile.it per ulteriori informazioni.", "debug": ' . $debug_result . '}}';
-                $log->lwrite('[DENIED] - Il tuo servizio non risulta attivo, contatta l\'assistenza all\'indirizzo supporto@costofacile.it per ulteriori informazioni. - '.$debug_result);
-                return;
-            }
-        }
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
         //Inizializzo componente SQL
         $sql = new FD_Mysql();
 
@@ -561,9 +526,14 @@ try
             if(isset($report) && $report != "" && $report != null)
             {
                 $log->lwrite('[INFO] - report - '.$report.' - '.$result);
-                $pdf = new FD_ReportService("Reports/".$report, 
-                                            count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
-                                            ,$log);
+                // lancio report allocando i parametri in una sessione
+                session_start();
+                $_SESSION["ReportData"] = array(
+                    "template" => "../Reports/".$report,
+                    "data_object" => count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true),
+                    "logger" => $log
+                );
+                Header("Location: ReportService/FD_ReportService.php");
             }
             else
             {
