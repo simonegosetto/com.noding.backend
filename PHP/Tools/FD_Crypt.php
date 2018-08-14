@@ -50,7 +50,8 @@ final class FD_Crypt
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
         //Ritorno il valore senza spazi
-        return str_replace("    }
+        return trim($decrypted_string);
+    }  
 
     //ritorna il valore per la connessione mysql
     public function mysql_decrypt($encrypted_string, $encryption_key) 
@@ -78,6 +79,12 @@ final class FD_Crypt
     {
         $app = base64_encode(hash_pbkdf2("sha256", $password, $salt, $iteration, 32, true));
         return 'pbkdf2_sha256$'.$iteration.'$'.$salt.'$'.$app;
+    }
+
+    //Ritorna key per redis
+    public function redis_crypt($command)
+    {
+        return md5($command);
     }
 
     //Funzione di fix stringhe con apici o caratteri strani

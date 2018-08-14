@@ -57,7 +57,7 @@ $logger = new FD_Logger('../Log/'.@date('d_m_Y').'.txt');
 
 if(IsNullOrEmptyString($template))
 {
-    //$logger->lwrite('[ERRORE] - Invalid template');
+    $logger->lwrite('[ERRORE] - Invalid template');
     echo '{"error" : "Invalid template"}';
 }
 
@@ -96,6 +96,7 @@ eval('
 }
 catch(Exception $e)
 {
+    $logger->lwrite('[ERRORE] - Errore durante la generazione del report !, '.$e->getMessage());
     echo '{"error" : "Errore durante la generazione del report !, '.$e->getMessage().'"}';
 }
 
@@ -377,7 +378,7 @@ final class FD_ReportEngine extends FD_ReportMaster
                                             {
                                                 $this->pdf->MultiCell($col["@attributes"]["w"],
                                                                  $col["@attributes"]["h"],
-                                                                 $row[$name].iconv('UTF-8', 'windows-1252',$col["@attributes"]["suffix"]),
+                                                                 iconv('UTF-8', 'windows-1252',$row[$name]).iconv('UTF-8', 'windows-1252',$col["@attributes"]["suffix"]),
                                                                  $col["@attributes"]["border"],
                                                                  0,
                                                                  $col["@attributes"]["align"]);
@@ -386,7 +387,7 @@ final class FD_ReportEngine extends FD_ReportMaster
                                             {
                                                 $this->pdf->Cell($col["@attributes"]["w"],
                                                                  $col["@attributes"]["h"],
-                                                                 $row[$name].iconv('UTF-8', 'windows-1252',$col["@attributes"]["suffix"]),
+                                                                 iconv('UTF-8', 'windows-1252',$row[$name]).iconv('UTF-8', 'windows-1252',$col["@attributes"]["suffix"]),
                                                                  $col["@attributes"]["border"],
                                                                  0,
                                                                  $col["@attributes"]["align"]);
@@ -440,5 +441,6 @@ final class FD_ReportEngine extends FD_ReportMaster
 }
 
 //lacio il report
+$logger->lwrite('[INFO] - [REPORT] - lancio report - '.$template);
 $report = new FD_ReportEngine($template,$data_object,$logger);
 echo $report->createPDF();

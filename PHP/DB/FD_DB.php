@@ -1,6 +1,7 @@
 <?php
 
-abstract class FD_DB {
+abstract class FD_DB 
+{
 
     //Variabili
     var $hostname = "";

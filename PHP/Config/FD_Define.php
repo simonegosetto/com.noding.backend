@@ -30,3 +30,12 @@ final class DB_TYPE extends FD_Define
     const POSTGRES = 3;
     const SQLITE = 4;
 }
+
+final class REDIS_DATA_TYPE extends FD_Define
+{
+    const STRING = 1;
+    const LIST = 2;
+    const HASH = 3;
+    const SET = 4;
+    const SORTED_SET = 5;
+}

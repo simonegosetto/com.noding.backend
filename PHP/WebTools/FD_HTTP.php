@@ -7,7 +7,7 @@
  */
 final class FD_HTTP {
 
-   function __construct(){}
+    function __construct(){}
 
    //http post
    public function Post($url, $data)

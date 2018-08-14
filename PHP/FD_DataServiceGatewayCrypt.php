@@ -52,6 +52,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
+require("DB/FD_Redis.php");
 require("DB/FD_Mysql.php");
 require("Tools/FD_Crypt.php");
 require("WebTools/FD_Mailer.php");
@@ -208,6 +209,10 @@ try
         {
             $debug = $_POST["debug"];
         }
+        if (isset($_POST["redis"]))
+        {
+            $redis = $_POST["redis"];
+        }
     } 
     else if($gest == 2) 
     {
@@ -245,6 +250,10 @@ try
         {
             $debug = $objData->debug;
         }
+        if(property_exists((object) $objData,"redis"))
+        {
+            $redis = $objData->redis;
+        }
     } 
     else if($gest == 3) 
     {
@@ -279,6 +288,10 @@ try
         if (isset($_GET["debug"]))
         {
             $debug = $_GET["debug"];
+        }
+        if (isset($_GET["redis"]))
+        {
+            $redis = $_GET["redis"];
         }
     }
 
@@ -374,6 +387,19 @@ try
             $params = '';
         }
         $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
+    }
+
+    //Gestisco REDIS
+    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
+    {
+        $redis = new FD_Redis();
+        $redis_key = $crypt->redis_crypt($query);
+        if($redis->exists($redis_key))
+        {
+            $log->lwrite('[REDIS] - query - '.$query);
+            echo $redis->get($redis_key);
+            return;
+        }
     }
 
     $debug_result .= ',"query" : "'.$query.'"';
@@ -539,10 +565,20 @@ try
                 if($result == "[0]") $result = "[]";
                 if(isset($debug))
                 {
+                    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
+                    {
+                        $redis->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
+                    } 
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}';
                 }
                 else
                 {
+                    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
+                    {
+                        $redis->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
+                    }
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
                 }
             }
