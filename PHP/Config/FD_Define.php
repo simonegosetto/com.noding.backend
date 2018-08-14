@@ -38,4 +38,5 @@ final class REDIS_DATA_TYPE extends FD_Define
     const HASH = 3;
     const SET = 4;
     const SORTED_SET = 5;
+    const JSON = 6;
 }
