@@ -178,12 +178,11 @@ final class FD_ReportEngine extends FD_ReportMaster
                         for($i=0;$i<count($keys);$i++)
                         {
                             // exclude the special keys
-                            if($keys[$i] == "@attributes" || $keys[$i] == "comment" || $keys[$i] == "bmargin") continue;
+                            if($keys[$i] == "@attributes" || $keys[$i] == "comment" || $keys[$i] == "bmargin" || $keys[$i] == "header" || $keys[$i] == "footer") continue;
 
                             if($keys[$i] == "author") $this->pdf->SetAuthor($this->content[$keys[$i]]);
                             else if ($keys[$i] == "title") $this->pdf->SetTitle($this->content[$keys[$i]]);
-                            else if ($keys[$i] == "header") continue;//$GLOBALS['header'] = $this->content[$keys[$i]];
-                            else if ($keys[$i] == "footer") continue;//$GLOBALS['footer'] = $this->content[$keys[$i]];
+                            else if ($keys[$i] == "newpage") $this->pdf->AddPage();
                             else
                                 
                             //check id properties exist in data array
@@ -343,7 +342,7 @@ final class FD_ReportEngine extends FD_ReportMaster
                                     $this->pdf->SetTextColor(0);
 
                                     //capisco se devo decodificare un json oppure ho già l'array passato dalla query
-                                    if($this->is_object)
+                                    if($this->is_object || ($this->content[$keys[$i]]["@attributes"]["type"] == "table" && $keys[$i] != "table"))
                                     {
                                         if(is_string($this->data_object[$keys[$i]])) $this->data_object[$keys[$i]] = json_decode($this->data_object[$keys[$i]], true);
                                     }
@@ -398,7 +397,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                         $this->pdf->Ln();
                                     }
                                 }
-                            
                             
                                 
                                 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
