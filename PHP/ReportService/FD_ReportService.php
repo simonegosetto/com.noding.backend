@@ -217,12 +217,12 @@ final class FD_ReportEngine extends FD_ReportMaster
                                         if(property_exists((object)$this->content[$keys[$i]]["@attributes"],"wordwrap") && $this->content[$keys[$i]]["@attributes"]["wordwrap"] == "true")
                                         {
                                             $this->pdf->MultiCell($this->content[$keys[$i]]["@attributes"]["w"],
-                                                                strlen($this->data_object[$keys[$i]]) < 100 ? 0 : (strlen($this->data_object[$keys[$i]])/100)*$this->content[$keys[$i]]["@attributes"]["font-size"]/2,
+                                                                //strlen($this->data_object[$keys[$i]]) < 100 ? 0 : (strlen($this->data_object[$keys[$i]])/100)*$this->content[$keys[$i]]["@attributes"]["font-size"]/2,
+                                                                $this->content[$keys[$i]]["@attributes"]["h"],
                                                 ($this->content[$keys[$i]]["@attributes"]["type"] == "label"
                                                     ? $this->content[$keys[$i]]["@attributes"]["text"]
                                                     : iconv('UTF-8', 'windows-1252',$this->data_object[$keys[$i]])),
                                                                 $this->content[$keys[$i]]["@attributes"]["border"],
-                                                                $this->content[$keys[$i]]["@attributes"]["ln"],
                                                                 $this->content[$keys[$i]]["@attributes"]["align"],
                                                                 $this->content[$keys[$i]]["@attributes"]["fill"]
                                             );
