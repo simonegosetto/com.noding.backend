@@ -21,22 +21,19 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 
-require("fpdf181/fpdf.php");
-require("FD_ReportEnum.php");
-require("../WebTools/FD_Logger.php");
+require("fpdf_v1-81/fpdf.php");
+require("SG_ReportEnum.php");
 
-session_start();
 
-if (isset($_SESSION["ReportData"]["template"]))
+if (isset($_GET["ReportData"]["template"]))
 {
-    $template = $_SESSION["ReportData"]["template"];
+    $template = $_GET["ReportData"]["template"];
 }
-if (isset($_SESSION["ReportData"]["data_object"]))
+if (isset($_GET["ReportData"]["data_object"]))
 {
-    $data_object = $_SESSION["ReportData"]["data_object"];
+    $data_object = $_GET["ReportData"]["data_object"];
 }
 
-session_destroy();
 
 //////////// funzioni globali /////////////////////////////////////
 
@@ -98,79 +95,69 @@ function is_indexed_array(&$arr)
 
 try {
 
-$logger = new FD_Logger('../Log/'.@date('d_m_Y').'.txt');
-
-if(IsNullOrEmptyString($template))
-{
-    $logger->lwrite('[ERRORE] - Invalid template');
-    echo '{"error" : "Invalid template"}';
-}
-
-//leggo template
-$xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-//gestisco header
-if(strpos($xml->asXML(),"<header") !== false)
-{
-    $header = 'function Header(){'.json_decode(json_encode($xml),TRUE)["header"].'}';
-}
-else
-{
-    $header = "";
-}
-
-//gestisco footer
-if(strpos($xml->asXML(),"<footer") !== false)
-{
-    $footer = 'function Footer(){'.json_decode(json_encode($xml),TRUE)["footer"].'}';
-}
-else
-{
-    $footer = "";
-}
-
-//definisco il report master (classe padre)
-eval('
-    class FD_ReportMaster extends FPDF
+    if(IsNullOrEmptyString($template))
     {
-        '.$header.'
-        '.$footer.'
+        echo '{"error" : "Invalid template"}';
     }
-');
+
+    //read the template
+    $xml = simplexml_load_file($template, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+    // header
+    if(strpos($xml->asXML(),"<header") !== false)
+    {
+        $header = 'function Header(){'.json_decode(json_encode($xml),TRUE)["header"].'}';
+    }
+    else
+    {
+        $header = "";
+    }
+
+    // footer
+    if(strpos($xml->asXML(),"<footer") !== false)
+    {
+        $footer = 'function Footer(){'.json_decode(json_encode($xml),TRUE)["footer"].'}';
+    }
+    else
+    {
+        $footer = "";
+    }
+
+    //define the report master runtime
+    eval('
+        class SG_ReportMaster extends FPDF
+        {
+            '.$header.'
+            '.$footer.'
+        }
+    ');
 
 }
 catch(Exception $e)
 {
-    $logger->lwrite('[ERRORE] - Errore durante la generazione del report !, '.$e->getMessage());
     echo '{"error" : "Errore durante la generazione del report !, '.$e->getMessage().'"}';
 }
 
-//definisco classe di engine del report
-final class FD_ReportEngine extends FD_ReportMaster
+// define the final child class
+final class SG_ReportEngine extends SG_ReportMaster
 {
     var $data_object;
     var $data_array;
     var $template = "";
     var $content;
     var $pdf;
-    var $log;
     var $is_array = false;
     var $is_object = false;
 
-    //Costruttore
-    function __construct($template,$data_object,$logger)
+    function __construct($template,$data_object)
     {
-        $this->log = $logger;
-
         if(IsNullOrEmptyString($template))
         {
-            $this->log->lwrite('[ERRORE] - Invalid template');
             echo '{"error" : "Invalid template"}';
         }
 
         if(!isset($data_object) || $data_object == null)
         {
-            $this->log->lwrite('[ERRORE] - Invalid data');
             echo '{"error" : "Invalid data"}';
             return;
         }
@@ -288,7 +275,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                     }
                                     else
                                     {
-                                        $this->log->lwrite('[ERRORE] - Any '.$keys[$i].'\'s attribute is invalid or missing');
                                         echo '{"error" : "Any '.$keys[$i].'\'s attribute is invalid or missing"}';
                                         return;
                                     }
@@ -310,7 +296,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                     }
                                     else
                                     {
-                                        $this->log->lwrite('[ERRORE] - Any '.$keys[$i].'\'s attribute is invalid or missing');
                                         echo '{"error" : "Any '.$keys[$i].'\'s attribute is invalid or missing"}';
                                         return;
                                     }
@@ -340,7 +325,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                         }
                                         else
                                         {
-                                            $this->log->lwrite('[ERRORE] - The image '.$keys[$i].' have invalid extension');
                                             echo '{"error" : "The image '.$keys[$i].' have invalid extension"}';
                                             return;
                                         }
@@ -386,7 +370,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                     $this->pdf->SetFillColor(255);
                                     $this->pdf->SetTextColor(0);
 
-                                    //capisco se devo decodificare un json oppure ho già l'array passato dalla query
                                     if($this->is_object || ($this->content[$keys[$i]]["@attributes"]["type"] == "table" && $keys[$i] != "table"))
                                     {
                                         if(is_string($this->data_object[$keys[$i]])) $this->data_object[$keys[$i]] = json_decode($this->data_object[$keys[$i]], true);
@@ -395,8 +378,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                                     {
                                         $this->data_object[$keys[$i]] = $this->data_array;
                                     }
-
-                                    //var_dump($this);return;
 
                                     foreach($this->data_object[$keys[$i]] as $row)
                                     {
@@ -448,7 +429,6 @@ final class FD_ReportEngine extends FD_ReportMaster
                             }
                             else
                             {
-                                $this->log->lwrite('[ERRORE] - The property '.$keys[$i].' is not defined in data array');
                                 echo '{"error" : "The property '.$keys[$i].' is not defined in data array"}';
                                 return;
                             }
@@ -462,28 +442,24 @@ final class FD_ReportEngine extends FD_ReportMaster
                 	}
                     else
                     {
-                        $this->log->lwrite('[ERRORE] - Any < report >\'s attribute is invalid or missing');
                         echo '{"error" : "Any < report >\'s attribute is invalid or missing"}';
                         return;
                     }
             }
             else
             {
-                $this->log->lwrite('[ERRORE] - Failed to open the template');
                 echo '{"error" : "Failed to open the template"}';
                 return;
             }
         }
         catch (Exception $e)
         {
-            $this->log->lwrite('[ERRORE] - '.$e->getMessage());
             echo '{"error" : "'.$e->getMessage().'"}';
         }
     }
 
 }
 
-//lacio il report
-$logger->lwrite('[INFO] - [REPORT] - lancio report - '.$template);
-$report = new FD_ReportEngine($template,$data_object,$logger);
+// run the report
+$report = new FD_ReportEngine($template,$data_object);
 echo $report->createPDF();
