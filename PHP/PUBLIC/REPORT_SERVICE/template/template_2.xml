@@ -7,8 +7,8 @@
     <header>
         <![CDATA[
             $this->Line(10,10,200,10);
-            //$this->SetFont('Arial','B',15);
-            //$this->Cell(190, 10, 'test' , 0, 1, 'C');
+            $this->SetFont('Arial','B',15);
+            $this->Cell(190, 30, 'HEADER' , 0, 1, 'C');
             $this->SetDrawColor(169,169,169);
             $this->Line(10,37,200,37);
             $this->SetDrawColor(0,0,0);
@@ -19,21 +19,21 @@
 
     <!-- http://www.fpdf.org/it/doc/setfont.htm -->
     <!-- http://www.fpdf.org/it/doc/cell.htm -->
-    <title type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="10" ></title>
+    <title type="text" font="Arial" font-size="16" font-style="B" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="50" ></title>
 
     <!-- static label: LABEL must to be unique into the file, so have an ID ex: "label"+1 = "label1", second "label"+2 = "label2" etc... -->
-    <label1 type="label" text="Static Label" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="R" fill="false" x="130" y="45" ></label1>
+    <label1 type="label" text="Static Label" font="Arial" font-size="10" font-style="" border="0" w="0" h="0" ln="1" align="C" fill="false" x="10" y="45" ></label1>
 
-    <image type="image" x="10" y="20" w="50" h="50" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
+    <image type="image" x="10" y="70" w="130" h="50" ></image> <!-- il type vedo di prenderlo direttamente dall'url, le dimensioni devo valutare... -->
 
     <!-- http://www.fpdf.org/en/tutorial/tuto5.htm -->
-    <table type="table" x="80" y="30" >
-        <name headertext="Name" font="Arial" font-size="12" font-style="" align="L" ></name>
-        <quantity headertext="Quantity (gr)" font="Arial" font-size="12" font-style="" align="L" ></quantity>
-        <perc headertext="% sul totale" font="Arial" font-size="12" font-style="" align="L" ></perc>
+    <table type="table" x="10" y="140" >
+        <name headertext="Name" font="Arial" font-size="12" font-style="" align="L" w="120" h="6" border="1" suffix="" drawcolor="169,169,169"  ></name>
+        <quantity headertext="Quantity (gr)" font="Arial" font-size="12" font-style="" align="L" w="30" h="6" border="1" suffix="" drawcolor="169,169,169" ></quantity>
+        <perc headertext="%" font="Arial" font-size="12" font-style="" align="L" w="30" h="6" border="1" suffix=" gr" drawcolor="169,169,169" ></perc>
     </table>
 
-    <process type="text" font="Arial" font-size="12" font-style="" border="0" w="0" h="0" ln="1" align="L" fill="false" x="10" yy="40" ></process>
+    <process type="cell" font="Arial" font-size="12" font-style="" border="0" w="0" h="4" ln="1" align="L" fill="false" x="10" yy="40" wordwrap="true" ></process>
 
     <!-- LN must to be unique into the file, so have an ID ex: "ln"+1 = "ln1", second "ln"+2 = "ln2" etc... -->
     <ln1 type="ln" h="6"></ln1>
@@ -48,7 +48,7 @@
             $this->SetDrawColor(0,0,0);
             $this->SetY(-15);
             $this->SetFont('Arial','I',8);
-            $this->Cell(0,10,'P.'.$this->PageNo(),0,0,'R');
+            $this->Cell(0,10,'Page.'.$this->PageNo(),0,0,'R');
             $this->SetY(-15);
             $this->Cell(0,10,@date('d/m/Y H:i:s'),0,0,'L');
         ]]>

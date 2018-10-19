@@ -17,21 +17,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 //remove the notice
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ERROR | E_PARSE); // | E_WARNING
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 
 require("fpdf_v1-81/fpdf.php");
 require("SG_ReportEnum.php");
 
+if (isset($_GET["ReportData"]))
+{
+    $params = json_decode($_GET["ReportData"],true);
 
-if (isset($_GET["ReportData"]["template"]))
-{
-    $template = $_GET["ReportData"]["template"];
+    if (isset($params["template"]))
+    {
+        $template = $params["template"];
+    }
+    if (isset($params["data_object"]))
+    {
+        $data_object = $params["data_object"];
+    }
 }
-if (isset($_GET["ReportData"]["data_object"]))
+else
 {
-    $data_object = $_GET["ReportData"]["data_object"];
+    echo '{"error" : "Invalid parameters"}';
+    return;
 }
 
 
@@ -98,6 +107,7 @@ try {
     if(IsNullOrEmptyString($template))
     {
         echo '{"error" : "Invalid template"}';
+        return;
     }
 
     //read the template
@@ -200,7 +210,7 @@ final class SG_ReportEngine extends SG_ReportMaster
                        in_array($this->content["@attributes"]["size"],(new PAGE_SIZE())->getConst()))
                     {
 
-                        $this->pdf = new FD_ReportMaster($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
+                        $this->pdf = new SG_ReportMaster($this->content["@attributes"]["orientation"],$this->content["@attributes"]["unit"],$this->content["@attributes"]["size"]);
                         $this->pdf->AliasNbPages();
                         if(isset($this->content["bmargin"])) $this->pdf->SetAutoPageBreak(true, $this->content["bmargin"]);
                         $this->pdf->AddPage();
@@ -461,5 +471,5 @@ final class SG_ReportEngine extends SG_ReportMaster
 }
 
 // run the report
-$report = new FD_ReportEngine($template,$data_object);
+$report = new SG_ReportEngine($template,$data_object);
 echo $report->createPDF();
