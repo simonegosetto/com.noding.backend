@@ -49,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+//error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
@@ -62,6 +64,7 @@ require("PushNotification/FD_PushNotification.php");
 require("PushNotification/FD_OneSignal.php");
 require("Tools/FD_Random.php");
 require("Tools/FD_JWT.php");
+require("Google/FD_GoogleService.php");
 
 //istanzio logger
 $log = new FD_Logger(null);
@@ -213,6 +216,14 @@ try
         {
             $redis = $_POST["redis"];
         }
+        if (isset($_POST["google"]))
+        {
+            $google = $_POST["google"];
+        }
+        if (isset($_POST["redirect"]))
+        {
+            $redirect = $_POST["redirect"];
+        }
     } 
     else if($gest == 2) 
     {
@@ -254,6 +265,14 @@ try
         {
             $redis = $objData->redis;
         }
+        if(property_exists((object) $objData,"google"))
+        {
+            $google = $objData->google;
+        }
+        if(property_exists((object) $objData,"redirect"))
+        {
+            $redirect = $objData->redirect;
+        }
     } 
     else if($gest == 3) 
     {
@@ -293,7 +312,21 @@ try
         {
             $redis = $_GET["redis"];
         }
+        if (isset($_GET["google"]))
+        {
+            $google = $_GET["google"];
+        }
+        if (isset($_GET["redirect"]))
+        {
+            $redirect = $_GET["redirect"];
+        }
     }
+
+    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"])
+    {
+        $redis_conn = new FD_Redis("",null);
+    }
+    */
 
     //Prendo il token di sessione dell'utente e controllo che sia valido
     $jwt = new FD_JWT();
@@ -323,6 +356,18 @@ try
         return;
     }
 
+    //gestione servizi google
+    if(isset($google))
+    {
+        if($google->mode == GOOLE_SERVICE_ACTION_MODE::BEFORE_DB_CALL)
+        {
+            $log->lwrite('[INFO] - google service - '.$google->action);
+            $google_service = new FD_GoogleService();
+            $google_service->engine($google->action,$google->params);
+            return;
+        }
+    }
+
     if(strlen($process) == 0)
     {
         echo '{"error" : "Invalid process !", "debug": ' . $debug_result . '}}';
@@ -348,11 +393,8 @@ try
         $debug_result .= ',"mail" : "'.(string)$mail.'"';
 
         $mailer = new FD_Mailer();
-        if ($mail->gestione == 1) 
-        {
-            $mailer->SendMail("volontapp",$mail);
-            return;
-        }
+        $mailer->SendMail($mail->gestione,$mail);
+        return;
     }
 
     //Capisco se ci sono parametri di output e compongo la query
@@ -387,19 +429,6 @@ try
             $params = '';
         }
         $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
-    }
-
-    //Gestisco REDIS
-    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
-    {
-        $redis = new FD_Redis();
-        $redis_key = $crypt->redis_crypt($query);
-        if($redis->exists($redis_key))
-        {
-            $log->lwrite('[REDIS] - query - '.$query);
-            echo $redis->get($redis_key);
-            return;
-        }
     }
 
     $debug_result .= ',"query" : "'.$query.'"';
@@ -556,32 +585,61 @@ try
                 session_start();
                 $_SESSION["ReportData"] = array(
                     "template" => "../Reports/".$report,
-                    "data_object" => count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
+                    "data_object" => json_decode($result,true) //count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
                 );
                 Header("Location: ReportService/FD_ReportService.php");
+            }
+            else if(isset($redirect))
+            {
+                Header("Location: ".$redirect);
             }
             else
             {
                 if($result == "[0]") $result = "[]";
                 if(isset($debug))
                 {
-                    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
+                    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
-                    } 
+                    } */
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}';
                 }
                 else
                 {
-                    if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
+                    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
-                    }
+                    }*/
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
                 }
             }
+
+            if(isset($google))
+            {
+                if($google->mode == GOOLE_SERVICE_ACTION_MODE::AFTER_DB_CALL)
+                {
+                    $log->lwrite('[INFO] - google service - '.$google->action);
+                    $google_service = new FD_GoogleService();
+                    $event_id = $google_service->engine($google->action,json_decode($result, true));
+                    
+                    if(!is_null($event_id))
+                    {
+                        $log->lwrite('[INFO] - google calendar - evento id: '.$event_id);
+                        // aggiorno l'id dell'evento
+                        $data = array(
+                            "type" => "1",
+                            "token" => $token,
+                            "process" => "ye0USzs1oueSkQMa+9U5i4XfnzPAmo26kC+m4K2D6YstWy0tSVYtWy3lyPgdmkV/FOoX9YejmAyvSG3q7lxKqd0Uny89oXPQhg@@",
+                            "params" =>  json_decode($result, true)[0]["id"] . ",'" . $event_id ."'"
+                        );
+                        $http->Post($_SERVER["HTTP_REFERER"].explode("/",$_SERVER['REQUEST_URI'])[1]."/FD_DataServiceGatewayCrypt.php?gest=1",$data);
+                    }
+                }
+            }
+
+
         }
     }
     else
@@ -592,7 +650,7 @@ try
 }
 catch (Exception $e)
 {
-    echo '{"error" : "'.$e->getMessage().'", "debug": ' . $debug_result . '}}';
+    echo '{"error" : "'.$e->getMessage().'"}';
     $log->lwrite('[ERRORE] - '.$e->getMessage());
 }
 

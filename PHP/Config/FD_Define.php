@@ -40,3 +40,17 @@ final class REDIS_DATA_TYPE extends FD_Define
     const SORTED_SET = 5;
     const JSON = 6;
 }
+
+final class GOOLE_SERVICE_ACTION extends FD_Define
+{
+    const AUTHENTICATION_URL_GET = 'authentication_url_get';
+    const AUTHENTICATION_CODE_SET = 'authentication_code_set';
+    const USER_INFO_GET = 'user_info_get';
+    const CALENDAR_GEST = 'calendar_gest';
+}
+
+final class GOOLE_SERVICE_ACTION_MODE extends FD_Define
+{
+    const BEFORE_DB_CALL = 1;
+    const AFTER_DB_CALL = 2;
+}
