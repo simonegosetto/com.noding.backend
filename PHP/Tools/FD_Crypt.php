@@ -50,7 +50,8 @@ final class FD_Crypt
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
         //Ritorno il valore senza spazi
-        return str_replace("    }
+        return str_replace(" ","",trim($decrypted_string));
+    }
 
     //ritorna il valore per la connessione mysql
     public function mysql_decrypt($encrypted_string, $encryption_key) 

@@ -1,0 +1,5 @@
+[
+  {"id":1,"host":"costofmtest.mysql.db","user":"costofmtest","pass":"AngeloSimone18","db":"costofmtest"},
+  {"id":2,"host":"costofmdemo.mysql.db","user":"costofmdemo","pass":"AngeloSimone18","db":"costofmdemo"},
+  {"id":3,"host":"costofmgourmetfy.mysql.db","user":"costofmgourmetfy","pass":"AngeloSimone18","db":"costofmgourmetfy"}
+]
