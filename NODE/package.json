@@ -1,0 +1,14 @@
+{
+  "name": "node_gateway",
+  "version": "1.0.0",
+  "description": "backend node",
+  "main": "dataservicegateway.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Simone Gosetto",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}
