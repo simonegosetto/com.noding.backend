@@ -1,6 +1,7 @@
 {
     "host": "localhost",
     "user": "root",
+    "port": "3305",
     "password": "Sfondiamo2013",
     "database": "better_trading"
 }

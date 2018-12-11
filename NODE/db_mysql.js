@@ -15,7 +15,7 @@ class MySql {
 
         connection = mysql.createConnection({
             host: obj_connection.host,
-            port:  3306,
+            port:  obj_connection.port,
             user: obj_connection.user,
             password: obj_connection.pass,
             database: obj_connection.database
@@ -44,6 +44,7 @@ class MySql {
             (err, result) => {
                 if (err) throw err;
                 console.log(result);
+                connection.end();
                 return result;
             }
         );
