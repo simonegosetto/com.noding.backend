@@ -32,7 +32,6 @@ const body_parser = require('body-parser');
 const db_mysql = require('./DB/db_mysql');
 
 var data = new Date().toISOString().substr(0,10);
-
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
 
 //abilito il parse delle richieste json (POST)
@@ -71,14 +70,27 @@ app.post('/dataservicegateway',
             function(connection_result) 
             {
                 //eseguo query passata in ingresso
-                let result = db_mysql_local.execute(params.process, params.params);
-                resp.send(result);
+                db_mysql_local.execute(params.process, params.params).then(
+                    function(data)
+                    {
+                        //ritorno risposta al client
+                        resp.send(data);
+                    },
+                    function(err)
+                    {
+                        //ritorno errore al client
+                        resp.send(err);
+                    }
+                );
+
+                //chiudo la connessione al DB
+                db_mysql_local.close();
             }, 
             function(err) 
             {
-                console.log(err);
+                console.log("errore di connessione");
                 logger.fatal(err);
-                resp.send(err);
+                resp.send('{"error": "' + err + '"}');
             }
         );
     }
