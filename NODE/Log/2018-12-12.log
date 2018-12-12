@@ -1,0 +1,159 @@
+
+info [Wed Dec 12 2018 09:42:43 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+info [Wed Dec 12 2018 09:46:26 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+info [Wed Dec 12 2018 09:46:35 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+fatal [Wed Dec 12 2018 09:46:48 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:69:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+
+info [Wed Dec 12 2018 09:56:38 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+info [Wed Dec 12 2018 09:57:28 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Wed Dec 12 2018 09:57:34 GMT+0100 (GMT+01:00)]  { process: 'test', params: { a: 'b' } }
+fatal [Wed Dec 12 2018 09:57:35 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+
+info [Wed Dec 12 2018 09:58:05 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Wed Dec 12 2018 09:58:11 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'test', params: { a: 'b' } }
+fatal [Wed Dec 12 2018 09:58:12 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+info [Wed Dec 12 2018 10:10:00 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'test', params: { a: 'b' } }
+fatal [Wed Dec 12 2018 10:10:01 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+
+info [Wed Dec 12 2018 10:13:17 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+info [Wed Dec 12 2018 10:14:21 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Wed Dec 12 2018 10:14:25 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'test', params: { a: 'b' } }
+fatal [Wed Dec 12 2018 10:14:27 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+
+info [Wed Dec 12 2018 10:15:34 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Wed Dec 12 2018 10:15:42 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'test', params: { a: 'b' } }
+fatal [Wed Dec 12 2018 10:15:44 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+info [Wed Dec 12 2018 11:01:51 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'test', params: '\'a\',\'b\'' }
+fatal [Wed Dec 12 2018 11:01:52 GMT+0100 (GMT+01:00)]  { Error: connect ECONNREFUSED 127.0.0.1:3306
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1163:14)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Protocol.handshake (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:51:23)
+    at Connection.connect (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:118:18)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:27:24
+    at new Promise (<anonymous>)
+    at MySql.connection (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:26:16)
+    at app.post (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:70:24)
+    at Layer.handle [as handle_request] (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\express\lib\router\route.js:112:3)
+  errno: 'ECONNREFUSED',
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 3306,
+  fatal: true }
+
+info [Wed Dec 12 2018 12:03:43 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
