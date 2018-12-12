@@ -25,15 +25,18 @@
  */
 "use strict";
 
+// include
 const express = require('express');
-const port = 3000;
-const app = express();
 const body_parser = require('body-parser');
 const db_mysql = require('./DB/db_mysql');
-const jsreport = require('jsreport');
+//const jsreport = require('jsreport');
 
 var data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
+
+//variabili
+const port = 3000;
+const app = express();
 
 //abilito il parse delle richieste json (POST)
 app.use(body_parser.json());
@@ -99,7 +102,7 @@ app.post('/dataservicegateway',
 
 app.get('/report',(req,resp) =>
     {
-
+        /*
         jsreport.render({
             template: {
                 content: "<h1>Hello world from {{this.name}}</h1>",
@@ -110,6 +113,6 @@ app.get('/report',(req,resp) =>
             //pipes plain text with Hello world from jsreport
             out.stream.pipe(resp);
         });
-
+        */
     }
 );
