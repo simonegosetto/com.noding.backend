@@ -1,0 +1,44 @@
+
+
+info [Thu Dec 13 2018 09:35:58 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Thu Dec 13 2018 09:36:40 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'my_sqrt', params: '4,@out_number' }
+info [Thu Dec 13 2018 09:36:41 GMT+0100 (GMT+01:00)]  query:  call my_sqrt(4,@out_number);select @out_number as out_number;
+info [Thu Dec 13 2018 09:37:16 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'sp_utenti_get', params: '' }
+info [Thu Dec 13 2018 09:37:16 GMT+0100 (GMT+01:00)]  query:  call sp_utenti_get();
+info [Thu Dec 13 2018 09:37:42 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'sp_utenti_get', params: '@asd' }
+info [Thu Dec 13 2018 09:37:42 GMT+0100 (GMT+01:00)]  query:  call sp_utenti_get(@asd);
+error [Thu Dec 13 2018 09:37:42 GMT+0100 (GMT+01:00)]  { Error: ER_SP_WRONG_NO_OF_ARGS: Incorrect number of arguments for PROCEDURE test.sp_utenti_get; expected 0, got 1
+    at Query.Sequence._packetToError (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\sequences\Sequence.js:47:14)
+    at Query.ErrorPacket (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\sequences\Query.js:77:18)
+    at Protocol._parsePacket (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:278:23)
+    at Parser.write (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Parser.js:76:12)
+    at Protocol.write (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:38:16)
+    at Socket.<anonymous> (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:91:28)
+    at Socket.<anonymous> (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:502:10)
+    at Socket.emit (events.js:182:13)
+    at addChunk (_stream_readable.js:283:12)
+    at readableAddChunk (_stream_readable.js:264:11)
+    --------------------
+    at Protocol._enqueue (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\protocol\Protocol.js:144:48)
+    at Connection.query (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\node_modules\mysql\lib\Connection.js:200:25)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:77:24
+    at new Promise (<anonymous>)
+    at MySql.execute (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:75:16)
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:77:32
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+  code: 'ER_SP_WRONG_NO_OF_ARGS',
+  errno: 1318,
+  sqlMessage:
+   'Incorrect number of arguments for PROCEDURE test.sp_utenti_get; expected 0, got 1',
+  sqlState: '42000',
+  index: 0,
+  sql: 'call sp_utenti_get(@asd);' }
+
+
+info [Thu Dec 13 2018 09:39:08 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+
+info [Thu Dec 13 2018 09:39:26 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+
+
+info [Thu Dec 13 2018 11:17:17 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000

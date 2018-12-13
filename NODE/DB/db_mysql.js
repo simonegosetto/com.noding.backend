@@ -84,9 +84,15 @@ class MySql {
 
                     if(result != undefined && result.length > 0)
                     {
-                        console.log(result);
+                        //console.log(result);
+                        
+                        //controllo se la stored restituisce un errore
+                        var stored_error = false;
+                        if(JSON.stringify(result[0]).indexOf('"error"') > -1) stored_error = true;
+
                         resolve('{"recordset":' + JSON.stringify(result[0]) 
                         + (output == true ? ', "output": ' + JSON.stringify(result[1]) : '')
+                        + (stored_error == true ? ', "error": ' + JSON.stringify(result[0]["error"]) : '')
                         + '}');
                     }
                     else
