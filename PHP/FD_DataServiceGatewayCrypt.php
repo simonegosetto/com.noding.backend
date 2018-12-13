@@ -595,6 +595,7 @@ try
             }
             else
             {
+                $log->lwrite('[INFO] - result - '.$result);
                 if($result == "[0]") $result = "[]";
                 if(isset($debug))
                 {
