@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 //error_reporting(E_ALL);
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
@@ -64,7 +64,10 @@ require("PushNotification/FD_PushNotification.php");
 require("PushNotification/FD_OneSignal.php");
 require("Tools/FD_Random.php");
 require("Tools/FD_JWT.php");
-require("Google/FD_GoogleService.php");
+if(parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
+{
+    require("Google/FD_GoogleService.php");
+}
 
 //istanzio logger
 $log = new FD_Logger(null);
@@ -357,7 +360,7 @@ try
     }
 
     //gestione servizi google
-    if(isset($google))
+    if(isset($google) && parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
     {
         if($google->mode == GOOLE_SERVICE_ACTION_MODE::BEFORE_DB_CALL)
         {
@@ -595,6 +598,7 @@ try
             }
             else
             {
+                $log->lwrite('[INFO] - result - '.$result);
                 if($result == "[0]") $result = "[]";
                 if(isset($debug))
                 {
@@ -616,7 +620,7 @@ try
                 }
             }
 
-            if(isset($google))
+            if(isset($google) && parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
             {
                 if($google->mode == GOOLE_SERVICE_ACTION_MODE::AFTER_DB_CALL)
                 {
