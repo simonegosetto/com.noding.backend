@@ -160,21 +160,27 @@ if (strlen($keyRequest) > 0)
     //$crypt = new FD_Crypt();
     $array = json_decode($result, true);
     //$date = new DateTime();
-    $jwt = new FD_JWT();
-    $token = $jwt->encode($random->Generate(25),$keyRequest);
 
-    //Prendo IP client
-    $url = new FD_Url();
-    //Salvo nel log delle sessioni
-    $sql->executeSQL("call sys_session_log(" . $array[0]["cod_u"] . ",'" . $token . "','".$url->IP_ADDRESS."','".$url->USER_AGENT["platform"]."','".$url->USER_AGENT["browser"]."','".$url->USER_AGENT["version"]."');");
+    if(strpos($result,"error") !== false)
+    {
+        echo '{"user":' . $result .', "error": "'.json_decode($result, true)[0]["error"].'"}';
+    }
+    else
+    {
+        $jwt = new FD_JWT();
+        $token = $jwt->encode($random->Generate(25),$keyRequest);
+        //Prendo IP client
+        $url = new FD_Url();
+        //Salvo nel log delle sessioni
+        $sql->executeSQL("call sys_session_log(" . $array[0]["cod_u"] . ",'" . $token . "','".$url->IP_ADDRESS."','".$url->USER_AGENT["platform"]."','".$url->USER_AGENT["browser"]."','".$url->USER_AGENT["version"]."');");
+        //logger
+        $log->lwrite('[INFO] - Login effettuato ! - ('.$token.') - ('.$array[0]["cod_u"].')<b>'.$username.'</b> - '.$url->USER_AGENT["platform"].' - '.$url->USER_AGENT["browser"].' - '.$url->USER_AGENT["version"]);
 
-    //logger
-    $log->lwrite('[INFO] - Login effettuato ! - ('.$token.') - ('.$array[0]["cod_u"].')<b>'.$username.'</b> - '.$url->USER_AGENT["platform"].' - '.$url->USER_AGENT["browser"].' - '.$url->USER_AGENT["version"]);
+        echo '{"user":' . $result .',"token": {"token" : "'.$token.'"}}';
+    }
 
     //Chiudo connessione
     $sql->closeConnection();
-
-    echo '{"user":' . $result .',"token": {"token" : "'.$token.'"}}';
 }
 else
 {

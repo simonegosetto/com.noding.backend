@@ -6,8 +6,8 @@
  * Time: 16:20
  **/
 
-require "predis/autoload.php";
-PredisAutoloader::register();
+//require "predis/autoload.php";
+//PredisAutoloader::register();
 
 final class FD_Redis
 {
