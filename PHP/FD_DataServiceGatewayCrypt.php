@@ -54,7 +54,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
-require("DB/FD_Redis.php");
+//require("DB/FD_Redis.php");
 require("DB/FD_Mysql.php");
 require("Tools/FD_Crypt.php");
 require("WebTools/FD_Mailer.php");
