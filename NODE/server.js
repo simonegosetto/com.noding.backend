@@ -23,7 +23,6 @@
  * VERSIONE 1.0.0
  *
  */
-"use strict";
 
 // include
 const express = require('express');
@@ -60,8 +59,7 @@ app.listen(port,
 
 //gestione del POST
 app.post('/dataservicegateway', 
-    (req,resp) =>
-    {
+    (req,resp) => {
         //prendo l'host corrente che mi serve per la connesione al db corretto
         let host = req.get('host').split(':')[0];
         //parametri in ingresso
@@ -71,17 +69,14 @@ app.post('/dataservicegateway',
         //istanzio componente mysql e lo connetto
         var db_mysql_local = new db_mysql();
         db_mysql_local.connection(host).then(
-            function(connection_result) 
-            {
+            function(connection_result) {
                 //eseguo query passata in ingresso
                 db_mysql_local.execute(params.process, params.params).then(
-                    function(data)
-                    {
+                    function(data) {
                         //ritorno risposta al client
                         resp.send(data);
                     },
-                    function(err)
-                    {
+                    function(err) {
                         //ritorno errore al client
                         resp.send(err);
                     }
