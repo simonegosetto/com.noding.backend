@@ -25,31 +25,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 }
 
 //remove the notice
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-//require("Config/FD_Define.php");
 require("DB/FD_DB.php");
 require("DB/FD_Mysql.php");
-require("WebTools/FD_Logger.php");
-
-//istanzio logger
-$log = new FD_Logger(null);
 
 $id_master = $_GET["id_master"];
 $id_slave = $_GET["id_slave"];
 
-
-$master_db = json_decode(file_get_contents("Config/config.json"),true)[array_search($id_master,array_column(json_decode(file_get_contents("Config/config.json"),true),"id"))]["db"];
-$slave_db = json_decode(file_get_contents("Config/config.json"),true)[array_search($id_slave,array_column(json_decode(file_get_contents("Config/config.json"),true),"id"))]["db"];
+$master_db = json_decode(file_get_contents("config.json"),true)[array_search($id_master,array_column(json_decode(file_get_contents("config.json"),true),"id"))]["db"];
+$slave_db = json_decode(file_get_contents("config.json"),true)[array_search($id_slave,array_column(json_decode(file_get_contents("config.json"),true),"id"))]["db"];
 
 if(strlen($id_master) == 0 || strlen($id_slave) == 0)
 {
-    $log->lwrite('[ERRORE] - Parametri non validi !');
-    echo '{"error": "Parametri non validi !"}';
+    echo '{"error": "invalid parameters"}';
     return;
 }
 
-// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FUNZIONI @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FUNCTIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 function remove_auto_increment_definer($string)
 {
@@ -73,10 +66,8 @@ try
 
     $sql = new FD_Mysql($id_master);
 
-    //Controllo che la connessione al DB sia andata a buon fine
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [MASTER] - '.$sql->lastError);
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -96,12 +87,10 @@ try
 
     */
     $query = "SHOW TABLES;";
-    $log->lwrite('[INFO] - [MASTER] - query - '.$query);
     $master_result = $sql->exportJSON($query);
 
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [MASTER] - '.$sql->lastError) ;
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -112,7 +101,7 @@ try
     $master_result_array = json_decode($master_result,true);
     $key = array_keys($master_result_array[0])[0];
 
-    //Compongo array di confronto
+    // master tables
     $final_result = array();
     for($i=0;$i<count($master_result_array);$i++)
     {
@@ -121,7 +110,6 @@ try
 
       if(strlen($sql->lastError) > 0)
       {
-          $log->lwrite('[ERRORE] - [MASTER] - '.$sql->lastError) ;
           if($sql->connected)
           {
               $sql->closeConnection();
@@ -143,13 +131,13 @@ try
       );
     }
 
-    $query = "SHOW PROCEDURE STATUS;";
-    $log->lwrite('[INFO] - [MASTER] - query - '.$query);
+    // master procedures
+    $query = "SHOW PROCEDURE STATUS WHERE Db = '".$sql->database."';";
     $master_result = $sql->exportJSON($query);
 
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [MASTER] - '.$sql->lastError) ;
+        echo $sql->lastError;
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -157,17 +145,19 @@ try
         return;
     }
 
+    var_dump($master_result);
+
     $master_result_array = json_decode($master_result,true);
 
-    //Compongo array di confronto
     for($i=0;$i<count($master_result_array);$i++)
     {
       $query = "SHOW CREATE PROCEDURE ".$master_result_array[$i]["Name"].";";
       $entity_definition = $sql->exportJSON($query);
 
+      echo $sql->database." ".$sql->lastError;
+
       if(strlen($sql->lastError) > 0)
       {
-          $log->lwrite('[ERRORE] - [MASTER] - '.$sql->lastError) ;
           if($sql->connected)
           {
               $sql->closeConnection();
@@ -191,16 +181,12 @@ try
 
     $sql->closeConnection();
 
-    $log->lwrite('[INFO] - [MASTER] - responce - '.$master_result);
-
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SLAVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
     $sql = new FD_Mysql($id_slave);
 
-    //Controllo che la connessione al DB sia andata a buon fine
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [SLAVE] - '.$sql->lastError);
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -209,12 +195,10 @@ try
     }
 
     $query = "SHOW TABLES;";
-    $log->lwrite('[INFO] - [SLAVE] - query - '.$query);
     $slave_result = $sql->exportJSON($query);
 
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [SLAVE] - '.$sql->lastError) ;
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -225,7 +209,7 @@ try
     $slave_result_array = json_decode($slave_result,true);
     $key = array_keys($slave_result_array[0])[0];
 
-    //Popolo l'array finale con i dati dello slave
+    // slave tables
     for($i=0;$i<count($slave_result_array);$i++)
     {
       $query = "SHOW CREATE TABLE ".$slave_result_array[$i][$key].";";
@@ -233,7 +217,6 @@ try
 
       if(strlen($sql->lastError) > 0)
       {
-          $log->lwrite('[ERRORE] - [SLAVE] - '.$sql->lastError) ;
           if($sql->connected)
           {
               $sql->closeConnection();
@@ -263,16 +246,13 @@ try
           )
         );
       }
-
     }
 
-    $query = "SHOW PROCEDURE STATUS;";
-    $log->lwrite('[INFO] - [SLAVE] - query - '.$query);
+    $query = "SHOW PROCEDURE STATUS WHERE Db = '".$sql->database."';";
     $slave_result = $sql->exportJSON($query);
 
     if(strlen($sql->lastError) > 0)
     {
-        $log->lwrite('[ERRORE] - [SLAVE] - '.$sql->lastError) ;
         if($sql->connected)
         {
             $sql->closeConnection();
@@ -282,7 +262,7 @@ try
 
     $slave_result_array = json_decode($slave_result,true);
 
-    //Popolo l'array finale con i dati dello slave
+    // slave procedure
     for($i=0;$i<count($slave_result_array);$i++)
     {
       $query = "SHOW CREATE PROCEDURE ".$slave_result_array[$i]["Name"].";";
@@ -290,7 +270,6 @@ try
 
       if(strlen($sql->lastError) > 0)
       {
-          $log->lwrite('[ERRORE] - [SLAVE] - '.$sql->lastError) ;
           if($sql->connected)
           {
               $sql->closeConnection();
@@ -325,11 +304,9 @@ try
 
     $sql->closeConnection();
 
-    $log->lwrite('[INFO] - [SLAVE] - responce - '.$slave_result);
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ FINAL RESULT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ESTRAZIONE FINALE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-    //normalizzo definizioni - AUTO_INCREMENT=5
+    // compose the final array of results
     for($i=0;$i<count($final_result);$i++)
     {
         $final_result[$i]["entity_definition_master"] = remove_auto_increment_definer($final_result[$i]["entity_definition_master"]);
@@ -342,5 +319,4 @@ try
 catch (Exception $e)
 {
     echo '{"error" : "'.$e->getMessage().'"}';
-    $log->lwrite('[ERRORE] - '.$e->getMessage());
 }

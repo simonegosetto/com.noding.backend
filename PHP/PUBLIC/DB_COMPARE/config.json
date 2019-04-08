@@ -1,0 +1,5 @@
+[
+  {"id":1,"host":"localhost","user":"root","pass":"","db":"mantis"},
+  {"id":2,"host":"localhost","user":"root","pass":"","db":"ricettario"},
+  {"id":3,"host":"localhost","user":"root","pass":"","db":"preventivatore"}
+]
