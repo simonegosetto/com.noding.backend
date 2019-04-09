@@ -440,7 +440,7 @@ try
     if(strlen($query) > 0 && strlen($type) > 0)
     {
         //Inizializzo componente SQL
-        $sql = new FD_Mysql();
+        $sql = new SG_Mysql();
 
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0)

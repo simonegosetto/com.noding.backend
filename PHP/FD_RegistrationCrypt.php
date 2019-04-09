@@ -216,7 +216,7 @@ try {
     if(strlen($query) > 0 && strlen($type) > 0 && strlen($database) > 0){
 
         //Inizializzo componente SQL
-        $sql = new FD_Mysql($keyRequest,$suffix);
+        $sql = new SG_Mysql($keyRequest,$suffix);
 
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0){

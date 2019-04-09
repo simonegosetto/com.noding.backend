@@ -1,6 +1,6 @@
 <?php
 
-final class FD_Mysql extends FD_DB
+final class SG_Mysql extends FD_DB
 {
 
     /* *******************

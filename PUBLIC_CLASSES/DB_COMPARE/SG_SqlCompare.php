@@ -27,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 //remove the notice
 //error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-require("DB/FD_DB.php");
-require("DB/FD_Mysql.php");
+require("DB/SG_DB.php");
+require("DB/SG_Mysql.php");
 
 $id_master = $_GET["id_master"];
 $id_slave = $_GET["id_slave"];
@@ -64,7 +64,7 @@ try
 {
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ MASTER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    $sql = new FD_Mysql($id_master);
+    $sql = new SG_Mysql($id_master);
 
     if(strlen($sql->lastError) > 0)
     {
@@ -183,7 +183,7 @@ try
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SLAVE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    $sql = new FD_Mysql($id_slave);
+    $sql = new SG_Mysql($id_slave);
 
     if(strlen($sql->lastError) > 0)
     {

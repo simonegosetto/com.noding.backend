@@ -1,6 +1,6 @@
 <?php
 
-abstract class FD_DB {
+abstract class SG_DB {
 
     var $hostname = "";
     var $username = "";
