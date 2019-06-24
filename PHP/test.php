@@ -1,4 +1,9 @@
 <?php
+
+echo __DIR__;
+
+
+/*
 require 'PHPMailer/PHPMailerAutoload.php';
 
 $mail = new PHPMailer;
@@ -34,3 +39,6 @@ if(!$mail->send()) {
 } else {
     echo 'Message has been sent';
 }
+*/
+
+
