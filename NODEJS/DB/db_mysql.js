@@ -4,12 +4,12 @@ const fs = require('fs');
 const mysql = require("mysql");
 const st = require('../Tools/StringTool');
 
-var data = new Date().toISOString().substr(0,10);
+const data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
 
-var connection;
-var connected = false;
-var string_tool = new st();
+let connection;
+let connected = false;
+const string_tool = new st();
 
 class MySql {
 
@@ -49,19 +49,18 @@ class MySql {
     //eseguo query (stored procedure)
     execute(process, params)
     {
-        var output = false;
+        let output = false;
         let query = "call " + process + "(" + string_tool.isnull(params) + ");";    
 
         //controllo parametri di output
-        if(string_tool.isnull(params).indexOf(",@") > -1)
-        {
+        if (string_tool.isnull(params).indexOf(",@") > -1) {
             output = true;
             //gestione parametri di output
             let output_query = "select ";
             let output_params = params.split(",");
             for(var i=0;i<output_params.length;i++)
             {
-                if(output_params[i].substr(0,1) == "@")
+                if (output_params[i].substr(0,1) == "@")
                 {
                     output_query += output_params[i] + " as " + output_params[i].replace("@","") + ",";
                 }
@@ -72,8 +71,7 @@ class MySql {
 
         logger.info('query: ',query);
 
-        return new Promise(function(resolve, reject) 
-        {
+        return new Promise(function(resolve, reject) {
             connection.query(query,
                 (err, result) => {
                     if (err) 
@@ -105,8 +103,7 @@ class MySql {
     }
 
     //chiudo connessione
-    close()
-    {
+    close() {
         connection.end();
     }
 

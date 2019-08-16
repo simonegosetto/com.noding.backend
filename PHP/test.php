@@ -1,6 +1,29 @@
 <?php
 
-echo __DIR__;
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require("Dropbox/FD_DropboxAPI.php");
+
+$origin = $_SERVER["SERVER_NAME"];
+
+$dp = new FD_DropboxAPI();
+/*
+$result = $dp->upload("/".$origin."/asd.mp3", file_get_contents('Config/esatto.mp3'));
+echo $result;
+if(strpos($result,"error") !== false)
+{
+    // {"error_summary": "path/insufficient_space/..", "error": {".tag": "path", "reason": {".tag": "insufficient_space"}, "upload_session_id": "AAAAAAAAHCidn026PInD3A"}}
+    echo json_decode($result, true)["error"]["reason"][".tag"];
+}
+else
+{
+    // {"name": "FD_Upload.php", "path_lower": "/fd_upload.php", "path_display": "/FD_Upload.php", "id": "id:kYe03Rd5rwAAAAAAAAAACw", "client_modified": "2019-08-16T13:01:27Z", "server_modified": "2019-08-16T13:01:27Z", "rev": "015903b969c1bb7000000016bbb2ab0", "size": 62, "is_downloadable": true, "content_hash": "aed09c1b1f002b268424c3985848358d5c5c4ffbe1006829d0c9f978593cdcfc"}
+}
+*/
+$result = $dp->download("id:kYe03Rd5rwAAAAAAAAAADw");
+echo $result;
+// header('Location: '.$result);
 
 
 /*
