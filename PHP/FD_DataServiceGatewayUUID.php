@@ -48,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 }
 
 //remove the notice
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
@@ -154,10 +154,6 @@ try
         {
             $params = $_POST["params"];
         }
-        if(isset($_POST["type"]))
-        {
-            $type = $_POST["type"];
-        }
         if(isset($_POST["token"]))
         {
             $token = $_POST["token"];
@@ -203,10 +199,6 @@ try
         {
             $params = $objData->params;
         }
-        if(property_exists((object) $objData,"type"))
-        {
-            $type = $objData->type;
-        }
         if(property_exists((object) $objData,"token"))
         {
             $token = $objData->token;
@@ -250,10 +242,6 @@ try
         {
             $params = $_GET["params"];
         }
-        if(isset($_GET["type"]))
-        {
-            $type = $_GET["type"];
-        }
         if(isset($_GET["token"]))
         {
             $token = $_GET["token"];
@@ -291,7 +279,7 @@ try
     //Prendo il token di sessione dell'utente e controllo che sia valido
     if(strlen($token) <= 0)
     {
-        echo '{"error" : "Invalid token !", "debug": "' . $debug_result . '"}';
+        echo '{"error" : "Invalid token !"}';
         $log->lwrite('[DENIED] - Invalid token !');
         return;
     }
@@ -300,12 +288,12 @@ try
 
     if(strlen($process) == 0)
     {
-        echo '{"error" : "Invalid process !", "debug": "' . $debug_result . '"}';
+        echo '{"error" : "Invalid process !"}';
         $log->lwrite('[ERRORE] - Invalid process !');
         return;
     }
 
-    $debug_result .= '{"token" : "'.$token.'"';
+    $debug_result = '{"token" : "'.$token.'"';
 
     $query = '';
 
@@ -346,7 +334,7 @@ try
     $debug_result .= ',"query" : "'.$query.'"';
     $log->lwrite('[INFO] - query - '.$query);
 
-    if(strlen($query) > 0 && strlen($type) > 0)
+    if(strlen($query) > 0)
     {
         //Inizializzo componente SQL
         $sql = new FD_Mysql();
@@ -354,7 +342,7 @@ try
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
+            echo '{"error" : "'.$sql->lastError.'"}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -365,7 +353,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
+            echo '{"error" : "'.$sql->lastError.'"}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -379,7 +367,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
+            echo '{"error" : "'.$sql->lastError.'"}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -400,7 +388,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
+            echo '{"error" : "'.$sql->lastError.'"}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -450,7 +438,7 @@ try
                 }
                 else
                 {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '", "debug": ' . $debug_result . '}}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}}';
                 }
             }
             else
@@ -491,16 +479,16 @@ try
                 {
                     /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
                     } */
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
                 }
                 else
                 {
                     /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
                     }*/
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
@@ -535,7 +523,7 @@ try
     }
     else
     {
-        echo '{"error" : "Invalid request !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid request !"}}';
         $log->lwrite('[ERRORE] - Invalid request ! - '.$debug_result);
     }
 }

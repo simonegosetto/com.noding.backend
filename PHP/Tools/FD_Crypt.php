@@ -74,6 +74,17 @@ final class FD_Crypt
         return $decrypted_string;
     }
 
+    public function host_decrypted()
+    {
+        $ini_array = parse_ini_file("Config/config.inc.ini");
+        $encrypted_string = base64_decode(str_replace("@","=",($ini_array["SERVER_NAME"])));
+        $encryption_key = strtolower(md5_file("Config/cryptocurrency.ini"));
+        $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
+        $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
+        $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
+        return str_replace(" ","",trim($decrypted_string));
+    }
+
     //Ritorna la password criptata per Django
     public function django_crypt($password,$salt,$iteration)
     {
@@ -110,6 +121,9 @@ final class FD_Crypt
 
         //elimino i NULLI presi come stringa
         $fixedString = str_replace("'null'","null",$fixedString);
+
+        //elimino gli UNDEFINED presi come stringa
+        $fixedString = str_replace("'undefined'","null",$fixedString);
 
         //sistemo l'encoding
         return $fixedString;//utf8_encode($fixedString);
