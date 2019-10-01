@@ -64,10 +64,11 @@ require("PushNotification/FD_PushNotification.php");
 require("PushNotification/FD_OneSignal.php");
 require("Tools/FD_Random.php");
 require("Tools/FD_JWT.php");
-if(parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
+if (parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
 {
     require("Google/FD_GoogleService.php");
 }
+require("Dropbox/FD_DropboxAPI.php");
 
 //istanzio logger
 $log = new FD_Logger(null);
@@ -230,6 +231,10 @@ try
         {
             $google = $_POST["google"];
         }
+        if (isset($_POST["dropbox"]))
+        {
+            $dropbox = $_POST["dropbox"];
+        }
         if (isset($_POST["redirect"]))
         {
             $redirect = $_POST["redirect"];
@@ -279,6 +284,10 @@ try
         {
             $google = $objData->google;
         }
+        if(property_exists((object) $objData,"dropbox"))
+        {
+            $dropbox = $objData->dropbox;
+        }
         if(property_exists((object) $objData,"redirect"))
         {
             $redirect = $objData->redirect;
@@ -326,6 +335,10 @@ try
         {
             $google = $_GET["google"];
         }
+        if (isset($_GET["dropbox"]))
+        {
+            $dropbox = $_GET["dropbox"];
+        }
         if (isset($_GET["redirect"]))
         {
             $redirect = $_GET["redirect"];
@@ -365,7 +378,7 @@ try
         return;
     }
 
-    //gestione servizi google
+    // gestione servizi google
     if(isset($google) && parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
     {
         if($google->mode == GOOLE_SERVICE_ACTION_MODE::BEFORE_DB_CALL)
@@ -396,7 +409,7 @@ try
     $random = new FD_Random();
     $query = '';
 
-    //Gestione invio mail
+    // Gestione invio mail
     if(isset($mail)) 
     {
         $debug_result .= ',"mail" : "'.(string)$mail.'"';
@@ -404,6 +417,21 @@ try
         $mailer = new FD_Mailer();
         $mailer->SendMail($mail->gestione,$mail);
         return;
+    }
+
+    // Gestione Dropbox
+    if (isset($dropbox))
+    {
+        $dp = new FD_DropboxAPI();
+        if ($dropbox->mode == DROPBOX::UPLOAD)
+        {
+
+        }
+        else if ($dropbox->mode == DROPBOX::DOWNLOAD)
+        {
+            header("Location: ".$dp->download("id:".$dropbox->id));
+            return;
+        }
     }
 
     //Capisco se ci sono parametri di output e compongo la query
@@ -594,7 +622,7 @@ try
                 session_start();
                 $_SESSION["ReportData"] = array(
                     "template" => "../Reports/".$report,
-                    "data_object" => json_decode($result,true) //count(json_decode($result,true)) == 1 ? json_decode($result,true)[0] : json_decode($result,true)
+                    "data_object" => json_decode($result,true)
                 );
                 Header("Location: ReportService/FD_ReportService.php");
             }

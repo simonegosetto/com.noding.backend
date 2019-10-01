@@ -54,3 +54,9 @@ final class GOOLE_SERVICE_ACTION_MODE extends FD_Define
     const BEFORE_DB_CALL = 1;
     const AFTER_DB_CALL = 2;
 }
+
+final class DROPBOX extends FD_Define
+{
+    const UPLOAD = 1;
+    const DOWNLOAD = 2;
+}
