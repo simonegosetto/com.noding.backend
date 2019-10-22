@@ -1,13 +1,8 @@
-"use strict";
-
 class StringTool {
 
-    isnull(string,value)
-    {
-        if(string == undefined || string == null)
-        {
-            if(value == undefined || value == null)
-            {
+    isnull(string, value) {
+        if (string === undefined || string === null) {
+            if (value === undefined || value === null) {
                 return value;
             }
             return "";

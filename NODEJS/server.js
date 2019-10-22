@@ -27,27 +27,25 @@
 // include
 const express = require('express');
 const body_parser = require('body-parser');
-const db_mysql = require('./DB/db_mysql');
-//const jsreport = require('jsreport');
+const mysql = require('./DB/mysql');
+// const jsreport = require('jsreport');
 
-var data = new Date().toISOString().substr(0,10);
+const data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
 
-//variabili
+// variabili
 const port = 3000;
 const app = express();
 
-//abilito il parse delle richieste json (POST)
+// abilito il parse delle richieste json (POST)
 app.use(body_parser.json());
-//abilito un livello più avanzato di parsing (oggetti nidificati)
+// abilito un livello più avanzato di parsing (oggetti nidificati)
 app.use(body_parser.urlencoded({extended: true}));
 
-//server in ascolto
+// server in ascolto
 app.listen(port,
-    function(error)
-    {
-        if(error)
-        {
+    function(error) {
+        if (error) {
             logger.fatal(error);
             return console.log(error);
         } 
@@ -58,35 +56,33 @@ app.listen(port,
 );
 
 //gestione del POST
-app.post('/dataservicegateway', 
-    (req,resp) => {
-        //prendo l'host corrente che mi serve per la connesione al db corretto
+app.post('/dataservicegateway', (req, resp) => {
+        // prendo l'host corrente che mi serve per la connesione al db corretto
         let host = req.get('host').split(':')[0];
-        //parametri in ingresso
+        // parametri in ingresso
         let params = req.body;
         logger.info('parametri post: ',req.body);
 
-        //istanzio componente mysql e lo connetto
-        var db_mysql_local = new db_mysql();
-        db_mysql_local.connection(host).then(
+        // istanzio componente mysql e lo connetto
+        const dbMysql = new mysql();
+        dbMysql.connection(host).then(
             function(connection_result) {
-                //eseguo query passata in ingresso
-                db_mysql_local.execute(params.process, params.params).then(
+                // eseguo query passata in ingresso
+                dbMysql.execute(params.process, params.params).then(
                     function(data) {
-                        //ritorno risposta al client
+                        // ritorno risposta al client
                         resp.send(data);
                     },
                     function(err) {
-                        //ritorno errore al client
+                        // ritorno errore al client
                         resp.send(err);
                     }
                 );
 
                 //chiudo la connessione al DB
-                db_mysql_local.close();
+                dbMysql.close();
             }, 
-            function(err) 
-            {
+            function(err) {
                 console.log("errore di connessione");
                 logger.fatal(err);
                 resp.send('{"error": "' + err + '"}');
@@ -95,8 +91,7 @@ app.post('/dataservicegateway',
     }
 );
 
-app.get('/report',(req,resp) =>
-    {
+app.get('/report',(req,resp) => {
         /*
         jsreport.render({
             template: {
