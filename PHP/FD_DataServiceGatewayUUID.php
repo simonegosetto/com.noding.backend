@@ -47,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-//remove the notice
-//error_reporting(E_ERROR | E_WARNING | E_PARSE);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// remove the notice
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
