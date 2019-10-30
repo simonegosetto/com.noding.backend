@@ -19,13 +19,13 @@ class MySql {
             host: obj_connection.host,
             port:  obj_connection.port,
             user: obj_connection.user,
-            password: obj_connection.pass,
+            password: obj_connection.password,
             database: obj_connection.database,
             // options
             multipleStatements: true
         });
     
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             connection.connect(
                 (err) => {
                     if (err) {
@@ -61,7 +61,7 @@ class MySql {
 
         logger.info('query: ',query);
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             connection.query(query, (err, result) => {
                     if (err) {
                         logger.error(err);

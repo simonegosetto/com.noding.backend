@@ -1,7 +1,7 @@
 {
-    "host": "localhost",
-    "user": "root",
+    "host": "51.91.252.10",
+    "user": "100bomb",
     "port": "3306",
-    "password": "",
-    "database": "test"
+    "password": "Forza2019",
+    "database": "noding"
 }

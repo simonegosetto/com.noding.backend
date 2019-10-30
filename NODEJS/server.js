@@ -28,7 +28,10 @@
 const express = require('express');
 const body_parser = require('body-parser');
 const mysql = require('./DB/mysql');
-// const jsreport = require('jsreport');
+const fs = require('fs');
+const pdf = require('html-pdf');
+const st = require('./Tools/StringTool');
+const stringTool = new st();
 
 const data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
@@ -58,22 +61,22 @@ app.listen(port,
 //gestione del POST
 app.post('/dataservicegateway', (req, resp) => {
         // prendo l'host corrente che mi serve per la connesione al db corretto
-        let host = req.get('host').split(':')[0];
+        const host = req.get('host').split(':')[0];
         // parametri in ingresso
-        let params = req.body;
+        const params = req.body;
         logger.info('parametri post: ',req.body);
 
         // istanzio componente mysql e lo connetto
         const dbMysql = new mysql();
         dbMysql.connection(host).then(
-            function(connection_result) {
+            (result) => {
                 // eseguo query passata in ingresso
                 dbMysql.execute(params.process, params.params).then(
                     function(data) {
                         // ritorno risposta al client
                         resp.send(data);
                     },
-                    function(err) {
+                    (err) => {
                         // ritorno errore al client
                         resp.send(err);
                     }
@@ -90,6 +93,72 @@ app.post('/dataservicegateway', (req, resp) => {
         );
     }
 );
+
+app.get('/generate-invoice',(req, resp) => {
+    const host = req.get('host').split(':')[0];
+    const params = req.query;
+    // leggo file template
+    let html = fs.readFileSync('./Templates/fattura.html', 'utf8');
+
+    const dbMysql = new mysql();
+    dbMysql.connection(host).then((result) => {
+            // eseguo query passata in ingresso
+            dbMysql.execute('n_fattura_report', `${params.id},${params.anno}`).then(
+                function(data) {
+                    // imposto valori corretti al template
+                    const testata = JSON.parse(data).recordset[0];
+                    html = html.replace('<%NumeroFattura%>', testata.numero);
+                    html = html.replace('<%DataFattura%>', testata.data);
+                    html = html.replace('<%Nome%>', testata.nome);
+                    html = html.replace('<%Iban%>', testata.iban);
+                    html = html.replace('<%MarcaBolloID%>', stringTool.isnull(testata.marcabolloid));
+                    html = html.replace('<%RagioneSociale%>', testata.ragionesociale);
+                    html = html.replace('<%Indirizzo%>', testata.indirizzo);
+                    html = html.replace('<%Localita%>', `${testata.localita} ${testata.cap}(${testata.provincia})`);
+                    html = html.replace('<%PartitaIVA%>', testata.partitaiva);
+                    html = html.replace('<%Email%>', testata.pec || testata.email);
+
+                    let totale = 0;
+                    const righe = JSON.parse(data).recordset.map(item => {
+                        totale += item.prezzo;
+                        return `
+                        <tr>
+                            <td style="border-right: 3px solid #ffffff" colspan=2 height="27" align="left" valign=middle bgcolor="#F2F2F2">${item.descrizione}</td>
+                            <td align="right" valign=middle bgcolor="#D9D9D9" sdval="500" sdnum="1040;0;[&gt;0]&quot; &euro; &quot;* #.##0,00&quot; &quot;;[&lt;0]&quot;-&euro; &quot;* #.##0,00&quot; &quot;;&quot; &euro; &quot;* -#&quot; &quot;;&quot; &quot;@&quot; &quot;"> &euro; ${item.prezzo},00 </td>
+                        </tr>
+                        `;
+                    }).join('');
+                    html = html.replace('<%Righe%>', righe);
+                    html = html.replace('<%Totale%>', totale);
+
+                    // genero PDF
+                    let filename = `fattura_${testata.numero}_${testata.data.substring(6, 10)}.pdf`;
+                    const filepath = `./Temp/${filename}`;
+                    pdf.create(html).toFile(filepath, (err, res) => {
+                        if (err) return console.log(err);
+                        console.log(res);
+                        // send('Fattura generata correttamente !');
+
+                        const stream = fs.createReadStream(filepath);
+                        filename = encodeURIComponent(filename);
+                        resp.setHeader('Content-disposition', 'inline; filename="' + filename + '"');
+                        resp.setHeader('Content-type', 'application/pdf');
+                        stream.pipe(resp);
+                    });
+                },
+                (err) => {
+                    // ritorno errore al client
+                    resp.send(err);
+                }
+            );
+        },
+        (err) => {
+            // ritorno errore al client
+            resp.send(err);
+        }
+    );
+
+});
 
 app.get('/report',(req,resp) => {
         /*
