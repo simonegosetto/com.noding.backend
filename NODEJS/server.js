@@ -25,10 +25,18 @@
  */
 
 // include
+const fs = require('fs');
 const express = require('express');
+const https = require('https');
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/backend.noding.it/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/backend.noding.it/fullchain.pem'),
+    // ca: fs.readFileSync('./0000_csr-certbot.pem'),
+    requestCert: false,
+    rejectUnauthorized: false,
+};
 const body_parser = require('body-parser');
 const mysql = require('./DB/mysql');
-const fs = require('fs');
 const pdf = require('html-pdf');
 const st = require('./Tools/StringTool');
 const stringTool = new st();
@@ -37,16 +45,20 @@ const data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
 
 // variabili
-const port = 3000;
+const port = 3001;
 const app = express();
-
 // abilito il parse delle richieste json (POST)
 app.use(body_parser.json());
 // abilito un livello più avanzato di parsing (oggetti nidificati)
 app.use(body_parser.urlencoded({extended: true}));
 
 // server in ascolto
-app.listen(port,
+const server = https.createServer(options, app);
+server.listen(port, () => {
+    console.log('server in ascolto sulla porta ',port);
+    logger.info('server in ascolto sulla porta ',port);
+});
+/*app.listen(port,
     function(error) {
         if (error) {
             logger.fatal(error);
@@ -56,7 +68,7 @@ app.listen(port,
         console.log('server in ascolto sulla porta ',port);
         logger.info('server in ascolto sulla porta ',port);
     }
-);
+);*/
 
 //gestione del POST
 app.post('/dataservicegateway', (req, resp) => {
