@@ -115,7 +115,7 @@ app.get('/generate-invoice',(req, resp) => {
     const dbMysql = new mysql();
     dbMysql.connection(host).then((result) => {
             // eseguo query passata in ingresso
-            dbMysql.execute('n_fattura_report', `${params.id},${params.anno}`).then(
+            dbMysql.execute('n_fattura_report', `${params.id},${params.anno},'${params.sezionale}'`).then(
                 function(data) {
                     // imposto valori corretti al template
                     const testata = JSON.parse(data).recordset[0];
