@@ -37,6 +37,7 @@ const options = {
 };
 const body_parser = require('body-parser');
 const mysql = require('./DB/mysql');
+const faceapi = require('./FaceApi/faceApi');
 const pdf = require('html-pdf');
 const st = require('./Tools/StringTool');
 const stringTool = new st();
@@ -45,7 +46,7 @@ const data = new Date().toISOString().substr(0,10);
 const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 'error', 'warn', 'info', 'debug'
 
 // variabili
-const port = 3001;
+const port = 8080;
 const app = express();
 // abilito il parse delle richieste json (POST)
 app.use(body_parser.json());
@@ -103,8 +104,7 @@ app.post('/dataservicegateway', (req, resp) => {
                 resp.send('{"error": "' + err + '"}');
             }
         );
-    }
-);
+    });
 
 app.get('/generate-invoice',(req, resp) => {
     const host = req.get('host').split(':')[0];
@@ -169,7 +169,27 @@ app.get('/generate-invoice',(req, resp) => {
             resp.send(err);
         }
     );
+});
 
+// TODO implementare la validità della richiesta con un token
+app.get('/face-api', async (req, resp) => {
+    if (req.query.hasOwnProperty('url')) {
+        const {url} = req.query;
+        logger.info(`url to evaluate ${url}`);
+        try {
+            const faceApi = new faceapi();
+            const result = await faceApi.evaluate(url);
+            logger.info(result);
+
+            // TODO salvare il risultato sul db
+
+            resp.send(result);
+        } catch (e) {
+            resp.send(JSON.stringify(e));
+        }
+    } else {
+        resp.send('{"error": "Invalid image url !"}');
+    }
 });
 
 app.get('/report',(req,resp) => {
@@ -185,5 +205,4 @@ app.get('/report',(req,resp) => {
             out.stream.pipe(resp);
         });
         */
-    }
-);
+    });
