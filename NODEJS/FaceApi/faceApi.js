@@ -3,6 +3,8 @@ const canvas = require("canvas");
 const fs = require("fs");
 const path = require("path");
 
+// require('@tensorflow/tfjs-node-gpu');
+
 // mokey pathing the faceapi canvas
 const { Canvas, Image, ImageData } = canvas;
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
@@ -43,9 +45,8 @@ class FaceApi {
         fs.writeFileSync(path.resolve(baseDir, fileName), buf);
     }
 
-    // TODO velocizzare il più possibile il tutto
-    // TODO implementare anche un eventuale input in base64
-    async evaluate(urlImage) {
+    async evaluate(inputImage) {
+        const fileName = new Date().toISOString();
         const faceDetectionOptions = this.getFaceDetectorOptions(faceDetectionNet);
         // load weights
         await faceDetectionNet.loadFromDisk('FaceApi/models');
@@ -55,7 +56,20 @@ class FaceApi {
         await faceapi.nets.ageGenderNet.loadFromDisk('FaceApi/models');
 
         // load the image
-        const img = await canvas.loadImage(urlImage);
+        let img;
+        if (inputImage.indexOf('data:') === -1) {
+            console.log('url');
+            img = await canvas.loadImage(inputImage);
+        } else {
+            console.log('base 64');
+            try {
+                fs.writeFileSync(`Temp/${fileName}`, inputImage.split(';base64,').pop(), {encoding: 'base64'});
+                img = await canvas.loadImage(`Temp/${fileName}`);
+            } catch (e) {
+                throw e;
+            }
+        }
+        console.log(img);
 
         // create a new canvas and draw the detection and landmarks
         const out = faceapi.createCanvasFromMedia(img);
@@ -83,7 +97,7 @@ class FaceApi {
         await faceapi.draw.drawDetections(out, singleFace.detection);
 
         // save the new canvas as image
-        this.saveFile(`${new Date().toISOString()}.jpg`, out.toBuffer('image/jpeg'));
+        this.saveFile(`${fileName}.jpg`, out.toBuffer('image/jpeg'));
 
         return {age, gender, expression};
     }

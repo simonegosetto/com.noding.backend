@@ -53,6 +53,7 @@ app.use(body_parser.json());
 // abilito un livello più avanzato di parsing (oggetti nidificati)
 app.use(body_parser.urlencoded({extended: true}));
 
+
 // server in ascolto
 const server = https.createServer(options, app);
 server.listen(port, () => {
@@ -127,6 +128,7 @@ app.get('/generate-invoice',(req, resp) => {
                     html = html.replace('<%RagioneSociale%>', testata.ragionesociale);
                     html = html.replace('<%Indirizzo%>', testata.indirizzo);
                     html = html.replace('<%Localita%>', `${testata.localita} ${testata.cap}(${testata.provincia})`);
+                    html = html.replace('<%CodiceFiscale%>', testata.codicefiscale);
                     html = html.replace('<%PartitaIVA%>', testata.partitaiva);
                     html = html.replace('<%Email%>', testata.pec || testata.email);
 
@@ -172,13 +174,13 @@ app.get('/generate-invoice',(req, resp) => {
 });
 
 // TODO implementare la validità della richiesta con un token
-app.get('/face-api', async (req, resp) => {
-    if (req.query.hasOwnProperty('url')) {
-        const {url} = req.query;
-        logger.info(`url to evaluate ${url}`);
+app.post('/face-api', async (req, resp) => {
+    if (req.body.hasOwnProperty('image')) {
+        const {image} = req.body;
+        logger.info(`url to evaluate ${image}`);
         try {
             const faceApi = new faceapi();
-            const result = await faceApi.evaluate(url);
+            const result = await faceApi.evaluate(image);
             logger.info(result);
 
             // TODO salvare il risultato sul db
