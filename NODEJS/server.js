@@ -49,10 +49,16 @@ const logger = require('logger').createLogger('./Log/'+data+'.log'); //'fatal', 
 const port = 8080;
 const app = express();
 // abilito il parse delle richieste json (POST)
-app.use(body_parser.json());
+app.use(body_parser.json({extended: true, limit: '20mb'}));
 // abilito un livello più avanzato di parsing (oggetti nidificati)
-app.use(body_parser.urlencoded({extended: true}));
-
+app.use(body_parser.urlencoded({extended: true, limit: '20mb'}));
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization');
+    next();
+});
 
 // server in ascolto
 const server = https.createServer(options, app);
