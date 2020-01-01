@@ -84,7 +84,7 @@ app.post('/dataservicegateway', (req, resp) => {
         const host = req.get('host').split(':')[0];
         // parametri in ingresso
         const params = req.body;
-        logger.info('parametri post: ',req.body);
+        // logger.info('parametri post: ',req.body);
 
         // istanzio componente mysql e lo connetto
         const dbMysql = new mysql();
