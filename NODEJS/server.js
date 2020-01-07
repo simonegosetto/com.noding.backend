@@ -179,6 +179,70 @@ app.get('/generate-invoice',(req, resp) => {
     );
 });
 
+app.get('/generate-quotation',(req, resp) => {
+    const host = req.get('host').split(':')[0];
+    const params = req.query;
+    // leggo file template
+    let html = fs.readFileSync('./Templates/preventivo.html', 'utf8');
+
+    const dbMysql = new mysql();
+    dbMysql.connection(host).then((result) => {
+            // eseguo query passata in ingresso
+            dbMysql.execute('n_preventivo_report', `${params.id}`).then(
+                function(data) {
+                    // imposto valori corretti al template
+                    const testata = JSON.parse(data).recordset[0];
+                    html = html.replace('<%NumeroPreventivo%>', testata.numero);
+                    html = html.replace('<%DataPreventivo%>', testata.data);
+                    html = html.replace('<%Nome%>', testata.nome);
+                    html = html.replace('<%RagioneSociale%>', testata.ragionesociale);
+                    html = html.replace('<%Indirizzo%>', testata.indirizzo);
+                    html = html.replace('<%Localita%>', `${testata.localita} ${testata.cap}(${testata.provincia})`);
+                    html = html.replace('<%CodiceFiscale%>', testata.codicefiscale);
+                    html = html.replace('<%PartitaIVA%>', testata.partitaiva);
+                    html = html.replace('<%Email%>', testata.pec || testata.email);
+
+                    let totale = 0;
+                    const righe = JSON.parse(data).recordset.map(item => {
+                        totale += item.prezzo;
+                        return `
+                        <tr>
+                            <td style="border-right: 3px solid #ffffff" colspan=2 height="27" align="left" valign=middle bgcolor="#F2F2F2">${item.descrizione}</td>
+                            <td align="right" valign=middle bgcolor="#D9D9D9" sdval="500" sdnum="1040;0;[&gt;0]&quot; &euro; &quot;* #.##0,00&quot; &quot;;[&lt;0]&quot;-&euro; &quot;* #.##0,00&quot; &quot;;&quot; &euro; &quot;* -#&quot; &quot;;&quot; &quot;@&quot; &quot;"> &euro; ${item.prezzo},00 </td>
+                        </tr>
+                        `;
+                    }).join('');
+                    html = html.replace('<%Righe%>', righe);
+                    html = html.replace('<%Totale%>', totale);
+
+                    // genero PDF
+                    let filename = `preventivo_${testata.numero}_${testata.data.substring(6, 10)}.pdf`;
+                    const filepath = `./Temp/${filename}`;
+                    pdf.create(html).toFile(filepath, (err, res) => {
+                        if (err) return console.log(err);
+                        console.log(res);
+                        // send('Fattura generata correttamente !');
+
+                        const stream = fs.createReadStream(filepath);
+                        filename = encodeURIComponent(filename);
+                        resp.setHeader('Content-disposition', 'inline; filename="' + filename + '"');
+                        resp.setHeader('Content-type', 'application/pdf');
+                        stream.pipe(resp);
+                    });
+                },
+                (err) => {
+                    // ritorno errore al client
+                    resp.send(err);
+                }
+            );
+        },
+        (err) => {
+            // ritorno errore al client
+            resp.send(err);
+        }
+    );
+});
+
 // TODO implementare la validità della richiesta con un token
 app.post('/face-api', async (req, resp) => {
     if (req.body.hasOwnProperty('image')) {
