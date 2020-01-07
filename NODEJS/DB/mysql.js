@@ -69,14 +69,13 @@ class MySql {
                     }
 
                     if (result !== undefined && result.length > 0) {
-                        // console.log(result);
                         
                         // controllo se la stored restituisce un errore
                         let stored_error = false;
                         if (JSON.stringify(result[0]).indexOf('"error"') > -1) stored_error = true;
 
                         resolve('{"recordset":' + JSON.stringify(result[0]) 
-                        + (output === true ? ', "output": ' + JSON.stringify(result[1]) : '')
+                        + (output === true ? ', "output": ' + (result[1].hasOwnProperty('fieldCount') ? JSON.stringify(result[2]) : JSON.stringify(result[1])) : '')
                         + (stored_error === true ? ', "error": ' + JSON.stringify(result[0]["error"]) : '')
                         + '}');
                     } else {

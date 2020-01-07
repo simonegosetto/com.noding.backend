@@ -201,6 +201,7 @@ app.get('/generate-quotation',(req, resp) => {
                     html = html.replace('<%CodiceFiscale%>', testata.codicefiscale);
                     html = html.replace('<%PartitaIVA%>', testata.partitaiva);
                     html = html.replace('<%Email%>', testata.pec || testata.email);
+                    html = html.replace('<%Note%>', testata.note);
 
                     let totale = 0;
                     const righe = JSON.parse(data).recordset.map(item => {
