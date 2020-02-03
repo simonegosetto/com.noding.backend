@@ -358,13 +358,13 @@ try
         $keyRequest = $jwt->decode($token,strtolower(md5_file("Config/esatto.mp3"))); //ritorna il payload
         if(strlen($keyRequest) == 0)
         {
-            echo '{"error" : "Invalid token 1 !", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "Invalid token 1 !", "debug": ' . $debug_result . '}';
             $log->lwrite('[DENIED] - Invalid token !');
             return;
         }
     }    else
     {
-        echo '{"error" : "Invalid token 2 !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid token 2 !", "debug": ' . $debug_result . '}';
         $log->lwrite('[DENIED] - Invalid token !');
         return;
     }
@@ -373,7 +373,7 @@ try
 
     if(strlen($keyRequest) == 0)
     {
-        echo '{"error" : "Invalid token 3 !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid token 3 !", "debug": ' . $debug_result . '}';
         $log->lwrite('[ERRORE] - Invalid token !');
         return;
     }
@@ -392,14 +392,14 @@ try
 
     if(strlen($process) == 0)
     {
-        echo '{"error" : "Invalid process !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid process !", "debug": ' . $debug_result . '}';
         $log->lwrite('[ERRORE] - Invalid process !');
         return;
     }
 
     if(strlen($type) == 0)
     {
-        echo '{"error" : "Invalid type !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid type !", "debug": ' . $debug_result . '}';
         $log->lwrite('[ERRORE] - Invalid type !');
         return;
     }
@@ -479,7 +479,7 @@ try
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -491,7 +491,7 @@ try
         //verifico che il token passato sia presente nelle sessioni di login
         /*if(!$sql->tokenCheck($token))
         {
-            echo '{"error" : "Invalid token 4 !", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "Invalid token 4 !", "debug": ' . $debug_result . '}';
             $log->lwrite('[ERRORE] - Invalid token ! - '.$debug_result);
             if($sql->connected)
             {
@@ -502,7 +502,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -526,7 +526,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -547,7 +547,7 @@ try
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}}';
+            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
             $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
             if($sql->connected)
             {
@@ -597,7 +597,7 @@ try
                 }
                 else
                 {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '", "debug": ' . $debug_result . '}}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '", "debug": ' . $debug_result . '}';
                 }
             }
             else
@@ -638,16 +638,16 @@ try
                 {
                     /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
                     } */
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}';
                 }
                 else
                 {
                     /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
                     {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}}');
+                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}');
                         $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
                     }*/
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
@@ -682,7 +682,7 @@ try
     }
     else
     {
-        echo '{"error" : "Invalid request !", "debug": ' . $debug_result . '}}';
+        echo '{"error" : "Invalid request !", "debug": ' . $debug_result . '}';
         $log->lwrite('[ERRORE] - Invalid request ! - '.$debug_result);
     }
 }

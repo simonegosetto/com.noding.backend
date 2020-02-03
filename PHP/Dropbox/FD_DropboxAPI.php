@@ -81,4 +81,14 @@ class FD_DropboxAPI
         $data = '{"path": "'.$path.'", "include_media_info": false, "include_deleted": false, "include_has_explicit_shared_members": false}';
         return $this->_request('https://api.dropboxapi.com/2/files/get_metadata', $header, $data);
     }
+	
+	// https://www.dropbox.com/developers/documentation/http/documentation#files-get_temporary_link
+	public function get($path)
+	{
+		$header = array();
+        $header[] = "Authorization: Bearer ".$this->AccessToken;
+        $header[] = 'Content-Type: application/json';
+        $data = '{"path": "'.$path.'"}';
+        return $this->_request('https://api.dropboxapi.com/2/files/get_temporary_link', $header, $data);
+	}
 }
