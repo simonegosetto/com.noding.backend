@@ -88,7 +88,7 @@ function getRicettaIngredienti($cod_p)
     $http2 = new FD_HTTP();
     $data = array(
         "type" => "1",
-        "token" => $token,
+        "token" => $GLOBALS["token"],
         "process" => "SK1mkQH9EPMbEjkXjVKh208J+h4RyoSZdYvjFW/IwVEtWy0tSVYtWy13aAC10tFq5lY4fyaPFRki0Z709DrH0ocLUEzAss/mUw@@",
         "params" => $cod_p
     );
@@ -149,18 +149,18 @@ try
         for ($i=0;$i<$numero;$i++)
         {
             $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
-            $htmlRicette .= '<div class="card-body">';
-            $htmlRicette .= '<h5 class="card-title">'.$ricette["recordset"][$i]["nome_ric"].'</h5>';
             if ($ricette["recordset"][$i]["id_storage"] != null && $ricette["recordset"][$i]["id_storage"] != "")
             {
                 $htmlRicette .= '<img width="100%" src="'.getRicettaImage($ricette["recordset"][$i]["id_storage"])["link"].'" class="card-img-top" >';
             }
+            $htmlRicette .= '<div class="card-body">';
+            $htmlRicette .= '<h5 class="card-title">'.$ricette["recordset"][$i]["nome_ric"].'</h5>';
             // prendo ingredienti della sotto ricetta
             $ingredienti = getRicettaIngredienti($ricette["recordset"][$i]["ricettaid"]);
-            $numero = count($ingredienti["recordset"]);
-            for ($i=0;$i<$numero;$i++)
+            $numeroIngredientiFigli = count($ingredienti["recordset"]);
+            for ($j=0;$j<$numeroIngredientiFigli;$j++)
             {
-                $htmlRicette .= '<li>'.$ingredienti["recordset"][$i]["nome"].' ('.$ingredienti["recordset"][$i]["quantita"].'g)';
+                $htmlRicette .= '<li>'.$ingredienti["recordset"][$j]["nome"].' ('.$ingredienti["recordset"][$j]["quantita"].'g)</li>';
             }
 
             $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';

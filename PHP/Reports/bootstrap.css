@@ -27,6 +27,10 @@ li {
     padding-top: 8px;
     padding-bottom: 8px;
 }
+.px-2 {
+    padding-left: 8px;
+    padding-right: 8px;
+}
 .p-5 {
     padding: 48px;
 }
@@ -50,6 +54,7 @@ li {
     flex: 1 1 auto;
     min-height: 1px;
     padding: 10px;
+    font-size: 10px !important;
 }
 .card-title {
     margin-bottom: 12px;
