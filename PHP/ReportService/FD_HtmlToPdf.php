@@ -83,6 +83,18 @@ function getRicettaImage($id_storage)
     $response = $http2->Post($GLOBALS["url_gateway"]."FD_DropboxGateway.php?gest=1", $data);
     return json_decode($response, true);
 }
+function getRicettaIngredienti($cod_p)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $token,
+        "process" => "SK1mkQH9EPMbEjkXjVKh208J+h4RyoSZdYvjFW/IwVEtWy0tSVYtWy13aAC10tFq5lY4fyaPFRki0Z709DrH0ocLUEzAss/mUw@@",
+        "params" => $cod_p
+    );
+    $ingredienti = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($ingredienti, true);
+}
 
 try
 {
@@ -144,8 +156,12 @@ try
                 $htmlRicette .= '<img width="100%" src="'.getRicettaImage($ricette["recordset"][$i]["id_storage"])["link"].'" class="card-img-top" >';
             }
             // prendo ingredienti della sotto ricetta
-
-            $htmlRicette .= '<li>'.$ingredienti["recordset"][$i]["nome"].' ('.$ingredienti["recordset"][$i]["quantita"].'g)';
+            $ingredienti = getRicettaIngredienti($ricette["recordset"][$i]["ricettaid"]);
+            $numero = count($ingredienti["recordset"]);
+            for ($i=0;$i<$numero;$i++)
+            {
+                $htmlRicette .= '<li>'.$ingredienti["recordset"][$i]["nome"].' ('.$ingredienti["recordset"][$i]["quantita"].'g)';
+            }
 
             $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
             $htmlRicette .= '</div>';
