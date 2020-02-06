@@ -6,12 +6,25 @@
     padding-right: 10px;
 }
 
+h2, h4 {
+    text-decoration: underline;
+}
+
+body {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 li {
     list-style-type: none;
 }
 
 .text-center {
-    text-align: center!important;
+    text-align: center !important;
+}
+
+.text-right {
+    text-align: right !important;
 }
 
 .p-1 {
@@ -30,6 +43,13 @@ li {
 .px-2 {
     padding-left: 8px;
     padding-right: 8px;
+}
+.px-3 {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.pt-3 {
+    padding-top: 20px;
 }
 .p-5 {
     padding: 48px;
@@ -124,7 +144,7 @@ img {
     padding-right: 2px;
     padding-left: 2px;
     float: left;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .col-xs {

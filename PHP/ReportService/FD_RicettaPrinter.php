@@ -128,8 +128,8 @@ try
 
     for ($i=0;$i<$numero;$i++)
     {
-        $htmlIngredienti .= '<li class="row">';
-        $htmlIngredienti .= '<div class="col-xs-6">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.$ingredienti["recordset"][$i]["quantita"].'g</div><div class="col-xs-2">'.round($ingredienti["recordset"][$i]["perc"],1).'%</div>';
+        $htmlIngredienti .= '<li class="row ingredienti">';
+        $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
         $htmlIngredienti .= '</li>';
     }
 
@@ -145,7 +145,7 @@ try
     $numero = count($ricette["recordset"]);
     if ($numero > 0)
     {
-        $htmlRicette = '<div class="row">';
+        $htmlRicette = '<div class="row pt-3">';
         for ($i=0;$i<$numero;$i++)
         {
             $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
@@ -160,8 +160,10 @@ try
             $numeroIngredientiFigli = count($ingredienti["recordset"]);
             for ($j=0;$j<$numeroIngredientiFigli;$j++)
             {
-                $htmlRicette .= '<li>'.$ingredienti["recordset"][$j]["nome"].' ('.$ingredienti["recordset"][$j]["quantita"].'g)</li>';
+                $htmlRicette .= '<li class="row"><div class="col-xs-6" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3 text-right" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div><div class="col-xs-2 text-right" style="font-size: 10px">'.round($ingredienti["recordset"][$j]["perc"],1).'%</div></li>';
             }
+            $htmlRicette .= '<hr>';
+            $htmlRicette .= '<li class="row"><div class="col-xs-6"></div><div class="col-xs-3 text-right" style="font-size: 10px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
 
             $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
             $htmlRicette .= '</div>';
@@ -199,8 +201,8 @@ try
     $html = str_replace('<%ingredienti%>', $htmlIngredienti, $html);
     if ($immagine)
     {
-        $html = str_replace('<%col-ingredienti%>', "col-xs-6", $html);
-        $html = str_replace('<%immagine%>','<div class="col-xs-5"><img width="70%" src="'.$immagine["link"].'" ></div>', $html);
+        $html = str_replace('<%col-ingredienti%>', "col-xs-7", $html);
+        $html = str_replace('<%immagine%>','<div class="col-xs-4" style="text-align: right"><img width="100%" src="'.$immagine["link"].'" ></div>', $html);
     }
     else
     {
