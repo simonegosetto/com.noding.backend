@@ -160,10 +160,10 @@ try
             $numeroIngredientiFigli = count($ingredienti["recordset"]);
             for ($j=0;$j<$numeroIngredientiFigli;$j++)
             {
-                $htmlRicette .= '<li class="row"><div class="col-xs-6" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3 text-right" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div><div class="col-xs-2 text-right" style="font-size: 10px">'.round($ingredienti["recordset"][$j]["perc"],1).'%</div></li>';
+                $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3 text-right" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div></li>';
             }
             $htmlRicette .= '<hr>';
-            $htmlRicette .= '<li class="row"><div class="col-xs-6"></div><div class="col-xs-3 text-right" style="font-size: 10px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
+            $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
 
             $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
             $htmlRicette .= '</div>';
