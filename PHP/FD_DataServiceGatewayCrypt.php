@@ -358,13 +358,13 @@ try
         $keyRequest = $jwt->decode($token,strtolower(md5_file("Config/esatto.mp3"))); //ritorna il payload
         if(strlen($keyRequest) == 0)
         {
-            echo '{"error" : "Invalid token 1 !", "debug": ' . $debug_result . '}';
+            echo '{"error" : "Invalid token 1 !"}';
             $log->lwrite('[DENIED] - Invalid token !');
             return;
         }
     }    else
     {
-        echo '{"error" : "Invalid token 2 !", "debug": ' . $debug_result . '}';
+        echo '{"error" : "Invalid token 2 !"}';
         $log->lwrite('[DENIED] - Invalid token !');
         return;
     }
@@ -373,7 +373,7 @@ try
 
     if(strlen($keyRequest) == 0)
     {
-        echo '{"error" : "Invalid token 3 !", "debug": ' . $debug_result . '}';
+        echo '{"error" : "Invalid token 3 !"}';
         $log->lwrite('[ERRORE] - Invalid token !');
         return;
     }
@@ -392,14 +392,14 @@ try
 
     if(strlen($process) == 0)
     {
-        echo '{"error" : "Invalid process !", "debug": ' . $debug_result . '}';
+        echo '{"error" : "Invalid process !"}';
         $log->lwrite('[ERRORE] - Invalid process !');
         return;
     }
 
     if(strlen($type) == 0)
     {
-        echo '{"error" : "Invalid type !", "debug": ' . $debug_result . '}';
+        echo '{"error" : "Invalid type !"}';
         $log->lwrite('[ERRORE] - Invalid type !');
         return;
     }
