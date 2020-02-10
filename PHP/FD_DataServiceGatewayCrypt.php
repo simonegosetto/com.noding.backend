@@ -54,10 +54,10 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
-//require("DB/FD_Redis.php");
+// require("DB/FD_Redis.php");
 require("DB/FD_Mysql.php");
 require("Tools/FD_Crypt.php");
-require("WebTools/FD_Mailer.php");
+// require("WebTools/FD_Mailer.php");
 require("WebTools/FD_Logger.php");
 require("WebTools/FD_HTTP.php");
 require("PushNotification/FD_PushNotification.php");
@@ -207,10 +207,10 @@ try
         {
             $token = $_POST["token"];
         }
-        if (isset($_POST["mail"]))
+        /*if (isset($_POST["mail"]))
         {
             $mail = $_POST["mail"];
-        }
+        }*/
         if (isset($_POST["report"]))
         {
             $report = $_POST["report"];
@@ -260,10 +260,10 @@ try
         {
             $token = $objData->token;
         }
-        if(property_exists((object) $objData,"mail"))
+        /*if(property_exists((object) $objData,"mail"))
         {
             $mail = $objData->mail;
-        }
+        }*/
         if(property_exists((object) $objData,"report"))
         {
             $report = $objData->report;
@@ -311,10 +311,10 @@ try
         {
             $token = $_GET["token"];
         }
-        if (isset($_GET["mail"]))
+        /*if (isset($_GET["mail"]))
         {
             $mail = $_GET["mail"];
-        }
+        }*/
         if (isset($_GET["report"]))
         {
             $report = $_GET["report"];
@@ -410,14 +410,14 @@ try
     $query = '';
 
     // Gestione invio mail
-    if(isset($mail)) 
+    /*if(isset($mail))
     {
         $debug_result .= ',"mail" : "'.(string)$mail.'"';
 
         $mailer = new FD_Mailer();
         $mailer->SendMail($mail->gestione,$mail);
         return;
-    }
+    }*/
 
     // Gestione Dropbox
     if (isset($dropbox))
