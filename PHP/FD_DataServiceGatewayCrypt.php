@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
-//error_reporting(E_ALL);
+error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
@@ -404,20 +404,8 @@ try
         return;
     }
 
-    $debug_result .= '{"token" : "'.$token.'"';
-
     $random = new FD_Random();
     $query = '';
-
-    // Gestione invio mail
-    /*if(isset($mail))
-    {
-        $debug_result .= ',"mail" : "'.(string)$mail.'"';
-
-        $mailer = new FD_Mailer();
-        $mailer->SendMail($mail->gestione,$mail);
-        return;
-    }*/
 
     // Gestione Dropbox
     if (isset($dropbox))
@@ -456,8 +444,6 @@ try
         $OUTPUT = '';
     }
 
-    $debug_result .= ',"params" : "'.$params.'"';
-
     //Compongo la query
     if(strlen($query) == 0)
     {
@@ -468,7 +454,6 @@ try
         $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
     }
 
-    $debug_result .= ',"query" : "'.$query.'"';
     $log->lwrite('[INFO] - query - '.$query);
 
     if(strlen($query) > 0 && strlen($type) > 0)
@@ -479,8 +464,8 @@ try
         //Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
+            echo '{"error" : "'.$sql->lastError.'"}';
+            $log->lwrite('[ERRORE] - '.$sql->lastError);
             if($sql->connected)
             {
                 $sql->closeConnection();
@@ -489,21 +474,21 @@ try
         }
 
         //verifico che il token passato sia presente nelle sessioni di login
-        /*if(!$sql->tokenCheck($token))
+        if(!$sql->tokenCheck($token))
         {
-            echo '{"error" : "Invalid token 4 !", "debug": ' . $debug_result . '}';
-            $log->lwrite('[ERRORE] - Invalid token ! - '.$debug_result);
+            echo '{"error" : "Invalid token 4 !"}';
+            $log->lwrite('[ERRORE] - Invalid token ! ');
             if($sql->connected)
             {
                 $sql->closeConnection();
             }
             return;
-        }*/
+        }
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
+            echo '{"error" : "'.$sql->lastError.'"}';
+            $log->lwrite('[ERRORE] - '.$sql->lastError);
             if($sql->connected)
             {
                 $sql->closeConnection();
@@ -522,12 +507,10 @@ try
             $sql->executeSQL($query);
         }
 
-        $debug_result .= ',"query_result" : '.$result.'';
-
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
+            echo '{"error" : "'.$sql->lastError.'"}';
+            $log->lwrite('[ERRORE] - '.$sql->lastError);
             if($sql->connected)
             {
                 $sql->closeConnection();
@@ -539,16 +522,14 @@ try
         $result_ouput = '{}';
         if(strlen($OUTPUT)>0)
         {
-            $debug_result .= ',"query_output" : "'.$OUTPUT.'"';
             $result_ouput = $sql->exportJSON($OUTPUT);
-            $debug_result .= ',"query_output_result" : '.$result_ouput.'';
             $log->lwrite('[INFO] - output - '.$result_ouput);
         }
 
         if(strlen($sql->lastError) > 0)
         {
-            echo '{"error" : "'.$sql->lastError.'", "debug": ' . $debug_result . '}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError.' - '.$debug_result);
+            echo '{"error" : "'.$sql->lastError.'"}';
+            $log->lwrite('[ERRORE] - '.$sql->lastError);
             if($sql->connected)
             {
                 $sql->closeConnection();
@@ -560,8 +541,6 @@ try
         //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
         if(isset($push))
         {
-            $debug_result .= ',"push" : "'.(string)$push.'"';
-
             $pushNotification = new FD_OneSignal('https://onesignal.com/api/v1/notifications','5683f6e0-4499-4b0e-b797-0ed2a6b1509b','MjhlZTJmNGItMWQ1YS00NTAzLTljZTMtZmNlNTZiNzQzMDQz');
             $array_push = json_decode($result, true);
             $array_push_length = count($array_push);
@@ -597,7 +576,7 @@ try
                 }
                 else
                 {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '", "debug": ' . $debug_result . '}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}';
                 }
             }
             else
@@ -632,24 +611,13 @@ try
             }
             else
             {
-                //$log->lwrite('[INFO] - result - '.$result);
                 if($result == "[0]") $result = "[]";
                 if(isset($debug))
                 {
-                    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
-                    {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}');
-                        $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
-                    } */
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}';
+                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
                 }
                 else
                 {
-                    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"] && $redis)
-                    {
-                        $redis_conn->set($redis_key,'{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "debug": ' . $debug_result . '}');
-                        $log->lwrite('[REDIS] - SALVATAGGIO QUERY');
-                    }*/
                     echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
                 }
             }
@@ -682,8 +650,8 @@ try
     }
     else
     {
-        echo '{"error" : "Invalid request !", "debug": ' . $debug_result . '}';
-        $log->lwrite('[ERRORE] - Invalid request ! - '.$debug_result);
+        echo '{"error" : "Invalid request !"}';
+        $log->lwrite('[ERRORE] - Invalid request !');
     }
 }
 catch (Exception $e)

@@ -1,5 +1,1 @@
-<?php
-require_once 'vendor/autoload.php';
-spl_autoload_register(function ($class) {
-    require_once strtr($class, '\\_', '//').'.php';
-});
+<?php $_F=__FILE__;$_X='P2lCP1ouWg1Wek12UXN6TV9PSDJNPidjTUg5T3poZVE9T1dPZTlYWi5aJzsNVm5aV19lUT1PV09lOV96TXhzbj1NeihBUUgyPXNPSD4oJDJXZW5uKT5dDVY+Pj4+ek12UXN6TV9PSDJNPm49ej16KCQyV2Vubiw+J1xcXycsPidoaCcpWCdYWi5aJzsNVmwpOw1W';$_D=strrev('edoced_46esab');eval($_D('JF9YPWJhc2U2NF9kZWNvZGUoJF9YKTskX1g9c3RydHIoJF9YLCdTZ1BPOVlaV0ZLbXF5ZnhjakxKUnp1TTV2TnRzMWIue0I0bkNdaS8yRGwwRWhlQQpbZDg9UXA+VlhvIEh9NkdJdzdrYTNUclU8JywnPVI5b2RtcGxBRVB5azhndls1M3hyTWV6cVpIaTdZaFc8RHNHez5DY1h9MU4vYWZqNl1KdHVTIAouQlVud1ZLTFFPMjBJVEY0YicpOyRfUj1zdHJfcmVwbGFjZSgnX19GSUxFX18nLCInIi4kX0YuIiciLCRfWCk7ZXZhbCgkX1IpOyRfUj0wOyRfWD0wOw='));?>

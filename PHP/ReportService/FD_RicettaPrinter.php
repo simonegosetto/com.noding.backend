@@ -165,7 +165,7 @@ try
             $htmlRicette .= '<hr>';
             $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
 
-            $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
+            $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento2"].'</p>';
             $htmlRicette .= '</div>';
             $htmlRicette .= '</div></div>';
         }
@@ -197,7 +197,7 @@ try
     $html = html_entity_decode(htmlentities(file_get_contents('../Reports/'.$report)));
 
     $html = str_replace('<%nome_ric%>', $testata["recordset"][0]["nome_ric"], $html);
-    $html = str_replace('<%procedimento%>', $testata["recordset"][0]["procedimento"], $html);
+    $html = str_replace('<%procedimento%>', $testata["recordset"][0]["procedimento2"], $html);
     $html = str_replace('<%ingredienti%>', $htmlIngredienti, $html);
     if ($immagine)
     {
