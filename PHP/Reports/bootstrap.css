@@ -6,6 +6,17 @@
     padding-right: 10px;
 }
 
+.footer {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+.footer-page {
+    position: absolute;
+    right: 10px;
+}
+
 h2, h4 {
     text-decoration: underline;
 }

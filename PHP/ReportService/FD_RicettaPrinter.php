@@ -179,7 +179,7 @@ try
         'margin_top' => 0,
         'margin_bottom' => 0,
         'margin_header' => 0,
-        'margin_footer' => 20,
+        'margin_footer' => 2,
         'default_font_size' => 14,
         // 'default_font' => 'potatoesandpeas',
         // 'debugfonts' => true,
@@ -223,6 +223,7 @@ try
     // echo '<pre>'.$html.'</pre>';return;
     // echo $html; return;
 
+    $mpdf->SetHTMLFooter('<div class="footer">Riccardo Valore</div>'); // <span class="footer-page">p. </span>
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $mpdf->Output();
