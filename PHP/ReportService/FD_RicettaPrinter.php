@@ -223,7 +223,9 @@ try
     // echo '<pre>'.$html.'</pre>';return;
     // echo $html; return;
 
-    $mpdf->SetHTMLFooter('<div class="footer">Riccardo Valore</div>'); // <span class="footer-page">p. </span>
+    $mpdf->SetHTMLFooter(
+        '<div class="footer">P.</div>'
+    ); // <span class="footer-page">p. </span>
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
     $mpdf->Output();

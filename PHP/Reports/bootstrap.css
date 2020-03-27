@@ -9,7 +9,9 @@
 .footer {
     position: relative;
     width: 100%;
-    text-align: center;
+    text-align: right;
+    font-size: 16px;
+    padding-right: 40px;
 }
 
 .footer-page {
@@ -62,8 +64,14 @@ li {
     padding-left: 20px;
     padding-right: 20px;
 }
+.p-3 {
+    padding: 20px;
+}
 .pt-3 {
     padding-top: 20px;
+}
+.pb-3 {
+    padding-bottom: 20px;
 }
 .p-5 {
     padding: 48px;
@@ -378,7 +386,8 @@ img {
     margin: 20px;
 }
 .box-procedimento {
-    border: 4px dotted #696969;
+    /*border: 4px dotted #696969;*/
+    height: 100% !important;
 }
 
 .center {

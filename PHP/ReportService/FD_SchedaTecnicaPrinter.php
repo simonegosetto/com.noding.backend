@@ -92,7 +92,7 @@ try
     $mpdf = new \Mpdf\Mpdf([
         'margin_left' => 0,
         'margin_right' => 0,
-        'margin_top' => 0,
+        'margin_top' => 5,
         'margin_bottom' => 0,
         'margin_header' => 0,
         'margin_footer' => 20,
@@ -101,7 +101,7 @@ try
         // 'debugfonts' => true,
         'tempDir' => '../ReportService/mPDF/tmp'
     ]);
-    $mpdf->SetTitle("Scheda Tecnica");
+    $mpdf->SetTitle("Tabella Tecnica");
     $mpdf->SetAuthor("Riccardo Valore");
     $mpdf->SetDisplayMode('fullpage');
 
@@ -136,9 +136,9 @@ try
 
         for ($i=0;$i<$numero;$i++)
         {
-            $htmlIngredienti .= '<li class="row ingredienti">';
+            $htmlIngredienti .= '<li class="row ingredienti px-3">';
             $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
-            $htmlIngredienti .= '</li>';
+            $htmlIngredienti .= '</li><hr style="padding:0;margin:0">';
         }
 
         // prendo ricette collegate
@@ -165,10 +165,10 @@ try
                 $numeroIngredientiFigli = count($ingredienti["recordset"]);
                 for ($j=0;$j<$numeroIngredientiFigli;$j++)
                 {
-                    $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3 text-right" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div></li>';
+                    $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div></li>';
                 }
-                $htmlRicette .= '<hr>';
-                $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
+                // $htmlRicette .= '<hr>';
+                // $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
 
                 $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
                 $htmlRicette .= '</div>';
