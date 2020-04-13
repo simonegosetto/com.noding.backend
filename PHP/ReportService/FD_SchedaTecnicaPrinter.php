@@ -68,6 +68,18 @@ if (isset($_GET["report"]))
 {
     $report = $_GET["report"];
 }
+if (isset($_GET["foodcost"]))
+{
+    $foodcost = $_GET["foodcost"];
+}
+if (isset($_GET["listino"]))
+{
+    $listino = $_GET["listino"];
+}
+if (isset($_GET["descrizione"]))
+{
+    $descrizione = $_GET["descrizione"];
+}
 
 function getRicettaIngredienti($cod_p)
 {
@@ -80,6 +92,18 @@ function getRicettaIngredienti($cod_p)
     );
     $ingredienti = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
     return json_decode($ingredienti, true);
+}
+function getFoodcost($cod_p, $listino)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $GLOBALS["token"],
+        "process" => "7c3nI1n1F+7U+NXIpgCDf+pC34FjTNYTw4jNa+K3KTAtWy0tSVYtWy2iLNJ3IBm9iOz/OUH8uUnOneEwIi4Rp5oXYz8toKLFyg@@",
+        "params" => $cod_p.",".$listino
+    );
+    $result = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($result, true);
 }
 
 try
@@ -101,7 +125,7 @@ try
         // 'debugfonts' => true,
         'tempDir' => '../ReportService/mPDF/tmp'
     ]);
-    $mpdf->SetTitle("Tabella Tecnica");
+    $mpdf->SetTitle("Scheda Produzione");
     $mpdf->SetAuthor("Riccardo Valore");
     $mpdf->SetDisplayMode('fullpage');
 
@@ -109,8 +133,15 @@ try
     $htmlTotale = ob_get_contents();
     ob_end_clean();
 
+    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h3>'.$descrizione.'</h3></div></div>';
+    $totIngredienti = 0;
+
+    $css = file_get_contents('../Reports/bootstrap.css');// str_replace('<%SFONDO%>','FD_DropboxGateway.php?gest=3&id='.$result[0]["id_storage"],$css);
+    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+
     for ($r=0;$r<$numeroRicette;$r++)
     {
+        $htmlTotale = ob_get_contents();
 
         // prendo informazioni testata ricetta
         $data = array(
@@ -124,72 +155,46 @@ try
         // var_dump($testata); return;
 
         // prendo ingredienti ricetta
-        $data = array(
-            "type" => "1",
-            "token" => $token,
-            "process" => "SK1mkQH9EPMbEjkXjVKh208J+h4RyoSZdYvjFW/IwVEtWy0tSVYtWy13aAC10tFq5lY4fyaPFRki0Z709DrH0ocLUEzAss/mUw@@",
-            "params" => $ricetteRichieste[$r]
-        );
-        $ingredienti = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
-        $ingredienti = json_decode($ingredienti, true);
-        $numero = count($ingredienti["recordset"]);
+        if ($foodcost == '0') {
+            $data = array(
+                "type" => "1",
+                "token" => $token,
+                "process" => "SK1mkQH9EPMbEjkXjVKh208J+h4RyoSZdYvjFW/IwVEtWy0tSVYtWy13aAC10tFq5lY4fyaPFRki0Z709DrH0ocLUEzAss/mUw@@",
+                "params" => $ricetteRichieste[$r]
+            );
+            $ingredienti = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+            $ingredienti = json_decode($ingredienti, true);
+            $numero = count($ingredienti["recordset"]);
 
-        for ($i=0;$i<$numero;$i++)
-        {
-            $htmlIngredienti .= '<li class="row ingredienti px-3">';
-            $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
-            $htmlIngredienti .= '</li><hr style="padding:0;margin:0">';
-        }
+            if (intval($totIngredienti + $numero) >= 35 && intval($totIngredienti) < 35)
+            {
+                $mpdf->AddPage();
+            }
+            $totIngredienti = intval($totIngredienti + $numero);
+            echo $totIngredienti;
 
-        // prendo ricette collegate
-        $data = array(
-            "type" => "1",
-            "token" => $token,
-            "process" => "VwCLXZp2b7f0ntDBmDtjQiMqA71icSP05BfmU0Opi4ydvEX+uB0U2OIODrusGLmNjWldKOX7EhnVg0nsIWMR4S1bLS1JVi1bLQBR2FofNJE57bLSH6oD630781d1Qx+bHhnMTeAjnNz7",
-            "params" => $ricetteRichieste[$r]
-        );
-        $ricette = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
-        $ricette = json_decode($ricette, true);
-        $numero = count($ricette["recordset"]);
-        if ($numero > 0)
-        {
-            $htmlRicette = '<div class="row pt-3">';
             for ($i=0;$i<$numero;$i++)
             {
-                $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
-
-                $htmlRicette .= '<div class="card-body">';
-                $htmlRicette .= '<h5 class="card-title">'.$ricette["recordset"][$i]["nome_ric"].'</h5>';
-                // prendo ingredienti della sotto ricetta
-                $ingredienti = getRicettaIngredienti($ricette["recordset"][$i]["ricettaid"]);
-                $numeroIngredientiFigli = count($ingredienti["recordset"]);
-                for ($j=0;$j<$numeroIngredientiFigli;$j++)
-                {
-                    $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'.$ingredienti["recordset"][$j]["nome"].'</div><div class="col-xs-3" style="font-size: 10px">'.$ingredienti["recordset"][$j]["quantita"].'g</div></li>';
-                }
-                // $htmlRicette .= '<hr>';
-                // $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'.array_sum(array_column($ingredienti["recordset"], 'quantita')).'g</div></li>';
-
-                $htmlRicette .= '<p class="card-text">'.$ricette["recordset"][$i]["procedimento"].'</p>';
-                $htmlRicette .= '</div>';
-                $htmlRicette .= '</div></div>';
+                $htmlIngredienti .= '<li class="row ingredienti px-3">';
+                $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
+                $htmlIngredienti .= '</li><hr style="padding:0;margin:0">';
             }
-            $htmlRicette .= '</div>';
+        }
+        else
+        {
+
         }
 
-        // CSS
         $html = html_entity_decode(htmlentities(file_get_contents('../Reports/'.$report)));
 
         $html = str_replace('<%nome_ric%>', $testata["recordset"][0]["nome_ric"], $html);
         $html = str_replace('<%procedimento%>', $testata["recordset"][0]["procedimento"], $html);
         $html = str_replace('<%ingredienti%>', $htmlIngredienti, $html);
         $htmlTotale .= $html;
+
+        $mpdf->WriteHTML($htmlTotale,\Mpdf\HTMLParserMode::HTML_BODY);
     }
 
-    $css = file_get_contents('../Reports/bootstrap.css');// str_replace('<%SFONDO%>','FD_DropboxGateway.php?gest=3&id='.$result[0]["id_storage"],$css);
-
-    $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
-    $mpdf->WriteHTML($htmlTotale,\Mpdf\HTMLParserMode::HTML_BODY);
     $mpdf->Output();
 }
 catch (Exception $e)

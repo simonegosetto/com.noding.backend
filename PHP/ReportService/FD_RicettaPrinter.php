@@ -69,6 +69,14 @@ if (isset($_GET["report"]))
 {
     $report = $_GET["report"];
 }
+if (isset($_GET["foodcost"]))
+{
+    $foodcost = $_GET["foodcost"];
+}
+if (isset($_GET["listino"]))
+{
+    $listino = $_GET["listino"];
+}
 
 function getRicettaImage($id_storage)
 {
@@ -94,6 +102,30 @@ function getRicettaIngredienti($cod_p)
     );
     $ingredienti = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
     return json_decode($ingredienti, true);
+}
+function getFoodcost($cod_p, $listino)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $GLOBALS["token"],
+        "process" => "7c3nI1n1F+7U+NXIpgCDf+pC34FjTNYTw4jNa+K3KTAtWy0tSVYtWy2iLNJ3IBm9iOz/OUH8uUnOneEwIi4Rp5oXYz8toKLFyg@@",
+        "params" => $cod_p.",".$listino
+    );
+    $result = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($result, true);
+}
+function getFoodcostTotali($cod_p, $listino)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $GLOBALS["token"],
+        "process" => "qowr/0gbIcivI7tzuXF3CcuV980mPwzGQU+See/fYNMtWy0tSVYtWy3CP0PrzJ6X9m1jn4Z+ig0OxeCGFi2Pu2EwfFZDO7S8pw@@",
+        "params" => $cod_p.",".$listino
+    );
+    $result = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($result, true);
 }
 
 try
@@ -218,16 +250,32 @@ try
         $html = str_replace('<%ricette%>', "", $html);
     }
 
-
     $css = file_get_contents('../Reports/bootstrap.css');// str_replace('<%SFONDO%>','FD_DropboxGateway.php?gest=3&id='.$result[0]["id_storage"],$css);
-    // echo '<pre>'.$html.'</pre>';return;
-    // echo $html; return;
 
-    $mpdf->SetHTMLFooter(
-        '<div class="footer">P.</div>'
-    ); // <span class="footer-page">p. </span>
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+
+    if ($foodcost == '1') {
+        $htmlFoodcost = ob_get_contents();
+        $mpdf->AddPage();
+        $foodcostRighe = getFoodcost($params, $listino);
+        $numeroFoodcostRighe = count($foodcostRighe["recordset"]);
+        $htmlFoodcost .= '<div class="row"><div class="col-xs-12 px-3 pb-2 pt-3"><h4>Foodcost</h4>';
+        for ($j=0;$j<$numeroFoodcostRighe;$j++)
+        {
+            $htmlFoodcost .= '<li class="row"><div class="col-xs-5" >'.$foodcostRighe["recordset"][$j]["descrizione"].'</div><div class="col-xs-3 text-right" >'.$foodcostRighe["recordset"][$j]["peso"].'g</div><div class="col-xs-3 text-right" >'.number_format($foodcostRighe["recordset"][$j]["foodcost"],2).'€</div></li>';
+        }
+        $totaliFoodcost = getFoodcostTotali($params, $listino);
+        $htmlFoodcost .= '<hr>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Foodcost</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Lordo</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_lordo_vendita"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Ratio</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["ratio"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_netto_vendita"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Margine Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["margine_netto"],2).'€</div></li>';
+        $htmlFoodcost .= '</div></div>';
+        $mpdf->WriteHTML($htmlFoodcost,\Mpdf\HTMLParserMode::HTML_BODY);
+    }
+
     $mpdf->Output();
 }
 catch (Exception $e)
