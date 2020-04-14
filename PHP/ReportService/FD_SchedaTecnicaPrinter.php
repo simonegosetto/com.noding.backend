@@ -105,6 +105,18 @@ function getFoodcost($cod_p, $listino)
     $result = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
     return json_decode($result, true);
 }
+function getFoodcostTotali($cod_p, $listino)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $GLOBALS["token"],
+        "process" => "qowr/0gbIcivI7tzuXF3CcuV980mPwzGQU+See/fYNMtWy0tSVYtWy3CP0PrzJ6X9m1jn4Z+ig0OxeCGFi2Pu2EwfFZDO7S8pw@@",
+        "params" => $cod_p.",".$listino
+    );
+    $result = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($result, true);
+}
 
 try
 {
@@ -133,7 +145,6 @@ try
     $htmlTotale = ob_get_contents();
     ob_end_clean();
 
-    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h3>'.$descrizione.'</h3></div></div>';
     $totIngredienti = 0;
 
     $css = file_get_contents('../Reports/bootstrap.css');// str_replace('<%SFONDO%>','FD_DropboxGateway.php?gest=3&id='.$result[0]["id_storage"],$css);
@@ -142,6 +153,11 @@ try
     for ($r=0;$r<$numeroRicette;$r++)
     {
         $htmlTotale = ob_get_contents();
+        $htmlIngredienti = '';
+        if ($r == 0)
+        {
+            $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h3>'.$descrizione.'</h3></div></div>';
+        }
 
         // prendo informazioni testata ricetta
         $data = array(
@@ -166,13 +182,6 @@ try
             $ingredienti = json_decode($ingredienti, true);
             $numero = count($ingredienti["recordset"]);
 
-            if (intval($totIngredienti + $numero) >= 35 && intval($totIngredienti) < 35)
-            {
-                $mpdf->AddPage();
-            }
-            $totIngredienti = intval($totIngredienti + $numero);
-            echo $totIngredienti;
-
             for ($i=0;$i<$numero;$i++)
             {
                 $htmlIngredienti .= '<li class="row ingredienti px-3">';
@@ -182,11 +191,34 @@ try
         }
         else
         {
+            $resultFoodcost = getFoodcost($ricetteRichieste[$r],$listino);
+            $numero = count($resultFoodcost["recordset"]);
+            for ($i=0;$i<$numero;$i++)
+            {
+                $htmlIngredienti .= '<li class="row ingredienti px-3">';
+                $htmlIngredienti .= '<div class="col-xs-7">'.$resultFoodcost["recordset"][$i]["descrizione"].'</div><div class="col-xs-2">'.($resultFoodcost["recordset"][$i]["peso"] > 0 ? $resultFoodcost["recordset"][$i]["peso"].'g' : '').'</div><div class="col-xs-2 text-right" >'.number_format($resultFoodcost["recordset"][$i]["foodcost"],2).'€</div>';
+                $htmlIngredienti .= '</li><hr style="padding:0;margin:0">';
+            }
 
+            $totaliFoodcost = getFoodcostTotali($ricetteRichieste[$r], $listino);
+            $htmlFoodcost = '<div class="row"><div class="col-xs-12 px-3 pb-2 pt-3">';
+            $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Foodcost</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div></li>';
+            $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Lordo</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_lordo_vendita"],2).'€</div></li>';
+            $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Ratio</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["ratio"],2).'€</div></li>';
+            $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_netto_vendita"],2).'€</div></li>';
+            $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Margine Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["margine_netto"],2).'€</div></li>';
+            $htmlFoodcost .= '</div></div>';
+            $testata["recordset"][0]["procedimento"] = $htmlFoodcost;
         }
 
-        $html = html_entity_decode(htmlentities(file_get_contents('../Reports/'.$report)));
+        // gestione del pagebreak in base al numero degli ingredienti ed al numero di ricette
+        if ((intval($totIngredienti) + intval($numero) + intval($numeroRicette)) >= 35 && (intval($totIngredienti) + intval($numeroRicette)) < 35)
+        {
+            $mpdf->AddPage();
+        }
+        $totIngredienti = intval($totIngredienti) + intval($numero);
 
+        $html = html_entity_decode(htmlentities(file_get_contents('../Reports/'.$report)));
         $html = str_replace('<%nome_ric%>', $testata["recordset"][0]["nome_ric"], $html);
         $html = str_replace('<%procedimento%>', $testata["recordset"][0]["procedimento"], $html);
         $html = str_replace('<%ingredienti%>', $htmlIngredienti, $html);
