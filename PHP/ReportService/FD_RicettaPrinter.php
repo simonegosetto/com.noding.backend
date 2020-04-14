@@ -28,15 +28,11 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
-// require("Config/FD_Define.php");
 require("../ReportService/mPDF/vendor/autoload.php");
 require("../WebTools/FD_Logger.php");
 require("../WebTools/FD_HTTP.php");
 require("../Tools/FD_JWT.php");
 require("../Tools/FD_Crypt.php");
-//require("../Tools/FD_Date.php");
-require("../DB/FD_DB.php");
-require("../DB/FD_Mysql.php");
 
 $http = new FD_HTTP();
 $url_gateway = "https://riccardovalore.com/BackEnd/";
