@@ -88,20 +88,20 @@ try
     $menuRighe = json_decode($menuRighe, true);
     $numero = count($menuRighe["recordset"]);
 
-    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h1>'.$descrizione.'</h1></div></div>';
+    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
 
     for ($i=0;$i<$numero;$i++)
     {
         if ($menuRighe["recordset"][$i]["tipo"] == 1)
         {
-            $htmlTotale .= '<li class="row ingredienti px-3 pt-3 text-center">';
+            $htmlTotale .= '<li class="row ingredienti px-3 pt-3 pb-3 text-center">';
             $htmlTotale .= '<div>'.$menuRighe["recordset"][$i]["categoria"].'</div>';
             $htmlTotale .= '</li>';
         }
         else
         {
-            $htmlTotale .= '<li class="row ingredienti px-3">';
-            $htmlTotale .= '<div class="col-xs-8">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            $htmlTotale .= '<li class="row ingredienti px-3 pb-2">';
+            $htmlTotale .= '<div class="col-xs-8">- '.$menuRighe["recordset"][$i]["descrizione"].'</div>';
             $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
             $htmlTotale .= '</li>';
         }

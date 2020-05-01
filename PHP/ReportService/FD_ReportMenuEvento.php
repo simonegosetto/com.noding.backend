@@ -101,25 +101,25 @@ try
     $menuRighe = json_decode($menuRighe, true);
     $numero = count($menuRighe["recordset"]);
 
-    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h1>'.$descrizione.'</h1></div></div>';
+    $htmlTotale .= '<div class="row text-center pb-3" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
 
     for ($i=0;$i<$numero;$i++)
     {
-        $htmlTotale .= '<li class="row ingredienti px-3">';
-        $htmlTotale .= '<div class="col-xs-8">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
-        $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
+        $htmlTotale .= '<li class="row ingredienti px-3 pb-3">';
+        $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+        // $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
         $htmlTotale .= '</li>';
     }
 
     $totaliFoodcost = getTotali();
     $htmlFoodcost .= '<hr>';
-    $htmlFoodcost .= '<div class="row"><div class="col-xs-12 pb-2 pt-3">';
-    $htmlFoodcost .= '<li class="row" style="font-weight: bold">';
-    $htmlFoodcost .= '<div class="col-xs-3" >N. Coperti</div>';
+    $htmlFoodcost .= '<div class="row" ><div class="col-xs-12 pb-2 pt-3">';
+    $htmlFoodcost .= '<li class="row" >';
+    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">N. Coperti</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["pax"],0).'</div>';
     $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row" style="font-weight: bold">';
-    $htmlFoodcost .= '<div class="col-xs-3" >% Scheda Tecnica</div>';
+    $htmlFoodcost .= '<li class="row" >';
+    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">% Scheda Tecnica</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["perc_ricetta"],1).'%</div>';
     $htmlFoodcost .= '</div></li>';
     $htmlFoodcost .= '<br>';
@@ -130,15 +130,15 @@ try
     $htmlFoodcost .= '<div class="col-xs-2 text-center" >Iva</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-center" >Prezzo Lordo</div>';
     $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row" style="font-weight: bold">';
-    $htmlFoodcost .= '<div class="col-xs-3" >Coperto</div>';
+    $htmlFoodcost .= '<li class="row">';
+    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Coperto</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto"],2).'€</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["lordo"],2).'€</div>';
     $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row" style="font-weight: bold">';
-    $htmlFoodcost .= '<div class="col-xs-3" >Totali Menù</div>';
+    $htmlFoodcost .= '<li class="row" >';
+    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Totali Menù</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost_tot"],2).'€</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto_tot"],2).'€</div>';
     $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
