@@ -37,13 +37,17 @@ require("../Tools/FD_Crypt.php");
 //istanzio logger
 $log = new FD_Logger(null);
 
-if (isset($_GET["params"]))
+if (isset($_GET["menu"]))
 {
-    $params = $_GET["params"];
+    $menu = $_GET["menu"];
 }
-if (isset($_GET["categoria"]))
+if (isset($_GET["listino"]))
 {
-    $categoria = $_GET["categoria"];
+    $menuRighe = $_GET["listino"];
+}
+if (isset($_GET["descrizione"]))
+{
+    $descrizione = $_GET["descrizione"];
 }
 if (isset($_GET["token"]))
 {
@@ -57,8 +61,8 @@ try
 {
     // inizializzazione
     $mpdf = new \Mpdf\Mpdf([
-        'margin_left' => 0,
-        'margin_right' => 0,
+        'margin_left' => 20,
+        'margin_right' => 20,
         'margin_top' => 5,
         'margin_bottom' => 0,
         'margin_header' => 0,
@@ -66,7 +70,7 @@ try
         'default_font_size' => 14,
         'tempDir' => '../ReportService/mPDF/tmp'
     ]);
-    $mpdf->SetTitle("Listino");
+    $mpdf->SetTitle("Menù");
     $mpdf->SetAuthor("Riccardo Valore");
     $mpdf->SetDisplayMode('fullpage');
 
@@ -77,24 +81,30 @@ try
     $data = array(
         "type" => "1",
         "token" => $token,
-        "process" => "j8nnE18DvMJLJn72/pLhFHuvrOA97O1D70EeY0K28/otWy0tSVYtWy1k5ipImnHJdjEgS2084WWHruF1SwXI5uZouBYSWHPGGQ@@",
-        "params" => $params.",".$categoria
+        "process" => "psv6VQSAtEEbFZMQFsqECpPHcS39sQCLkeYlWTsSz+QtWy0tSVYtWy3Yp+JgJC//klU7QOi+O80sdHpj9guvh0v/3I34nk2LMg@@",
+        "params" => $menu.",".$menuRighe
     );
-    $listino = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
-    $listino = json_decode($listino, true);
-    $numero = count($listino["recordset"]);
+    $menuRighe = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    $menuRighe = json_decode($menuRighe, true);
+    $numero = count($menuRighe["recordset"]);
 
-    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h3>'.$listino["recordset"][0]["listinonome"].' - '.$listino["recordset"][0]["categorianome"].'</h3></div></div>';
+    $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h1>'.$descrizione.'</h1></div></div>';
 
     for ($i=0;$i<$numero;$i++)
     {
-        $htmlTotale .= '<li class="row ingredienti px-3">';
-        $htmlTotale .= '<div class="col-xs-3">'.$listino["recordset"][$i]["descrizione"].'</div>';
-        $htmlTotale .= '<div class="col-xs-2 text-right">'.number_format($listino["recordset"][$i]["scarto"],2).'%</div>';
-        $htmlTotale .= '<div class="col-xs-2 text-right">'.number_format($listino["recordset"][$i]["grammatura"],2).'g</div>';
-        $htmlTotale .= '<div class="col-xs-2 text-right">'.number_format($listino["recordset"][$i]["prezzo"],2).'€</div>';
-        $htmlTotale .= '<div class="col-xs-2 text-right">'.number_format($listino["recordset"][$i]["kcal"],2).'kcal</div>';
-        $htmlTotale .= '</li><hr style="padding:0;margin:0">';
+        if ($menuRighe["recordset"][$i]["tipo"] == 1)
+        {
+            $htmlTotale .= '<li class="row ingredienti px-3 pt-3 text-center">';
+            $htmlTotale .= '<div>'.$menuRighe["recordset"][$i]["categoria"].'</div>';
+            $htmlTotale .= '</li>';
+        }
+        else
+        {
+            $htmlTotale .= '<li class="row ingredienti px-3">';
+            $htmlTotale .= '<div class="col-xs-8">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
+            $htmlTotale .= '</li>';
+        }
     }
 
     $css = file_get_contents('../Reports/bootstrap.css');
