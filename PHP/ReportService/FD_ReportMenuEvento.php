@@ -41,6 +41,19 @@ function getTotali()
     return json_decode($result, true);
 }
 
+function getRicettaIngredienti($cod_p)
+{
+    $http2 = new FD_HTTP();
+    $data = array(
+        "type" => "1",
+        "token" => $GLOBALS["token"],
+        "process" => "SK1mkQH9EPMbEjkXjVKh208J+h4RyoSZdYvjFW/IwVEtWy0tSVYtWy13aAC10tFq5lY4fyaPFRki0Z709DrH0ocLUEzAss/mUw@@",
+        "params" => $cod_p
+    );
+    $ingredienti = $http2->Post($GLOBALS["url_gateway"]."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+    return json_decode($ingredienti, true);
+}
+
 require("../ReportService/mPDF/vendor/autoload.php");
 require("../WebTools/FD_Logger.php");
 require("../WebTools/FD_HTTP.php");
@@ -65,6 +78,14 @@ if (isset($_GET["descrizione"]))
 if (isset($_GET["token"]))
 {
     $token = $_GET["token"];
+}
+if (isset($_GET["foodcost"]))
+{
+    $foodcost = $_GET["foodcost"];
+}
+if (isset($_GET["bom"]))
+{
+    $bom = $_GET["bom"];
 }
 
 $http = new FD_HTTP();
@@ -91,66 +112,141 @@ try
     $htmlTotale = ob_get_contents();
     ob_end_clean();
 
-    $data = array(
-        "type" => "1",
-        "token" => $token,
-        "process" => "gmWVJZP+UGV9KGcRG53D30i0ozWILb/EMajQiDrIEastWy0tSVYtWy3BMu7OQxzscLI2Tq9rx7i26t6Ra97143uOpKI178zF1w@@",
-        "params" => $menu.",".$listino
-    );
-    $menuRighe = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
-    $menuRighe = json_decode($menuRighe, true);
-    $numero = count($menuRighe["recordset"]);
-
-    $htmlTotale .= '<div class="row text-center pb-3" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
-
-    for ($i=0;$i<$numero;$i++)
-    {
-        $htmlTotale .= '<li class="row ingredienti px-3 pb-3">';
-        $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
-        // $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
-        $htmlTotale .= '</li>';
-    }
-
-    $totaliFoodcost = getTotali();
-    $htmlFoodcost .= '<hr>';
-    $htmlFoodcost .= '<div class="row" ><div class="col-xs-12 pb-2 pt-3">';
-    $htmlFoodcost .= '<li class="row" >';
-    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">N. Coperti</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["pax"],0).'</div>';
-    $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row" >';
-    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">% Scheda Tecnica</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["perc_ricetta"],1).'%</div>';
-    $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<br>';
-    $htmlFoodcost .= '<li class="row pb-2" style="font-weight: bold">';
-    $htmlFoodcost .= '<div class="col-xs-3" >&nbsp;</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-center" >Costo</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-center" >Prezzo Netto</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-center" >Iva</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-center" >Prezzo Lordo</div>';
-    $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row">';
-    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Coperto</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto"],2).'€</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["lordo"],2).'€</div>';
-    $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '<li class="row" >';
-    $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Totali Menù</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost_tot"],2).'€</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto_tot"],2).'€</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
-    $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["lordo_tot"],2).'€</div>';
-    $htmlFoodcost .= '</div></li>';
-    $htmlFoodcost .= '</div></div>';
-
-    $htmlTotale .= $htmlFoodcost;
-
     $css = file_get_contents('../Reports/bootstrap.css');
-    // $css .= 'div { border: 1px solid }';
     $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
+
+    if ($bom == 1)
+    {
+        $data = array(
+            "type" => "1",
+            "token" => $token,
+            "process" => "UH5OXwpKuWSqjkkNGiKw7L8gH54shs/vz27OD9wsHRAtWy0tSVYtWy1W/b9kI/zIQ8exbhOcUcrFFROfhZsJGpUSYXIAysU/RA@@",
+            "params" => $menu
+        );
+        $menuRighe = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+        $menuRighe = json_decode($menuRighe, true);
+        $numero = count($menuRighe["recordset"]);
+
+        $htmlTotale .= '<div class="row text-center pb-3" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
+
+        for ($i=0;$i<$numero;$i++)
+        {
+            $htmlTotale .= '<li class="row ingredienti px-3">';
+            $htmlTotale .= '<div class="col-xs-8" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            $htmlTotale .= '<div class="col-xs-3 text-right">'
+            .number_format($menuRighe["recordset"][$i]["quantita"],1)
+            .'g</div>';
+            $htmlTotale .= '</li><hr style="padding:0;margin:0">';
+        }
+
+    }
+    else
+    {
+        $data = array(
+            "type" => "1",
+            "token" => $token,
+            "process" => "gmWVJZP+UGV9KGcRG53D30i0ozWILb/EMajQiDrIEastWy0tSVYtWy3BMu7OQxzscLI2Tq9rx7i26t6Ra97143uOpKI178zF1w@@",
+            "params" => $menu.",".$listino
+        );
+        $menuRighe = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
+        $menuRighe = json_decode($menuRighe, true);
+        $numero = count($menuRighe["recordset"]);
+
+        $totaliFoodcost = getTotali();
+        if (!isset($foodcost))
+        {
+            $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
+            $htmlTotale .= '<li class="row pb-3" >';
+            $htmlTotale .= '<div class="col-xs-12 text-center" style="font-weight: bold;font-size: 18px">N. Coperti: '.number_format($totaliFoodcost["recordset"][0]["pax"],0).'</div>';
+            $htmlTotale .= '</div></li>';
+        }
+        else
+        {
+            $htmlTotale .= '<div class="row text-center pb-3" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
+        }
+
+        for ($i=0;$i<$numero;$i++)
+        {
+            $htmlTotale .= '<li class="row ingredienti px-3 pb-3">';
+            $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            // $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
+            $htmlTotale .= '</li>';
+        }
+
+        if ($foodcost == 1)
+        {
+            $htmlFoodcost .= '<hr>';
+            $htmlFoodcost .= '<div class="row" ><div class="col-xs-12 pb-2 pt-3">';
+            $htmlFoodcost .= '<li class="row" >';
+            $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">N. Coperti</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["pax"],0).'</div>';
+            $htmlFoodcost .= '</div></li>';
+            $htmlFoodcost .= '<li class="row" >';
+            $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold">% Scheda Tecnica</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["perc_ricetta"],1).'%</div>';
+            $htmlFoodcost .= '</div></li>';
+            $htmlFoodcost .= '<br>';
+            $htmlFoodcost .= '<li class="row pb-2" style="font-weight: bold">';
+            $htmlFoodcost .= '<div class="col-xs-3" >&nbsp;</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-center" >Costo</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-center" >Prezzo Netto</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-center" >Iva</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-center" >Prezzo Lordo</div>';
+            $htmlFoodcost .= '</div></li>';
+            $htmlFoodcost .= '<li class="row">';
+            $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Coperto</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto"],2).'€</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["lordo"],2).'€</div>';
+            $htmlFoodcost .= '</div></li>';
+            $htmlFoodcost .= '<li class="row" >';
+            $htmlFoodcost .= '<div class="col-xs-3" style="font-weight: bold" >Totali Menù</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost_tot"],2).'€</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["netto_tot"],2).'€</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["iva"],2).'%</div>';
+            $htmlFoodcost .= '<div class="col-xs-2 text-right" >'.number_format($totaliFoodcost["recordset"][0]["lordo_tot"],2).'€</div>';
+            $htmlFoodcost .= '</div></li>';
+            $htmlFoodcost .= '</div></div>';
+
+            $htmlTotale .= $htmlFoodcost;
+        }
+        else
+        {
+            $mpdf->WriteHTML($htmlTotale,\Mpdf\HTMLParserMode::HTML_BODY);
+            $mpdf->AddPage();
+            $htmlTotale = ob_get_contents();
+
+            $htmlRicette .= '<div class="row pt-3">';
+            for ($i=0;$i<$numero;$i++)
+            {
+                $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
+                $htmlRicette .= '<div class="card-body">';
+                $htmlRicette .= '<h5 class="card-title">'.$menuRighe["recordset"][$i]["descrizione"].'</h5>';
+                $ingredienti = getRicettaIngredienti($menuRighe["recordset"][$i]["ricettaid"]);
+                $numeroIngredientiFigli = count($ingredienti["recordset"]);
+                for ($j=0;$j<$numeroIngredientiFigli;$j++)
+                {
+                    $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'
+                    .$ingredienti["recordset"][$j]["nome"]
+                    .'</div><div class="col-xs-3 text-right" style="font-size: 10px">'
+                    .$ingredienti["recordset"][$j]["quantita"] * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
+                    .'g</div></li>';
+                }
+                // number_format($totaliFoodcost["recordset"][0]["foodcost"],2)
+                /*$htmlRicette .= '<hr>';
+                $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'
+                .array_sum(array_column($ingredienti["recordset"], 'quantita')) * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
+                .'g</div></li>';*/
+                $htmlRicette .= '</div>';
+                $htmlRicette .= '</div></div>';
+            }
+            $htmlRicette .= '</div>';
+            $htmlTotale .= $htmlRicette;
+        }
+    }
+    // $css .= 'div { border: 1px solid }';
+    // $mpdf->WriteHTML($css,\Mpdf\HTMLParserMode::HEADER_CSS);
     $mpdf->WriteHTML($htmlTotale,\Mpdf\HTMLParserMode::HTML_BODY);
     $mpdf->Output();
 
