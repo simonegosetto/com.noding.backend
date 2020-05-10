@@ -168,7 +168,14 @@ try
         for ($i=0;$i<$numero;$i++)
         {
             $htmlTotale .= '<li class="row ingredienti px-3 pb-3">';
-            $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            if ($menuRighe["recordset"][$i]["tipo"] == 1)
+            {
+                $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            }
+            else
+            {
+                $htmlTotale .= '<div class="col-xs-12 text-center" style="font-size: 18px"><hr></div>';
+            }
             // $htmlTotale .= '<div class="col-xs-3 text-right">'.number_format($menuRighe["recordset"][$i]["prezzo_lordo_vendita"],2).'€</div>';
             $htmlTotale .= '</li>';
         }
