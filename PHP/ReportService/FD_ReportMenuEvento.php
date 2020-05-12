@@ -121,7 +121,7 @@ try
             "type" => "1",
             "token" => $token,
             "process" => "UH5OXwpKuWSqjkkNGiKw7L8gH54shs/vz27OD9wsHRAtWy0tSVYtWy1W/b9kI/zIQ8exbhOcUcrFFROfhZsJGpUSYXIAysU/RA@@",
-            "params" => $menu
+            "params" => $menu.",".$listino
         );
         $menuRighe = $http->Post($url_gateway."FD_DataServiceGatewayCrypt.php?gest=1", $data);
         $menuRighe = json_decode($menuRighe, true);
@@ -132,8 +132,9 @@ try
         for ($i=0;$i<$numero;$i++)
         {
             $htmlTotale .= '<li class="row ingredienti px-3">';
-            $htmlTotale .= '<div class="col-xs-8" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
-            $htmlTotale .= '<div class="col-xs-3 text-right">'
+            $htmlTotale .= '<div class="col-xs-6" style="font-size: 18px">'.$menuRighe["recordset"][$i]["descrizione"].'</div>';
+            $htmlTotale .= '<div class="col-xs-3" style="font-size: 10px" >'.$menuRighe["recordset"][$i]["categoria"].'</div>';
+            $htmlTotale .= '<div class="col-xs-2 text-right">'
             .number_format($menuRighe["recordset"][$i]["quantita"],1)
             .'g</div>';
             $htmlTotale .= '</li><hr style="padding:0;margin:0">';
@@ -156,7 +157,7 @@ try
         if (!isset($foodcost))
         {
             $htmlTotale .= '<div class="row text-center" ><div class="col-xs-12"><h2>'.$descrizione.'</h2></div></div>';
-            $htmlTotale .= '<li class="row pb-3" >';
+            $htmlTotale .= '<li class="row pb-5" >';
             $htmlTotale .= '<div class="col-xs-12 text-center" style="font-weight: bold;font-size: 18px">N. Coperti: '.number_format($totaliFoodcost["recordset"][0]["pax"],0).'</div>';
             $htmlTotale .= '</div></li>';
         }

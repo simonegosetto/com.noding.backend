@@ -156,7 +156,7 @@ try
 
     for ($i=0;$i<$numero;$i++)
     {
-        $htmlIngredienti .= '<li class="row ingredienti">';
+        $htmlIngredienti .= '<li class="row ingredienti" style="justify-content: space-around !important;">';
         $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
         $htmlIngredienti .= '</li>';
     }
@@ -256,18 +256,20 @@ try
         $mpdf->AddPage();
         $foodcostRighe = getFoodcost($params, $listino);
         $numeroFoodcostRighe = count($foodcostRighe["recordset"]);
-        $htmlFoodcost .= '<div class="row"><div class="col-xs-12 px-3 pb-4 pt-4"><h4>Foodcost</h4>';
+        $htmlFoodcost .= '<div class="row pt-5"><div class="col-xs-12 px-3 pb-4 pt-4"><h4>Foodcost</h4>';
         for ($j=0;$j<$numeroFoodcostRighe;$j++)
         {
             $htmlFoodcost .= '<li class="row"><div class="col-xs-5" >'.$foodcostRighe["recordset"][$j]["descrizione"].'</div><div class="col-xs-3 text-right" >'.$foodcostRighe["recordset"][$j]["peso"].'g</div><div class="col-xs-3 text-right" >'.number_format($foodcostRighe["recordset"][$j]["foodcost"],2).'€</div></li>';
         }
         $totaliFoodcost = getFoodcostTotali($params, $listino);
         $htmlFoodcost .= '<hr>';
-        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Foodcost</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div></li>';
-        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Teorico ivato</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_lordo_vendita"],2).'€</div></li>';
-        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Ratio</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["ratio"],2).'%</div></li>';
-        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prezzo Vendita Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_netto_vendita"],2).'€</div></li>';
-        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Margine Netto</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["margine_netto"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Coût des matières premières</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["foodcost"],2).'€</div></li>';
+        $htmlFoodcost .= '<hr>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prix de vente TTC</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_lordo_vendita"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Prix de vente H.T</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["prezzo_netto_vendita"],2).'€</div></li>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Marge brut</div><div class="col-xs-3 text-right" >'.number_format($totaliFoodcost["recordset"][0]["margine_netto"],2).'€</div></li>';
+        $htmlFoodcost .= '<br>';
+        $htmlFoodcost .= '<li class="row" style="font-weight: bold"><div class="col-xs-8 text-right">Ratio</div><div class="col-xs-3 text-right" style="text-decoration: underline" >'.number_format($totaliFoodcost["recordset"][0]["ratio"],2).'%</div></li>';
         $htmlFoodcost .= '</div></div>';
         $mpdf->WriteHTML($htmlFoodcost,\Mpdf\HTMLParserMode::HTML_BODY);
     }
