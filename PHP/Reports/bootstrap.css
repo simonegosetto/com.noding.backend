@@ -28,6 +28,10 @@ body {
     text-justify: inter-word;
 }
 
+.ingredienti {
+    text-align: left !important;
+}
+
 li {
     list-style-type: none;
 }

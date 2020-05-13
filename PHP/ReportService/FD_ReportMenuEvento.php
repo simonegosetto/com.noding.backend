@@ -228,26 +228,29 @@ try
             $htmlRicette .= '<div class="row pt-3">';
             for ($i=0;$i<$numero;$i++)
             {
-                $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
-                $htmlRicette .= '<div class="card-body">';
-                $htmlRicette .= '<h5 class="card-title">'.$menuRighe["recordset"][$i]["descrizione"].'</h5>';
-                $ingredienti = getRicettaIngredienti($menuRighe["recordset"][$i]["ricettaid"]);
-                $numeroIngredientiFigli = count($ingredienti["recordset"]);
-                for ($j=0;$j<$numeroIngredientiFigli;$j++)
+                if ($menuRighe["recordset"][$i]["tipo"] == 1)
                 {
-                    $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'
-                    .$ingredienti["recordset"][$j]["nome"]
-                    .'</div><div class="col-xs-3 text-right" style="font-size: 10px">'
-                    .$ingredienti["recordset"][$j]["quantita"] * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
-                    .'g</div></li>';
+                    $htmlRicette .= '<div class="col-xs-4 p-1"><div class="card" style="width: 100%;">';
+                    $htmlRicette .= '<div class="card-body ingredienti">';
+                    $htmlRicette .= '<h5 class="card-title">'.$menuRighe["recordset"][$i]["descrizione"].'</h5>';
+                    $ingredienti = getRicettaIngredienti($menuRighe["recordset"][$i]["ricettaid"]);
+                    $numeroIngredientiFigli = count($ingredienti["recordset"]);
+                    for ($j=0;$j<$numeroIngredientiFigli;$j++)
+                    {
+                        $htmlRicette .= '<li class="row"><div class="col-xs-8" style="font-size: 10px">'
+                        .$ingredienti["recordset"][$j]["nome"]
+                        .'</div><div class="col-xs-3 text-right" style="font-size: 10px">'
+                        .$ingredienti["recordset"][$j]["quantita"] * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
+                        .'g</div></li>';
+                    }
+                    // number_format($totaliFoodcost["recordset"][0]["foodcost"],2)
+                    /*$htmlRicette .= '<hr>';
+                    $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'
+                    .array_sum(array_column($ingredienti["recordset"], 'quantita')) * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
+                    .'g</div></li>';*/
+                    $htmlRicette .= '</div>';
+                    $htmlRicette .= '</div></div>';
                 }
-                // number_format($totaliFoodcost["recordset"][0]["foodcost"],2)
-                /*$htmlRicette .= '<hr>';
-                $htmlRicette .= '<li class="row"><div class="col-xs-12 text-right" style="font-size: 10px;padding-right: 13px">'
-                .array_sum(array_column($ingredienti["recordset"], 'quantita')) * ($menuRighe["recordset"][$i]["perc_ricetta"] / 100)
-                .'g</div></li>';*/
-                $htmlRicette .= '</div>';
-                $htmlRicette .= '</div></div>';
             }
             $htmlRicette .= '</div>';
             $htmlTotale .= $htmlRicette;

@@ -156,7 +156,7 @@ try
 
     for ($i=0;$i<$numero;$i++)
     {
-        $htmlIngredienti .= '<li class="row ingredienti" style="justify-content: space-around !important;">';
+        $htmlIngredienti .= '<li class="row ingredienti" >';
         $htmlIngredienti .= '<div class="col-xs-8">'.$ingredienti["recordset"][$i]["nome"].'</div><div class="col-xs-3">'.($ingredienti["recordset"][$i]["quantita"] > 0 ? $ingredienti["recordset"][$i]["quantita"].'g' : '').'</div>';
         $htmlIngredienti .= '</li>';
     }
@@ -181,7 +181,7 @@ try
             {
                 $htmlRicette .= '<img width="100%" src="'.getRicettaImage($ricette["recordset"][$i]["id_storage"])["link"].'" class="card-img-top" >';
             }
-            $htmlRicette .= '<div class="card-body">';
+            $htmlRicette .= '<div class="card-body ingredienti">';
             $htmlRicette .= '<h5 class="card-title">'.$ricette["recordset"][$i]["nome_ric"].'</h5>';
             // prendo ingredienti della sotto ricetta
             $ingredienti = getRicettaIngredienti($ricette["recordset"][$i]["ricettaid"]);
@@ -256,7 +256,7 @@ try
         $mpdf->AddPage();
         $foodcostRighe = getFoodcost($params, $listino);
         $numeroFoodcostRighe = count($foodcostRighe["recordset"]);
-        $htmlFoodcost .= '<div class="row pt-5"><div class="col-xs-12 px-3 pb-4 pt-4"><h4>Foodcost</h4>';
+        $htmlFoodcost .= '<div class="row pt-5 ingredienti"><div class="col-xs-12 px-3 pb-4 pt-4"><h4>Foodcost</h4>';
         for ($j=0;$j<$numeroFoodcostRighe;$j++)
         {
             $htmlFoodcost .= '<li class="row"><div class="col-xs-5" >'.$foodcostRighe["recordset"][$j]["descrizione"].'</div><div class="col-xs-3 text-right" >'.$foodcostRighe["recordset"][$j]["peso"].'g</div><div class="col-xs-3 text-right" >'.number_format($foodcostRighe["recordset"][$j]["foodcost"],2).'€</div></li>';
