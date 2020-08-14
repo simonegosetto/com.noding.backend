@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
@@ -173,6 +173,14 @@ if (strlen($keyRequest) > 0)
         $url = new FD_Url();
         //Salvo nel log delle sessioni
         $sql->executeSQL("call sys_session_log(" . $array[0]["cod_u"] . ",'" . $token . "','".$url->IP_ADDRESS."','".$url->USER_AGENT["platform"]."','".$url->USER_AGENT["browser"]."','".$url->USER_AGENT["version"]."');");
+        if (strlen($sql->lastError) > 0)
+        {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            if ($sql->connected) {
+                $sql->closeConnection();
+            }
+            return;
+        }
         //logger
         $log->lwrite('[INFO] - Login effettuato ! - ('.$token.') - ('.$array[0]["cod_u"].')<b>'.$username.'</b> - '.$url->USER_AGENT["platform"].' - '.$url->USER_AGENT["browser"].' - '.$url->USER_AGENT["version"]);
 
