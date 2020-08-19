@@ -91,4 +91,13 @@ class FD_DropboxAPI
         $data = '{"path": "'.$path.'"}';
         return $this->_request('https://api.dropboxapi.com/2/files/get_temporary_link', $header, $data);
 	}
+
+	// https://www.dropbox.com/developers/documentation/http/documentation#files-get_preview
+    public function preview($path)
+    {
+        $header = array();
+        $header[] = "Authorization: Bearer ".$this->AccessToken;
+        $header[] = "Dropbox-API-Arg: {"path": "'.$path.'"}";
+        return $this->_request('https://content.dropboxapi.com/2/files/get_preview', $header);
+    }
 }

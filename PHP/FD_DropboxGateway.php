@@ -138,6 +138,22 @@ try
                 echo '{"link" : "'.json_decode($result, true)["link"].'"}';
             }
         }
+        else if ((int)$action->mode == DROPBOX::PREVIEW)
+        {
+            $result = $dp->preview($action->path);
+            if (strpos($result,"error") !== false)
+            {
+                $error = json_decode($result, true)["error"]["reason"][".tag"];
+                echo '{"error" : "'.$error.'"}';
+                $log->lwrite('[ERRORE] - '.$error);
+                return;
+            }
+            else
+            {
+                echo $result;
+                return;
+            }
+        }
     }
 
     // download
