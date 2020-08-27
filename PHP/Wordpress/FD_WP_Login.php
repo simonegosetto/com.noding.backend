@@ -29,16 +29,16 @@ ini_set('display_errors', 1);
 
 // includo libreria Wordpress
 $serverPath = explode("/", __DIR__);
-array_splice($serverPath, count($serverPath)-2, 2);
+array_splice($serverPath, count($serverPath)-3, 3);
 $wpLibrary =  implode("/", $serverPath) . '/wp-load.php';
 require_once $wpLibrary;
 
-include "DB/FD_DB.php";
-include "DB/FD_Mysql.php";
-include "Tools/FD_Random.php";
-include "WebTools/FD_Url.php";
-require("WebTools/FD_Logger.php");
-include "Tools/FD_JWT.php";
+include "../DB/FD_DB.php";
+include "../DB/FD_Mysql.php";
+include "../Tools/FD_Random.php";
+include "../WebTools/FD_Url.php";
+require("../WebTools/FD_Logger.php");
+include "../Tools/FD_JWT.php";
 
 //istanzio logger
 $log = new FD_Logger(null);
