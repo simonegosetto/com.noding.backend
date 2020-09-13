@@ -140,7 +140,7 @@ try
         }
         else if ((int)$action->mode == DROPBOX::PREVIEW)
         {
-            $result = $dp->preview($action->path);
+            $result = $dp->thumbnail($action->path);
             if (strpos($result,"error") !== false)
             {
                 $error = json_decode($result, true)["error"]["reason"][".tag"];
@@ -150,7 +150,7 @@ try
             }
             else
             {
-                echo $result;
+                echo '{"thumbnail" : "data:image/jpeg;base64,'.base64_encode($result).'"}';
                 return;
             }
         }

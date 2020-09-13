@@ -18,7 +18,6 @@ class FD_DropboxAPI
         $this->AppKey = $ini_array["appkey"];
         $this->AppSecret = $ini_array["appsecret"];
         $this->AccessToken = $ini_array["accesstoken"];
-        //$this->AppInfo = new Dropbox\AppInfo($key, $secret);
     }
 
     private function _request($url, $header, $file = null)
@@ -92,12 +91,13 @@ class FD_DropboxAPI
         return $this->_request('https://api.dropboxapi.com/2/files/get_temporary_link', $header, $data);
 	}
 
-	// https://www.dropbox.com/developers/documentation/http/documentation#files-get_preview
-    public function preview($path)
+	// https://www.dropbox.com/developers/documentation/http/documentation#files-get_thumbnail
+    public function thumbnail($path)
     {
         $header = array();
         $header[] = "Authorization: Bearer ".$this->AccessToken;
-        $header[] = "Dropbox-API-Arg: {"path": "'.$path.'"}";
-        return $this->_request('https://content.dropboxapi.com/2/files/get_preview', $header);
+        $header[] = 'Content-Type: application/octet-stream';
+        $header[] = 'Dropbox-API-Arg: {"resource": {".tag": "path","path": "'.$path.'"}, "format": "jpeg", "size": "w64h64", "mode": "strict"}';
+        return $this->_request('https://content.dropboxapi.com/2/files/get_thumbnail_v2', $header);
     }
 }
