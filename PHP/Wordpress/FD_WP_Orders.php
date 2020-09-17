@@ -65,16 +65,22 @@ try {
         $orderq = wc_get_order($customer_order);
 		foreach($orderq->get_items() as $item)
 		{
-			echo $item->get_name();
-			// echo $item->name;
+		    // var_dump($item->get_product());
+			// $item->get_product()->get_data()["slug"]
+			$Order_Array[] = [
+				"id" => $orderq->get_id(),
+				"name" => $item->get_name(),
+				"image" => wp_get_attachment_url( $item->get_product()->get_image_id() ),
+				"date" => $orderq->get_date_created()->date_i18n('Y-m-d'),
+				"productid" => $item->get_product_id(),
+				"anno" => $item->get_product()->get_length(),
+				"daunit" => $item->get_product()->get_width(),
+				"aunit" => $item->get_product()->get_height()
+			];
 		}
-        /*$Order_Array[] = [
-            "ID" => $orderq->get_id(),
-            "Value" => $orderq->get_total(),
-            "Date" => $orderq->get_date_created()->date_i18n('Y-m-d'),
-        ];*/
 
     }
+	echo json_encode($Order_Array);
 }
 catch (Exception $e)
 {
