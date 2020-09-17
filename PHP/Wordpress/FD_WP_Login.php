@@ -23,25 +23,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 //remove the notice
-// error_reporting(E_ERROR | E_WARNING | E_PARSE);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 // includo libreria Wordpress
 $serverPath = explode("/", __DIR__);
-array_splice($serverPath, count($serverPath)-3, 3);
+array_splice($serverPath, count($serverPath)-2, 2);
 $wpLibrary =  implode("/", $serverPath) . '/wp-load.php';
 require_once $wpLibrary;
 
-include "../DB/FD_DB.php";
-include "../DB/FD_Mysql.php";
-include "../Tools/FD_Random.php";
-include "../WebTools/FD_Url.php";
-require("../WebTools/FD_Logger.php");
-include "../Tools/FD_JWT.php";
+include "DB/FD_DB.php";
+include "DB/FD_Mysql.php";
+include "Tools/FD_Random.php";
+include "WebTools/FD_Url.php";
+require("WebTools/FD_Logger.php");
+include "Tools/FD_JWT.php";
 
 //istanzio logger
 $log = new FD_Logger(null);
+$keyRequest = strtolower("8F39D289C2D21ABA1D95845FF5F26BE1");
 
 try
 {
