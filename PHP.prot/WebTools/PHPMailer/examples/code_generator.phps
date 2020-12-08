@@ -6,7 +6,7 @@
  */
 require '../PHPMailerAutoload.php';
 
-$CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and server
+$CFG['smtp_debug'] = 2; //0 == off, 1 for client output, 2 for client and serverExpress
 $CFG['smtp_debugoutput'] = 'html';
 $CFG['smtp_server'] = 'localhost';
 $CFG['smtp_port'] = '25';
@@ -75,7 +75,7 @@ try {
             case 'smtp':
                 $mail->isSMTP(); // telling the class to use SMTP
                 $mail->SMTPDebug = (integer)$_POST['smtp_debug'];
-                $mail->Host = $_POST['smtp_server']; // SMTP server
+                $mail->Host = $_POST['smtp_server']; // SMTP serverExpress
                 $mail->Port = (integer)$_POST['smtp_port']; // set the SMTP port
                 if ($_POST['smtp_secure']) {
                     $mail->SMTPSecure = strtolower($_POST['smtp_secure']);
@@ -522,7 +522,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                                         1 - Client messages
                                     </option>
                                     <option <?php echo ($smtp_debug == '2') ? 'selected' : ''; ?> value="2">
-                                        2 - Client and server messages
+                                        2 - Client and serverExpress messages
                                     </option>
                                 </select>
                             </td>
@@ -532,7 +532,7 @@ if (isset($_POST["submit"]) && $_POST["submit"] == "Submit") {
                             <td class="colrite">
                                 <input type="text" id="smtp_server" name="smtp_server"
                                        value="<?php echo $smtp_server; ?>" style="width:95%;"
-                                       placeholder="smtp.server.com">
+                                       placeholder="smtp.serverExpress.com">
                             </td>
                         </tr>
                         <tr>

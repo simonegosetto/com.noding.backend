@@ -1,5 +1,5 @@
 const fs = require('fs');
-const mysql = require("mysql");
+const mysql = require('mysql');
 const st = require('../Tools/StringTool');
 
 const data = new Date().toISOString().substr(0,10);

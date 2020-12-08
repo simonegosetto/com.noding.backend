@@ -2,7 +2,7 @@
   "name": "node_gateway",
   "version": "1.0.0",
   "description": "backend node js",
-  "main": "server.js",
+  "main": "server.express.js",
   "scripts": {
     "test": "test"
   },

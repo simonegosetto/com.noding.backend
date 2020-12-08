@@ -39,7 +39,7 @@ final class SG_PostgreSQL extends SG_DB
         $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
         if(!$this->conn)
         {
-            $this->lastError = 'No connection for the server !';
+            $this->lastError = 'No connection for the serverExpress !';
             $this->connected = false;
             return false;
         }

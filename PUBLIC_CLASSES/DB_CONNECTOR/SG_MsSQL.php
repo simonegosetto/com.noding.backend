@@ -50,7 +50,7 @@ final class SG_MsSQL extends SG_DB
         $this->conn = sqlsrv_connect($this->hostname, array("Database"=>$this->database, "UID"=>$this->username, "PWD"=>$this->password, "CharacterSet" => "UTF-8"));
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server: ' . $this->GetError();
+            $this->lastError = 'Nessuna connessione al serverExpress: ' . $this->GetError();
             $this->connected = false;
             return false;
         }

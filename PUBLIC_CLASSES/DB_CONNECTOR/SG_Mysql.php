@@ -39,7 +39,7 @@ final class SG_Mysql extends SG_DB
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         if(!$this->conn)
         {
-            $this->lastError = 'No connection for the server !: ' . mysqli_connect_error().PHP_EOL;
+            $this->lastError = 'No connection for the serverExpress !: ' . mysqli_connect_error().PHP_EOL;
             $this->connected = false;
             return false;
         }

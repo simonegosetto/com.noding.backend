@@ -49,7 +49,7 @@
 * Minor code cleanup for robustness
 * Add Indonesian translations (Thanks to @ceceprawiro)
 * Avoid `error_log` Debugoutput naming clash
-* Add ability to parse server capabilities in response to EHLO (useful for SendGrid etc)
+* Add ability to parse serverExpress capabilities in response to EHLO (useful for SendGrid etc)
 * Amended default values for WordWrap to match RFC
 * Remove html2text converter class (has incompatible license)
 * Provide new mechanism for injecting html to text converters
@@ -67,7 +67,7 @@
 * Improved checks and error messages for missing extensions
 * Store and report SMTP errors more consistently
 * Add MIME multipart preamble for better Outlook compatibility
-* Enable TLS encryption automatically if the server offers it
+* Enable TLS encryption automatically if the serverExpress offers it
 * Provide detailed errors when individual recipients fail
 * Report more errors when connecting
 * Add extras classes to composer classmap
@@ -177,7 +177,7 @@
 * Fix broken Q-encoding
 * Czech language update (Thanks to @nemelu)
 * Removal of excess blank lines in messages
-* Added fake POP server and unit tests for POP-before-SMTP
+* Added fake POP serverExpress and unit tests for POP-before-SMTP
 
 ## Version 5.2.6 (April 11th 2013)
 * Reflect move to PHPMailer GitHub organisation at https://github.com/PHPMailer/PHPMailer
@@ -191,7 +191,7 @@
 * Merge in changes from Google code 5.2.4 release
 * Minor coding standards cleanup in SMTP class
 * Improved unit tests, now tests S/MIME signing
-* Travis-CI support on GitHub, runs tests with fake SMTP server
+* Travis-CI support on GitHub, runs tests with fake SMTP serverExpress
 
 ## Version 5.2.4 (February 19, 2013)
 * Fix tag and version bug.
@@ -210,7 +210,7 @@
 * Add Slovak translation, thanks to Michal Tinka
 
 ## Version 5.2.2-rc2 (November 6, 2012)
-* Fix SMTP server rotation (Bugz: 118)
+* Fix SMTP serverExpress rotation (Bugz: 118)
 * Allow override of autogen'ed 'Date' header (for Drupal's
   og_mailinglist module)
 * No whitespace after '-f' option (Bugz: 116)
@@ -391,7 +391,7 @@ NOTE: WE HAVE A NEW LANGUAGE VARIABLE FOR DIGITALLY SIGNED S/MIME EMAILS. IF YOU
     This is NOT a PHPMailer error, it is the result of an incorrectly configured
     PHP5 installation. The fix is to modify your 'php.ini' file and include the
     date.timezone = Etc/UTC (or your own zone)
-    directive, to your own server timezone
+    directive, to your own serverExpress timezone
   - If you do get this error, and are unable to access your php.ini file:
     In your PHP script, add
     `date_default_timezone_set('Etc/UTC');`
@@ -556,7 +556,7 @@ NOTE: will NOT work with PHP5 in E_STRICT error mode
 
 ## Version 1.28 (Mon, Jul 30 2001)
 * Fixed a typo in SMTP class
-* Fixed header issue with Imail (win32) SMTP server
+* Fixed header issue with Imail (win32) SMTP serverExpress
 * Made fopen() calls for attachments use "rb" to fix win32 error
 
 ## Version 1.25 (Mon, Jul 02 2001)

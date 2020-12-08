@@ -1,6 +1,6 @@
 <?php
 /**
- * This uses the SMTP class alone to check that a connection can be made to an SMTP server,
+ * This uses the SMTP class alone to check that a connection can be made to an SMTP serverExpress,
  * authenticate, then disconnect
  */
 
@@ -17,7 +17,7 @@ $smtp = new SMTP;
 $smtp->do_debug = SMTP::DEBUG_CONNECTION;
 
 try {
-    //Connect to an SMTP server
+    //Connect to an SMTP serverExpress
     if (!$smtp->connect('mail.example.com', 25)) {
         throw new Exception('Connect failed');
     }
@@ -25,9 +25,9 @@ try {
     if (!$smtp->hello(gethostname())) {
         throw new Exception('EHLO failed: ' . $smtp->getError()['error']);
     }
-    //Get the list of ESMTP services the server offers
+    //Get the list of ESMTP services the serverExpress offers
     $e = $smtp->getServerExtList();
-    //If server can do TLS encryption, use it
+    //If serverExpress can do TLS encryption, use it
     if (array_key_exists('STARTTLS', $e)) {
         $tlsok = $smtp->startTLS();
         if (!$tlsok) {
@@ -40,7 +40,7 @@ try {
         //Get new capabilities list, which will usually now include AUTH if it didn't before
         $e = $smtp->getServerExtList();
     }
-    //If server supports authentication, do it (even if no encryption)
+    //If serverExpress supports authentication, do it (even if no encryption)
     if (array_key_exists('AUTH', $e)) {
         if ($smtp->authenticate('username', 'password')) {
             echo "Connected ok!";

@@ -60,11 +60,11 @@ app.use(function(req, res, next) {
     next();
 });
 
-// server in ascolto
-const server = https.createServer(options, app);
-server.listen(port, () => {
-    console.log('server in ascolto sulla porta ',port);
-    logger.info('server in ascolto sulla porta ',port);
+// serverExpress in ascolto
+const serverExpress = https.createServer(options, app);
+serverExpress.listen(port, () => {
+    console.log('serverExpress in ascolto sulla porta ',port);
+    logger.info('serverExpress in ascolto sulla porta ',port);
 });
 /*app.listen(port,
     function(error) {
@@ -73,8 +73,8 @@ server.listen(port, () => {
             return console.log(error);
         } 
         
-        console.log('server in ascolto sulla porta ',port);
-        logger.info('server in ascolto sulla porta ',port);
+        console.log('serverExpress in ascolto sulla porta ',port);
+        logger.info('serverExpress in ascolto sulla porta ',port);
     }
 );*/
 
