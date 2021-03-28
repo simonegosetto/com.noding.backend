@@ -12,7 +12,7 @@ Build status: [![Build Status](https://travis-ci.org/PHPMailer/PHPMailer.svg)](h
 
 - Probably the world's most popular code for sending email from PHP!
 - Used by many open-source projects: WordPress, Drupal, 1CRM, SugarCRM, Yii, Joomla! and many more
-- Integrated SMTP support - send without a local mail server
+- Integrated SMTP support - send without a local mail serverExpress
 - Send emails with multiple TOs, CCs, BCCs and REPLY-TOs
 - Multipart/alternative emails for mail clients that do not read HTML email
 - Support for UTF-8 content and 8bit, base64, binary, and quoted-printable encodings
@@ -29,7 +29,7 @@ Many PHP developers utilize email in their code. The only PHP function that supp
 Formatting email correctly is surprisingly difficult. There are myriad overlapping RFCs, requiring tight adherence to horribly complicated formatting and encoding rules - the vast majority of code that you'll find online that uses the `mail()` function directly is just plain wrong!
 *Please* don't be tempted to do it yourself - if you don't use PHPMailer, there are many other excellent libraries that you should look at before rolling your own - try SwiftMailer, Zend_Mail, eZcomponents etc.
 
-The PHP `mail()` function usually sends via a local mail server, typically fronted by a `sendmail` binary on Linux, BSD and OS X platforms, however, Windows usually doesn't include a local mail server; PHPMailer's integrated SMTP implementation allows email sending on Windows platforms without a local mail server.
+The PHP `mail()` function usually sends via a local mail serverExpress, typically fronted by a `sendmail` binary on Linux, BSD and OS X platforms, however, Windows usually doesn't include a local mail serverExpress; PHPMailer's integrated SMTP implementation allows email sending on Windows platforms without a local mail serverExpress.
 
 ## License
 

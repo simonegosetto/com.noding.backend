@@ -1,6 +1,6 @@
 
 
-info [Thu Dec 13 2018 09:35:58 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Thu Dec 13 2018 09:35:58 GMT+0100 (GMT+01:00)]  serverExpress in ascolto sulla porta  3000
 info [Thu Dec 13 2018 09:36:40 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'my_sqrt', params: '4,@out_number' }
 info [Thu Dec 13 2018 09:36:41 GMT+0100 (GMT+01:00)]  query:  call my_sqrt(4,@out_number);select @out_number as out_number;
 info [Thu Dec 13 2018 09:37:16 GMT+0100 (GMT+01:00)]  parametri post:  { process: 'sp_utenti_get', params: '' }
@@ -24,7 +24,7 @@ error [Thu Dec 13 2018 09:37:42 GMT+0100 (GMT+01:00)]  { Error: ER_SP_WRONG_NO_O
     at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:77:24
     at new Promise (<anonymous>)
     at MySql.execute (C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\DB\db_mysql.js:75:16)
-    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\server.js:77:32
+    at C:\Users\gosetto\Documents\SGD\flexdev_framework\NODE\serverExpress.js:77:32
     at process._tickCallback (internal/process/next_tick.js:68:7)
   code: 'ER_SP_WRONG_NO_OF_ARGS',
   errno: 1318,
@@ -35,10 +35,10 @@ error [Thu Dec 13 2018 09:37:42 GMT+0100 (GMT+01:00)]  { Error: ER_SP_WRONG_NO_O
   sql: 'call sp_utenti_get(@asd);' }
 
 
-info [Thu Dec 13 2018 09:39:08 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Thu Dec 13 2018 09:39:08 GMT+0100 (GMT+01:00)]  serverExpress in ascolto sulla porta  3000
 
 
-info [Thu Dec 13 2018 09:39:26 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Thu Dec 13 2018 09:39:26 GMT+0100 (GMT+01:00)]  serverExpress in ascolto sulla porta  3000
 
 
-info [Thu Dec 13 2018 11:17:17 GMT+0100 (GMT+01:00)]  server in ascolto sulla porta  3000
+info [Thu Dec 13 2018 11:17:17 GMT+0100 (GMT+01:00)]  serverExpress in ascolto sulla porta  3000

@@ -156,7 +156,7 @@ class Google_Service_Monitoring_Resource_ProjectsNotificationChannels extends Go
    *
    * @param string $name The full REST resource name for this channel. The syntax
    * is: projects/[PROJECT_ID]/notificationChannels/[CHANNEL_ID] The [CHANNEL_ID]
-   * is automatically assigned by the server on creation.
+   * is automatically assigned by the serverExpress on creation.
    * @param Google_Service_Monitoring_NotificationChannel $postBody
    * @param array $optParams Optional parameters.
    *

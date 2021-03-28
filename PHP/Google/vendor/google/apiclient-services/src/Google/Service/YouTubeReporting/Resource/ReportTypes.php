@@ -30,7 +30,7 @@ class Google_Service_YouTubeReporting_Resource_ReportTypes extends Google_Servic
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string pageToken A token identifying a page of results the server
+   * @opt_param string pageToken A token identifying a page of results the serverExpress
    * should return. Typically, this is the value of
    * ListReportTypesResponse.next_page_token returned in response to the previous
    * call to the `ListReportTypes` method.
@@ -38,7 +38,7 @@ class Google_Service_YouTubeReporting_Resource_ReportTypes extends Google_Servic
    * report types will be returned; otherwise only the report types that can be
    * used to create new reporting jobs will be returned.
    * @opt_param int pageSize Requested page size. Server may return fewer report
-   * types than requested. If unspecified, server will pick an appropriate
+   * types than requested. If unspecified, serverExpress will pick an appropriate
    * default.
    * @opt_param string onBehalfOfContentOwner The content owner's external ID on
    * which behalf the user is acting on. If not set, the user is acting for

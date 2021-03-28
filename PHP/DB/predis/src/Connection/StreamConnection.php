@@ -21,8 +21,8 @@ use Predis\Response\Status as StatusResponse;
  * The connection parameters supported by this class are:.
  *
  *  - scheme: it can be either 'redis', 'tcp', 'rediss', 'tls' or 'unix'.
- *  - host: hostname or IP address of the server.
- *  - port: TCP port of the server.
+ *  - host: hostname or IP address of the serverExpress.
+ *  - port: TCP port of the serverExpress.
  *  - path: path of a UNIX domain socket when scheme is 'unix'.
  *  - timeout: timeout to perform the connection (default is 5 seconds).
  *  - read_write_timeout: timeout of read / write operations.
@@ -36,7 +36,7 @@ use Predis\Response\Status as StatusResponse;
 class StreamConnection extends AbstractConnection
 {
     /**
-     * Disconnects from the server and destroys the underlying resource when the
+     * Disconnects from the serverExpress and destroys the underlying resource when the
      * garbage collector kicks in only if the connection has not been marked as
      * persistent.
      */
@@ -295,7 +295,7 @@ class StreamConnection extends AbstractConnection
             }
 
             if ($written === false || $written === 0) {
-                $this->onConnectionError('Error while writing bytes to the server.');
+                $this->onConnectionError('Error while writing bytes to the serverExpress.');
             }
 
             $buffer = substr($buffer, $written);
@@ -311,7 +311,7 @@ class StreamConnection extends AbstractConnection
         $chunk = fgets($socket);
 
         if ($chunk === false || $chunk === '') {
-            $this->onConnectionError('Error while reading line from the server.');
+            $this->onConnectionError('Error while reading line from the serverExpress.');
         }
 
         $prefix = $chunk[0];
@@ -335,7 +335,7 @@ class StreamConnection extends AbstractConnection
                     $chunk = fread($socket, min($bytesLeft, 4096));
 
                     if ($chunk === false || $chunk === '') {
-                        $this->onConnectionError('Error while reading bytes from the server.');
+                        $this->onConnectionError('Error while reading bytes from the serverExpress.');
                     }
 
                     $bulkData .= $chunk;

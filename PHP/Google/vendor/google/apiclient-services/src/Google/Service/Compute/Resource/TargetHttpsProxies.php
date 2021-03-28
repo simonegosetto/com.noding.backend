@@ -35,11 +35,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *
@@ -79,11 +79,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *
@@ -162,11 +162,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *
@@ -192,11 +192,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *
@@ -212,7 +212,7 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
   }
   /**
    * Sets the SSL policy for TargetHttpsProxy. The SSL policy specifies the
-   * server-side support for SSL features. This affects connections between
+   * serverExpress-side support for SSL features. This affects connections between
    * clients and the HTTPS proxy load balancer. They do not affect the connection
    * between the load balancer and the backends. (targetHttpsProxies.setSslPolicy)
    *
@@ -225,11 +225,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *
@@ -254,11 +254,11 @@ class Google_Service_Compute_Resource_TargetHttpsProxies extends Google_Service_
    *
    * @opt_param string requestId An optional request ID to identify requests.
    * Specify a unique request ID so that if you must retry your request, the
-   * server will know to ignore the request if it has already been completed.
+   * serverExpress will know to ignore the request if it has already been completed.
    *
    * For example, consider a situation where you make an initial request and the
    * request times out. If you make the request again with the same request ID,
-   * the server can check if original operation with the same request ID was
+   * the serverExpress can check if original operation with the same request ID was
    * received, and if so, will ignore the second request. This prevents clients
    * from accidentally creating duplicate commitments.
    *

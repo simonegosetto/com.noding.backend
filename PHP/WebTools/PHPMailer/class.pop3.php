@@ -67,7 +67,7 @@ class POP3
     public $do_debug = 0;
 
     /**
-     * POP3 mail server hostname.
+     * POP3 mail serverExpress hostname.
      * @var string
      * @access public
      */
@@ -150,7 +150,7 @@ class POP3
     }
 
     /**
-     * Authenticate with a POP3 server.
+     * Authenticate with a POP3 serverExpress.
      * A connect, login, disconnect sequence
      * appropriate for POP-before SMTP authorisation.
      * @access public
@@ -197,7 +197,7 @@ class POP3
     }
 
     /**
-     * Connect to a POP3 server.
+     * Connect to a POP3 serverExpress.
      * @access public
      * @param string $host
      * @param integer|boolean $port
@@ -219,7 +219,7 @@ class POP3
             $port = $this->POP3_PORT;
         }
 
-        //  connect to the POP3 server
+        //  connect to the POP3 serverExpress
         $this->pop_conn = fsockopen(
             $host, //  POP3 Host
             $port, //  Port #
@@ -234,7 +234,7 @@ class POP3
         if (false === $this->pop_conn) {
             //  It would appear not...
             $this->setError(array(
-                'error' => "Failed to connect to server $host on port $port",
+                'error' => "Failed to connect to serverExpress $host on port $port",
                 'errno' => $errno,
                 'errstr' => $errstr
             ));
@@ -244,11 +244,11 @@ class POP3
         //  Increase the stream time-out
         stream_set_timeout($this->pop_conn, $tval, 0);
 
-        //  Get the POP3 server response
+        //  Get the POP3 serverExpress response
         $pop3_response = $this->getResponse();
         //  Check for the +OK
         if ($this->checkResponse($pop3_response)) {
-            //  The connection is established and the POP3 server is talking
+            //  The connection is established and the POP3 serverExpress is talking
             $this->connected = true;
             return true;
         }
@@ -256,7 +256,7 @@ class POP3
     }
 
     /**
-     * Log in to the POP3 server.
+     * Log in to the POP3 serverExpress.
      * Does not support APOP (RFC 2828, 4949).
      * @access public
      * @param string $username
@@ -266,7 +266,7 @@ class POP3
     public function login($username = '', $password = '')
     {
         if (!$this->connected) {
-            $this->setError('Not connected to POP3 server');
+            $this->setError('Not connected to POP3 serverExpress');
         }
         if (empty($username)) {
             $username = $this->username;
@@ -290,7 +290,7 @@ class POP3
     }
 
     /**
-     * Disconnect from the POP3 server.
+     * Disconnect from the POP3 serverExpress.
      * @access public
      */
     public function disconnect()
@@ -306,7 +306,7 @@ class POP3
     }
 
     /**
-     * Get a response from the POP3 server.
+     * Get a response from the POP3 serverExpress.
      * $size is the maximum number of bytes to retrieve
      * @param integer $size
      * @return string
@@ -322,7 +322,7 @@ class POP3
     }
 
     /**
-     * Send raw data to the POP3 server.
+     * Send raw data to the POP3 serverExpress.
      * @param string $string
      * @return integer
      * @access protected
@@ -339,7 +339,7 @@ class POP3
     }
 
     /**
-     * Checks the POP3 server response.
+     * Checks the POP3 serverExpress response.
      * Looks for for +OK or -ERR.
      * @param string $string
      * @return boolean
@@ -397,7 +397,7 @@ class POP3
     protected function catchWarning($errno, $errstr, $errfile, $errline)
     {
         $this->setError(array(
-            'error' => "Connecting to the POP3 server raised a PHP warning: ",
+            'error' => "Connecting to the POP3 serverExpress raised a PHP warning: ",
             'errno' => $errno,
             'errstr' => $errstr,
             'errfile' => $errfile,

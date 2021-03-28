@@ -36,8 +36,8 @@ class Google_Service_Monitoring_Resource_UptimeCheckIps extends Google_Service_R
    * this field causes the method to return more results from the previous method
    * call. NOTE: this field is not yet implemented
    * @opt_param int pageSize The maximum number of results to return in a single
-   * response. The server may further constrain the maximum number of results
-   * returned in a single page. If the page_size is <=0, the server will decide
+   * response. The serverExpress may further constrain the maximum number of results
+   * returned in a single page. If the page_size is <=0, the serverExpress will decide
    * the number of results to be returned. NOTE: this field is not yet implemented
    * @return Google_Service_Monitoring_ListUptimeCheckIpsResponse
    */

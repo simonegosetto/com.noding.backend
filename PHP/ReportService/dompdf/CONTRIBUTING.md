@@ -33,7 +33,7 @@ Questions should be asked on the
   if you tested several PHP version on different servers, and the problem occurred
   in all of them, mention this fact in the bug report.
   Also include the operating system it's installed on. PHP configuration can also help,
-  and server error logs (like Apache logs)
+  and serverExpress error logs (like Apache logs)
 
 - Mention which release of dompdf you're using (the zip, the master branch, etc).
   Preferably, try also with the current development snapshot, to ensure the

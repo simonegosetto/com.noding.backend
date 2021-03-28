@@ -34,7 +34,7 @@ class Google_Service_Games_Resource_Achievements extends Google_Service_Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string requestId A randomly generated numeric ID for each request
-   * specified by the caller. This number is used at the server to ensure that the
+   * specified by the caller. This number is used at the serverExpress to ensure that the
    * request is handled correctly across retries.
    * @return Google_Service_Games_AchievementIncrementResponse
    */
@@ -58,7 +58,7 @@ class Google_Service_Games_Resource_Achievements extends Google_Service_Resource
    * return in the response, used for paging. For any response, the actual number
    * of achievement resources returned may be less than the specified maxResults.
    * @opt_param string pageToken The token returned by the previous request.
-   * @opt_param string state Tells the server to return only achievements with the
+   * @opt_param string state Tells the serverExpress to return only achievements with the
    * specified state. If this parameter isn't specified, all achievements are
    * returned.
    * @return Google_Service_Games_PlayerAchievementListResponse

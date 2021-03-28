@@ -20,7 +20,7 @@ namespace Monolog;
  * state, and getting it back to a state in which it can receive log records again.
  *
  * This is useful in case you want to avoid logs leaking between two requests or jobs when you
- * have a long running process like a worker or an application server serving multiple requests
+ * have a long running process like a worker or an application serverExpress serving multiple requests
  * in one process.
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>

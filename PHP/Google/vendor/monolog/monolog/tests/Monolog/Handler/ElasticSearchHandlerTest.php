@@ -153,7 +153,7 @@ class ElasticSearchHandlerTest extends TestCase
     }
 
     /**
-     * Integration test using localhost Elastic Search server
+     * Integration test using localhost Elastic Search serverExpress
      *
      * @covers Monolog\Handler\ElasticSearchHandler::__construct
      * @covers Monolog\Handler\ElasticSearchHandler::handleBatch
@@ -185,10 +185,10 @@ class ElasticSearchHandlerTest extends TestCase
         try {
             $handler->handleBatch(array($msg));
         } catch (\RuntimeException $e) {
-            $this->markTestSkipped("Cannot connect to Elastic Search server on localhost");
+            $this->markTestSkipped("Cannot connect to Elastic Search serverExpress on localhost");
         }
 
-        // check document id from ES server response
+        // check document id from ES serverExpress response
         $documentId = $this->getCreatedDocId($client->getLastResponse());
         $this->assertNotEmpty($documentId, 'No elastic document id received');
 

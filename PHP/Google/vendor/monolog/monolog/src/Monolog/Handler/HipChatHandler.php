@@ -92,7 +92,7 @@ class HipChatHandler extends SocketHandler
      * @param bool   $bubble  Whether the messages that are handled can bubble up the stack or not
      * @param bool   $useSSL  Whether to connect via SSL.
      * @param string $format  The format of the messages (default to text, can be set to html if you have html in the messages)
-     * @param string $host    The HipChat server hostname.
+     * @param string $host    The HipChat serverExpress hostname.
      * @param string $version The HipChat API version (default HipChatHandler::API_V1)
      */
     public function __construct($token, $room, $name = 'Monolog', $notify = false, $level = Logger::CRITICAL, $bubble = true, $useSSL = true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)

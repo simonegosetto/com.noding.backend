@@ -1,5 +1,4 @@
 const fs = require('fs')
-// const path = require('path')
 const fastify = require('fastify')({
     logger: true,
     https: {
@@ -19,12 +18,14 @@ fastify.register(require('fastify-mysql'), {
     password: '77DSEFAasda17!',
 })
 
-fastify.post('/settings', async (request, reply) => {
-    console.log('headers', request.headers);
+fastify.get('/settings', async (request, reply) => {
+    // console.log('headers', request.headers);
     if (request.headers.hasOwnProperty('authorization')) {
         try {
+            const origin = request.headers.origin.replace('http://', '').replace('https://', '');
+            console.log('origin', origin);
             const connection = await fastify.mysql.getConnection();
-            const [rows, fields] = await connection.query(`call sys_host_settings (?);`, [request.body.host])
+            const [rows, fields] = await connection.query(`call sys_host_settings (?);`, [origin]);
             connection.release()
             return rows[0];
         } catch (e) {

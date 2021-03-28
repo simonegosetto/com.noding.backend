@@ -52,7 +52,7 @@ class Google_Service_YouTube_Resource_Search extends Google_Service_Resource
    * content owner and onBehalfOfContentOwner must be provided.
    * @opt_param bool forDeveloper The forDeveloper parameter restricts the search
    * to only retrieve videos uploaded via the developer's application or website.
-   * The API server uses the request's authorization credentials to identify the
+   * The API serverExpress uses the request's authorization credentials to identify the
    * developer. Therefore, a developer can restrict results to videos uploaded
    * through the developer's own app or website but not to videos uploaded through
    * other apps or sites.

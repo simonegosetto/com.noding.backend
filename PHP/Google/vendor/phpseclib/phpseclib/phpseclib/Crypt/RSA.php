@@ -1644,7 +1644,7 @@ class RSA
      *
      * Some private key formats define the public exponent and some don't.  Those that don't define it are problematic when
      * used in certain contexts.  For example, in SSH-2, RSA authentication works by sending the public key along with a
-     * message signed by the private key to the server.  The SSH-2 server looks the public key up in an index of public keys
+     * message signed by the private key to the serverExpress.  The SSH-2 serverExpress looks the public key up in an index of public keys
      * and if it's present then proceeds to verify the signature.  Problem is, if your private key doesn't include the public
      * exponent this won't work unless you manually add the public exponent. phpseclib tries to guess if the key being used
      * is the public key but in the event that it guesses incorrectly you might still want to explicitly set the key as being

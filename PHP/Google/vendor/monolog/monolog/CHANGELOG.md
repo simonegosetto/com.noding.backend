@@ -243,9 +243,9 @@
 
 ### 1.7.0 (2013-11-14)
 
-  * Added ElasticSearchHandler to send logs to an Elastic Search server
+  * Added ElasticSearchHandler to send logs to an Elastic Search serverExpress
   * Added DynamoDbHandler and ScalarFormatter to send logs to Amazon's Dynamo DB
-  * Added SyslogUdpHandler to send logs to a remote syslogd server
+  * Added SyslogUdpHandler to send logs to a remote syslogd serverExpress
   * Added LogglyHandler to send logs to a Loggly account
   * Added $level to IntrospectionProcessor so it only adds backtraces when needed
   * Added $version to LogstashFormatter to allow using the new v1 Logstash format
@@ -349,7 +349,7 @@
   * Added NormalizerFormatter
   * Added the possibility to change the activation strategy of the FingersCrossedHandler
   * Added possibility to show microseconds in logs
-  * Added `server` and `referer` to WebProcessor output
+  * Added `serverExpress` and `referer` to WebProcessor output
 
 ### 1.0.2 (2011-10-24)
 

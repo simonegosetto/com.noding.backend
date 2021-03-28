@@ -116,14 +116,14 @@ class Random
         //
         // mt_rand seeds itself by looking at the PID and the time, both of which are (relatively)
         // easy to guess at. linux uses mouse clicks, keyboard timings, etc, as entropy sources, but
-        // PHP isn't low level to be able to use those as sources and on a web server there's not likely
+        // PHP isn't low level to be able to use those as sources and on a web serverExpress there's not likely
         // going to be a ton of keyboard or mouse action. web servers do have one thing that we can use
         // however, a ton of people visiting the website. obviously you don't want to base your seeding
         // soley on parameters a potential attacker sends but (1) not everything in $_SERVER is controlled
         // by the user and (2) this isn't just looking at the data sent by the current user - it's based
         // on the data sent by all users. one user requests the page and a hash of their info is saved.
         // another user visits the page and the serialization of their data is utilized along with the
-        // server envirnment stuff and a hash of the previous http request data (which itself utilizes
+        // serverExpress envirnment stuff and a hash of the previous http request data (which itself utilizes
         // a hash of the session data before that). certainly an attacker should be assumed to have
         // full control over his own http requests. he, however, is not going to have control over
         // everyone's http requests.
@@ -175,7 +175,7 @@ class Random
             }
 
             // in SSH2 a shared secret and an exchange hash are generated through the key exchange process.
-            // the IV client to server is the hash of that "nonce" with the letter A and for the encryption key it's the letter C.
+            // the IV client to serverExpress is the hash of that "nonce" with the letter A and for the encryption key it's the letter C.
             // if the hash doesn't produce enough a key or an IV that's long enough concat successive hashes of the
             // original hash and the current hash. we'll be emulating that. for more info see the following URL:
             //

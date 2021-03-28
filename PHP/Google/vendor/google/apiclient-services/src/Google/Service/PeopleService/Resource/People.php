@@ -148,7 +148,7 @@ class Google_Service_PeopleService_Resource_People extends Google_Service_Resour
    * updates to the latest person. (people.updateContact)
    *
    * @param string $resourceName The resource name for the person, assigned by the
-   * server. An ASCII string with a max length of 27 characters, in the form of
+   * serverExpress. An ASCII string with a max length of 27 characters, in the form of
    * `people/`person_id.
    * @param Google_Service_PeopleService_Person $postBody
    * @param array $optParams Optional parameters.

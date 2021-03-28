@@ -110,7 +110,7 @@ class Google_Service_Books_Resource_Myconfig extends Google_Service_Resource
   }
   /**
    * Sets the settings for the user. If a sub-object is specified, it will
-   * overwrite the existing sub-object stored in the server. Unspecified sub-
+   * overwrite the existing sub-object stored in the serverExpress. Unspecified sub-
    * objects will retain the existing value. (myconfig.updateUserSettings)
    *
    * @param Google_Service_Books_Usersettings $postBody

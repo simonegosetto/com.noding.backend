@@ -51,7 +51,7 @@ class Google_Service_Pubsub_Resource_ProjectsSubscriptions extends Google_Servic
    * subscription already exists, returns `ALREADY_EXISTS`. If the corresponding
    * topic doesn't exist, returns `NOT_FOUND`.
    *
-   * If the name is not provided in the request, the server will assign a random
+   * If the name is not provided in the request, the serverExpress will assign a random
    * name for this subscription on the same project as the topic, conforming to
    * the [resource name
    * format](https://cloud.google.com/pubsub/docs/overview#names). The generated
@@ -204,7 +204,7 @@ class Google_Service_Pubsub_Resource_ProjectsSubscriptions extends Google_Servic
     return $this->call('patch', array($params), "Google_Service_Pubsub_Subscription");
   }
   /**
-   * Pulls messages from the server. The server may return `UNAVAILABLE` if there
+   * Pulls messages from the serverExpress. The serverExpress may return `UNAVAILABLE` if there
    * are too many concurrent pull requests pending for the given subscription.
    * (subscriptions.pull)
    *

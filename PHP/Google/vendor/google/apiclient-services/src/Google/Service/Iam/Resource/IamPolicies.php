@@ -42,7 +42,7 @@ class Google_Service_Iam_Resource_IamPolicies extends Google_Service_Resource
    * the policy instance)   which shall be provided by the caller. Refer to the
    * comments of   google.iam.admin.v1.LintPolicyRequest.context for more details.
    *
-   * The set of applicable validation units is determined by the Cloud IAM server
+   * The set of applicable validation units is determined by the Cloud IAM serverExpress
    * and is not configurable.
    *
    * Regardless of any lint issues or their severities, successful calls to

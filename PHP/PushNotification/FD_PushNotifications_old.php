@@ -8,7 +8,7 @@
 class FD_PushNotifications {
 
 	var $conn;
-    var $validatedRequest;  //Richiesta al server validata si/no
+    var $validatedRequest;  //Richiesta al serverExpress validata si/no
 
     public function FD_PushNotifications($keyRequest=""){
         if($keyRequest == md5_file("http://simonegosetto.it/FD_Components/esatto.mp3")){
@@ -26,7 +26,7 @@ class FD_PushNotifications {
              */
             $conn = mysql_connect($hostname, $username,$password);
             if(!$conn){
-                echo 'Nessuna connessione al server: ' . mysql_error($conn);
+                echo 'Nessuna connessione al serverExpress: ' . mysql_error($conn);
                 return;
             }
 
@@ -35,7 +35,7 @@ class FD_PushNotifications {
             echo "Connesso al db<br>";
         }else{
             $this->validatedRequest=false;
-            echo "Richiesta al server non valida";
+            echo "Richiesta al serverExpress non valida";
         }
     }
 
@@ -139,7 +139,7 @@ class FD_PushNotifications {
 					stream_context_set_option($ctx, 'ssl', 'local_cert', $ios_pem);
 					stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
-					// Open a connection to the APNS server
+					// Open a connection to the APNS serverExpress
 					$fp = stream_socket_client(
 						'ssl://gateway.sandbox.push.apple.com:2195', $err,
 						$errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
@@ -161,7 +161,7 @@ class FD_PushNotifications {
 					// Build the binary notification
 					$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
 
-					// Send it to the server
+					// Send it to the serverExpress
 					$result = fwrite($fp, $msg, strlen($msg));
 
 					if (!$result)
@@ -169,7 +169,7 @@ class FD_PushNotifications {
 					else
 						echo 'Message successfully delivered' . PHP_EOL;
 
-					// Close the connection to the server
+					// Close the connection to the serverExpress
 					fclose($fp);
 
 				}

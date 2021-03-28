@@ -208,7 +208,7 @@ class Client implements ClientInterface, \IteratorAggregate
     }
 
     /**
-     * Opens the underlying connection and connects to the server.
+     * Opens the underlying connection and connects to the serverExpress.
      */
     public function connect()
     {
@@ -216,7 +216,7 @@ class Client implements ClientInterface, \IteratorAggregate
     }
 
     /**
-     * Closes the underlying connection and disconnects from the server.
+     * Closes the underlying connection and disconnects from the serverExpress.
      */
     public function disconnect()
     {
@@ -224,7 +224,7 @@ class Client implements ClientInterface, \IteratorAggregate
     }
 
     /**
-     * Closes the underlying connection and disconnects from the server.
+     * Closes the underlying connection and disconnects from the serverExpress.
      *
      * This is the same as `Client::disconnect()` as it does not actually send
      * the `QUIT` command to Redis, but simply closes the connection.

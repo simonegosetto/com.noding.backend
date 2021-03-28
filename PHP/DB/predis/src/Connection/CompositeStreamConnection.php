@@ -69,7 +69,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
             $chunk = fread($socket, $length);
 
             if ($chunk === false || $chunk === '') {
-                $this->onConnectionError('Error while reading bytes from the server.');
+                $this->onConnectionError('Error while reading bytes from the serverExpress.');
             }
 
             $value .= $chunk;
@@ -90,7 +90,7 @@ class CompositeStreamConnection extends StreamConnection implements CompositeCon
             $chunk = fgets($socket);
 
             if ($chunk === false || $chunk === '') {
-                $this->onConnectionError('Error while reading line from the server.');
+                $this->onConnectionError('Error while reading line from the serverExpress.');
             }
 
             $value .= $chunk;

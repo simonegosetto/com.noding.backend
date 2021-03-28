@@ -14,7 +14,7 @@ require __DIR__.'/shared.php';
 // Predis allows to set Lua scripts as read-only operations for replication.
 // This works for both EVAL and EVALSHA and also for the client-side abstraction
 // built upon them (Predis\Command\ScriptCommand). This example shows a slightly
-// more complex configuration that injects a new script command in the server
+// more complex configuration that injects a new script command in the serverExpress
 // profile used by the new client instance and marks it marks it as a read-only
 // operation for replication so that it will be executed on slaves.
 
@@ -72,7 +72,7 @@ $options = array(
 
 $client = new Predis\Client($parameters, $options);
 
-// Execute the following commands on the master server using redis-cli:
+// Execute the following commands on the master serverExpress using redis-cli:
 // $ ./redis-cli HMSET metavars foo bar hoge piyo
 // $ ./redis-cli HMSET servers master host1 slave host2
 

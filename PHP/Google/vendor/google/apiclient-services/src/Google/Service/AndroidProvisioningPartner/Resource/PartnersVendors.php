@@ -33,7 +33,7 @@ class Google_Service_AndroidProvisioningPartner_Resource_PartnersVendors extends
    * @param array $optParams Optional parameters.
    *
    * @opt_param string pageToken A token identifying a page of results returned by
-   * the server.
+   * the serverExpress.
    * @opt_param int pageSize The maximum number of results to be returned.
    * @return Google_Service_AndroidProvisioningPartner_ListVendorsResponse
    */

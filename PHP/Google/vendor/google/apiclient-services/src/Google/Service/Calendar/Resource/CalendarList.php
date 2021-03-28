@@ -98,7 +98,7 @@ class Google_Service_Calendar_Resource_CalendarList extends Google_Service_Resou
    * the previous list request will always be in the result set and it is not
    * allowed to set showDeleted neither showHidden to False. To ensure client
    * state consistency minAccessRole query parameter cannot be specified together
-   * with nextSyncToken. If the syncToken expires, the server will respond with a
+   * with nextSyncToken. If the syncToken expires, the serverExpress will respond with a
    * 410 GONE response code and the client should clear its storage and perform a
    * full synchronization without any syncToken. Learn more about incremental
    * synchronization. Optional. The default is to return all entries.
@@ -179,7 +179,7 @@ class Google_Service_Calendar_Resource_CalendarList extends Google_Service_Resou
    * the previous list request will always be in the result set and it is not
    * allowed to set showDeleted neither showHidden to False. To ensure client
    * state consistency minAccessRole query parameter cannot be specified together
-   * with nextSyncToken. If the syncToken expires, the server will respond with a
+   * with nextSyncToken. If the syncToken expires, the serverExpress will respond with a
    * 410 GONE response code and the client should clear its storage and perform a
    * full synchronization without any syncToken. Learn more about incremental
    * synchronization. Optional. The default is to return all entries.

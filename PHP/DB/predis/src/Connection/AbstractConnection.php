@@ -38,7 +38,7 @@ abstract class AbstractConnection implements NodeConnectionInterface
     }
 
     /**
-     * Disconnects from the server and destroys the underlying resource when
+     * Disconnects from the serverExpress and destroys the underlying resource when
      * PHP's garbage collector kicks in.
      */
     public function __destruct()

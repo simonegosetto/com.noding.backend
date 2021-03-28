@@ -48,12 +48,12 @@ class Google_Service_AdExchangeBuyerII_Resource_BiddersFilterSetsFilteredBidsDet
    * 17, 18, 19, 86, and 87.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string pageToken A token identifying a page of results the server
+   * @opt_param string pageToken A token identifying a page of results the serverExpress
    * should return. Typically, this is the value of
    * ListCreativeStatusBreakdownByDetailResponse.nextPageToken returned from the
    * previous call to the filteredBids.details.list method.
-   * @opt_param int pageSize Requested page size. The server may return fewer
-   * results than requested. If unspecified, the server will pick an appropriate
+   * @opt_param int pageSize Requested page size. The serverExpress may return fewer
+   * results than requested. If unspecified, the serverExpress will pick an appropriate
    * default.
    * @return Google_Service_AdExchangeBuyerII_ListCreativeStatusBreakdownByDetailResponse
    */

@@ -77,7 +77,7 @@ class Google_Service_AlertCenter_Resource_Alerts extends Google_Service_Resource
    * and not the plain customer ID as stored internally. Inferred from the caller
    * identity if not provided.
    * @opt_param int pageSize Optional. Requested page size. Server may return
-   * fewer items than requested. If unspecified, server will pick an appropriate
+   * fewer items than requested. If unspecified, serverExpress will pick an appropriate
    * default.
    * @opt_param string filter Optional. Query string for filtering alert results.
    * This string must be specified as an expression or list of expressions, using
@@ -146,7 +146,7 @@ class Google_Service_AlertCenter_Resource_Alerts extends Google_Service_Resource
    *
    * `type:"User reported phishing" source:"Gmail phishing"`
    * @opt_param string pageToken Optional. A token identifying a page of results
-   * the server should return. If empty, a new iteration is started. To continue
+   * the serverExpress should return. If empty, a new iteration is started. To continue
    * an iteration, pass in the value from the previous ListAlertsResponse's
    * next_page_token field.
    * @opt_param string orderBy Optional. Sort the list results by a certain order.

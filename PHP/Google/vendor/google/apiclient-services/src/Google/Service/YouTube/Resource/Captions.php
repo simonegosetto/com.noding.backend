@@ -197,7 +197,7 @@ class Google_Service_YouTube_Resource_Captions extends Google_Service_Resource
    * authentication credentials for each individual channel. The actual CMS
    * account that the user authenticates with must be linked to the specified
    * YouTube content owner.
-   * @opt_param bool sync Note: The API server only processes the parameter value
+   * @opt_param bool sync Note: The API serverExpress only processes the parameter value
    * if the request contains an updated caption file.
    *
    * The sync parameter indicates whether YouTube should automatically synchronize

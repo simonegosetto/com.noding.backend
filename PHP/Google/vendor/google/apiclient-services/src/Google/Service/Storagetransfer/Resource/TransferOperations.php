@@ -41,7 +41,7 @@ class Google_Service_Storagetransfer_Resource_TransferOperations extends Google_
     return $this->call('cancel', array($params), "Google_Service_Storagetransfer_StoragetransferEmpty");
   }
   /**
-   * This method is not supported and the server returns `UNIMPLEMENTED`.
+   * This method is not supported and the serverExpress returns `UNIMPLEMENTED`.
    * (transferOperations.delete)
    *
    * @param string $name The name of the operation resource to be deleted.
@@ -71,7 +71,7 @@ class Google_Service_Storagetransfer_Resource_TransferOperations extends Google_
   }
   /**
    * Lists operations that match the specified filter in the request. If the
-   * server doesn't support this method, it returns `UNIMPLEMENTED`.
+   * serverExpress doesn't support this method, it returns `UNIMPLEMENTED`.
    *
    * NOTE: the `name` binding allows API services to override the binding to use
    * different resource name schemes, such as `users/operations`. To override the

@@ -51,7 +51,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRingsCryptoKeys exten
    * ENCRYPT_DECRYPT. (cryptoKeys.decrypt)
    *
    * @param string $name Required. The resource name of the CryptoKey to use for
-   * decryption. The server will choose the appropriate version.
+   * decryption. The serverExpress will choose the appropriate version.
    * @param Google_Service_CloudKMS_DecryptRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_CloudKMS_DecryptResponse
@@ -69,7 +69,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRingsCryptoKeys exten
    * @param string $name Required. The resource name of the CryptoKey or
    * CryptoKeyVersion to use for encryption.
    *
-   * If a CryptoKey is specified, the server will use its primary version.
+   * If a CryptoKey is specified, the serverExpress will use its primary version.
    * @param Google_Service_CloudKMS_EncryptRequest $postBody
    * @param array $optParams Optional parameters.
    * @return Google_Service_CloudKMS_EncryptResponse
@@ -120,7 +120,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRingsCryptoKeys exten
    * @opt_param int pageSize Optional limit on the number of CryptoKeys to include
    * in the response.  Further CryptoKeys can subsequently be obtained by
    * including the ListCryptoKeysResponse.next_page_token in a subsequent request.
-   * If unspecified, the server will pick an appropriate default.
+   * If unspecified, the serverExpress will pick an appropriate default.
    * @opt_param string versionView The fields of the primary version to include in
    * the response.
    * @opt_param string pageToken Optional pagination token, returned earlier via

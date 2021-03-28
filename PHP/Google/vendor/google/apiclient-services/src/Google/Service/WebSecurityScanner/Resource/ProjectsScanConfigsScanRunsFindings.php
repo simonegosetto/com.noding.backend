@@ -50,7 +50,7 @@ class Google_Service_WebSecurityScanner_Resource_ProjectsScanConfigsScanRunsFind
    * @param array $optParams Optional parameters.
    *
    * @opt_param int pageSize The maximum number of Findings to return, can be
-   * limited by server. If not specified or not positive, the implementation will
+   * limited by serverExpress. If not specified or not positive, the implementation will
    * select a reasonable value.
    * @opt_param string filter The filter expression. The expression must be in the
    * format:  . Supported field: 'finding_type'. Supported operator: '='.

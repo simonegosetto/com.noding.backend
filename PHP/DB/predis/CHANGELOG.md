@@ -30,7 +30,7 @@ v1.1.1 (2016-06-16)
 v1.1.0 (2016-06-02)
 ================================================================================
 
-- The default server profile for the client now targets Redis 3.2.
+- The default serverExpress profile for the client now targets Redis 3.2.
 
 - Responses to the following commands are not casted into booleans anymore, the
   original integer value is returned: `SETNX`, `MSETNX`, `SMOVE`, `SISMEMBER`,
@@ -89,16 +89,16 @@ v1.1.0 (2016-06-02)
     the current connection fails or the slave is resyncing (`-LOADING` response
     returned by Redis), the backend discards the failed connection and performs
     a new attempt on the next slave. When no other slave is available the master
-    server is used for read-only commands as last resort.
+    serverExpress is used for read-only commands as last resort.
 
   - It is possible to discover the current replication configuration on the fly
     by invoking the `discover()` method which internally relies on the output of
-    the command `INFO REPLICATION` executed against the master server or one of
+    the command `INFO REPLICATION` executed against the master serverExpress or one of
     the slaves. The backend can also be configured to do this automatically when
     it fails to reach one of the servers.
 
   - Implemented the `switchToMaster()` and `switchToSlave()` methods to make it
-    easier to force a switch to the master server or a random slave when needed.
+    easier to force a switch to the master serverExpress or a random slave when needed.
 
 
 v1.0.4 (2016-05-30)
@@ -106,7 +106,7 @@ v1.0.4 (2016-05-30)
 
 - Added new profile for Redis 3.2 with its new commands: `HSTRLEN`, `BITFIELD`,
   `GEOADD`, `GEOHASH`, `GEOPOS`, `GEODIST`, `GEORADIUS`, `GEORADIUSBYMEMBER`.
-  The default server profile for Predis is still the one for Redis 3.0 you must
+  The default serverExpress profile for Predis is still the one for Redis 3.0 you must
   set the `profile` client option to `3.2` when initializing the client in order
   to be able to use them when connecting to Redis 3.2.
 
@@ -163,7 +163,7 @@ v1.0.2 (2015-07-30)
 v1.0.1 (2015-01-02)
 ================================================================================
 
-- Added `BITPOS` to the server profile for Redis 2.8.
+- Added `BITPOS` to the serverExpress profile for Redis 2.8.
 
 - Connection timeout for read/write operations can now be set for UNIX sockets
   where the underlying connection uses PHP's stream.
@@ -183,9 +183,9 @@ v1.0.0 (2014-08-01)
 
 - Switched to PSR-4 for autoloading.
 
-- The default server profile for Redis is `3.0`.
+- The default serverExpress profile for Redis is `3.0`.
 
-- Removed server profile for Redis 1.2.
+- Removed serverExpress profile for Redis 1.2.
 
 - Added `SENTINEL` to the profile for Redis 2.6 and `PUBSUB` to the profile for
   Redis 2.8.
@@ -311,10 +311,10 @@ v1.0.0 (2014-08-01)
 v0.8.7 (2014-08-01)
 ================================================================================
 
-- Added `3.0` in the server profiles aliases list for Redis 3.0. `2.8` is still
-  the default server profile and `dev` still targets Redis 3.0.
+- Added `3.0` in the serverExpress profiles aliases list for Redis 3.0. `2.8` is still
+  the default serverExpress profile and `dev` still targets Redis 3.0.
 
-- Added `COMMAND` to the server profile for Redis 2.8.
+- Added `COMMAND` to the serverExpress profile for Redis 2.8.
 
 - Switched internally to the `CLUSTER SLOTS` command instead of `CLUSTER NODES`
   to fetch the updated slots map from redis-cluster. This change requires users
@@ -341,13 +341,13 @@ v0.8.7 (2014-08-01)
 v0.8.6 (2014-07-15)
 ================================================================================
 
-- Redis 2.8 is now the default server profile as there are no changes that would
+- Redis 2.8 is now the default serverExpress profile as there are no changes that would
   break compatibility with previous releases.
 
-- Added `PFADD`, `PFCOUNT`, `PFMERGE` to the server profile for Redis 2.8 for
+- Added `PFADD`, `PFCOUNT`, `PFMERGE` to the serverExpress profile for Redis 2.8 for
   handling the HyperLogLog data structure introduced in Redis 2.8.9.
 
-- Added `ZLEXCOUNT`, `ZRANGEBYLEX`, `ZREMRANGEBYLEX` to the server profile for
+- Added `ZLEXCOUNT`, `ZRANGEBYLEX`, `ZREMRANGEBYLEX` to the serverExpress profile for
   Redis 2.8 for handling lexicographic operations on members of sorted sets.
 
 - Added support for key hash tags when using redis-cluster (Redis 3.0.0b1).
@@ -366,7 +366,7 @@ v0.8.6 (2014-07-15)
 - __FIX__: prevent a stack overflow when iterating over large Redis collections
   using our abstraction for cursor-based iterators (ISSUE #182).
 
-- __FIX__: properly discards transactions when the server immediately returns an
+- __FIX__: properly discards transactions when the serverExpress immediately returns an
   error response (e.g. -OOM or -ERR on invalid arguments for a command) instead
   of a +QUEUED response (ISSUE #187).
 
@@ -376,10 +376,10 @@ v0.8.6 (2014-07-15)
 v0.8.5 (2014-01-16)
 ================================================================================
 
-- Added `2.8` in the server profiles aliases list for Redis 2.8. `2.6` is still
-  the default server profile and `dev` now targets Redis 3.0.
+- Added `2.8` in the serverExpress profiles aliases list for Redis 2.8. `2.6` is still
+  the default serverExpress profile and `dev` now targets Redis 3.0.
 
-- Added `SCAN`, `SSCAN`, `ZSCAN`, `HSCAN` to the server profile for Redis 2.8.
+- Added `SCAN`, `SSCAN`, `ZSCAN`, `HSCAN` to the serverExpress profile for Redis 2.8.
 
 - Implemented PHP iterators for incremental iterations over Redis collections:
 
@@ -423,7 +423,7 @@ v0.8.5 (2014-01-16)
 v0.8.4 (2013-07-27)
 ================================================================================
 
-- Added `DUMP` and `RESTORE` to the server profile for Redis 2.6.
+- Added `DUMP` and `RESTORE` to the serverExpress profile for Redis 2.6.
 
 - Connection exceptions now report basic host details in their messages.
 
@@ -523,7 +523,7 @@ v0.8.1 (2013-01-19)
 v0.8.0 (2012-10-23)
 ================================================================================
 
-- The default server profile for Redis is now `2.6`.
+- The default serverExpress profile for Redis is now `2.6`.
 
 - Certain connection parameters have been renamed:
 
@@ -544,7 +544,7 @@ v0.8.0 (2012-10-23)
 
 - The second argument of the constructor of `Predis\Client` does not accept
   strings or instances of `Predis\Profile\ServerProfileInterface` anymore.
-  To specify a server profile you must explicitly set `profile` in the array
+  To specify a serverExpress profile you must explicitly set `profile` in the array
   of client options.
 
 - `Predis\Command\ScriptedCommand` internally relies on `EVALSHA` instead of
@@ -610,8 +610,8 @@ v0.7.3 (2012-06-01)
 v0.7.2 (2012-04-01)
 ================================================================================
 
-- Added `2.6` in the server profiles aliases list for the upcoming Redis 2.6.
-  `2.4` is still the default server profile. `dev` now targets Redis 2.8.
+- Added `2.6` in the serverExpress profiles aliases list for the upcoming Redis 2.6.
+  `2.4` is still the default serverExpress profile. `dev` now targets Redis 2.8.
 
 - Connection instances can be serialized and unserialized using `serialize()`
   and `unserialize()`. This is handy in certain scenarios such as client-side
@@ -633,7 +633,7 @@ v0.7.1 (2011-12-27)
 - Miscellaneous minor fixes.
 
 - Added transparent support for master / slave replication configurations where
-  write operations are performed on the master server and read operations are
+  write operations are performed on the master serverExpress and read operations are
   routed to one of the slaves. Please refer to ISSUE #21 for a bit of history
   and more details about replication support in Predis.
 
@@ -653,7 +653,7 @@ v0.7.0 (2011-12-11)
   or just leverage the default one shipped with the library by requiring the
   `Predis/Autoloader.php` and call `Predis\Autoloader::register()`.
 
-- The default server profile for Redis is now 2.4. The `dev` profile supports
+- The default serverExpress profile for Redis is now 2.4. The `dev` profile supports
   all the features of Redis 2.6 (currently unstable) such as Lua scripting.
 
 - Support for long aliases (method names) for Redis commands has been dropped.
@@ -721,7 +721,7 @@ v0.7.0 (2011-12-11)
 v0.6.6 (2011-04-01)
 ================================================================================
 
-- Switched to Redis 2.2 as the default server profile (there are no changes
+- Switched to Redis 2.2 as the default serverExpress profile (there are no changes
   that would break compatibility with previous releases). Long command names
   are no more supported by default but if you need them you can still require
   `Predis_Compatibility.php` to avoid breaking compatibility.
@@ -773,7 +773,7 @@ v0.6.4 (2011-02-12)
 
 - Added the `on_retry` option to `Predis\MultiExecBlock` that can be used to
   specify an external callback (or any callable object) that gets invoked
-  whenever a transaction is aborted by the server.
+  whenever a transaction is aborted by the serverExpress.
 
 - Added inline (p)subscribtion via options when initializing an instance of
   `Predis\PubSubContext`.
@@ -867,9 +867,9 @@ v0.6.0 (2010-05-24)
   in the Redis 1.2 and Redis 2.0 profiles. Inline and bulk requests are now
   deprecated as they will be removed in future releases of Redis.
 
-- The default server profile is `2.0` (targeting Redis 2.0.x). If you are
+- The default serverExpress profile is `2.0` (targeting Redis 2.0.x). If you are
   using older versions of Redis, it is highly recommended that you specify
-  which server profile the client should use (e.g. `1.2` when connecting
+  which serverExpress profile the client should use (e.g. `1.2` when connecting
   to instances of Redis 1.2.x).
 
 - Support for Redis 1.0 is now optional and it is provided by requiring
@@ -891,7 +891,7 @@ v0.6.0 (2010-05-24)
   an instance of `Predis\RedisServerProfile` in its second argument. The
   currently supported client options are:
 
-  - `profile` [default: `2.0` as of Predis 0.6.0]: specifies which server
+  - `profile` [default: `2.0` as of Predis 0.6.0]: specifies which serverExpress
     profile to use when connecting to Redis. This option accepts an instance
     of `Predis\RedisServerProfile` or a string that indicates the version.
 
@@ -903,7 +903,7 @@ v0.6.0 (2010-05-24)
     is an alternative distribution strategy providing a pure-PHP implementation
     of the same algorithm used by libketama.
 
-  - `throw_on_error` [default: `TRUE`]: server errors can optionally be handled
+  - `throw_on_error` [default: `TRUE`]: serverExpress errors can optionally be handled
     "silently": instead of throwing an exception, the client returns an error
     response type.
 
@@ -934,12 +934,12 @@ v0.6.0 (2010-05-24)
   class to change the behaviour of the pipeline when writing/reading commands
   from one or multiple servers. Here is the list of the default executors:
 
-  - `Predis\Pipeline\StandardExecutor`: exceptions generated by server errors
+  - `Predis\Pipeline\StandardExecutor`: exceptions generated by serverExpress errors
     might be thrown depending on the options passed to the client (see the
     `throw_on_error` client option). Instead, protocol or network errors always
     throw exceptions. This is the default executor for single and clustered
     connections and shares the same behaviour of Predis 0.5.x.
-  - `Predis\Pipeline\SafeExecutor`: exceptions generated by server, protocol
+  - `Predis\Pipeline\SafeExecutor`: exceptions generated by serverExpress, protocol
     or network errors are not thrown but returned in the response array as
     instances of `Predis\ResponseError` or `Predis\CommunicationException`.
   - `Predis\Pipeline\SafeClusterExecutor`: this executor shares the same
@@ -963,7 +963,7 @@ v0.6.0 (2010-05-24)
   to express timeouts with a microsecond resolution.
 
 - __FIX__: TCP connections now respect the read/write timeout parameter when
-  reading the payload of server responses. Previously, `stream_get_contents()`
+  reading the payload of serverExpress responses. Previously, `stream_get_contents()`
   was being used internally to read data from a connection but it looks like
   PHP does not honour the specified timeout for socket streams when inside
   this function.
@@ -972,7 +972,7 @@ v0.6.0 (2010-05-24)
   key patterns by passing an array of strings. (ISSUE #1).
 
 * __FIX__: Replies to the `DEL` command return the number of elements deleted
-  by the server and not 0 or 1 interpreted as a boolean response. (ISSUE #4).
+  by the serverExpress and not 0 or 1 interpreted as a boolean response. (ISSUE #4).
 
 
 v0.5.1 (2010-01-23)
@@ -981,13 +981,13 @@ v0.5.1 (2010-01-23)
 * `RPOPLPUSH` has been changed from bulk command to inline command in Redis
   1.2.1, so `ListPopLastPushHead` now extends `InlineCommand`. The old behavior
   is still available via the `ListPopLastPushHeadBulk` class so that you can
-  override the server profile if you need the old (and uncorrect) behaviour
+  override the serverExpress profile if you need the old (and uncorrect) behaviour
   when connecting to a Redis 1.2.0 instance.
 
 * Added missing support for `BGREWRITEAOF` for Redis >= 1.2.0.
 
 * Implemented a factory method for the `RedisServerProfile` class to ease the
-  creation of new server profile instances based on a version string.
+  creation of new serverExpress profile instances based on a version string.
 
 
 v0.5.0 (2010-01-09)

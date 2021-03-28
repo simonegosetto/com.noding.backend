@@ -19,7 +19,7 @@
 
 /**
  * PHPMailer RFC821 SMTP email transport class.
- * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP server.
+ * Implements RFC 821 SMTP commands and provides some utility methods for sending mail to an SMTP serverExpress.
  * @package PHPMailer
  * @author Chris Ryan
  * @author Marcus Bointon <phpmailer@synchromedia.co.uk>
@@ -56,17 +56,17 @@ class SMTP
     const DEBUG_OFF = 0;
 
     /**
-     * Debug level to show client -> server messages
+     * Debug level to show client -> serverExpress messages
      */
     const DEBUG_CLIENT = 1;
 
     /**
-     * Debug level to show client -> server and server -> client messages
+     * Debug level to show client -> serverExpress and serverExpress -> client messages
      */
     const DEBUG_SERVER = 2;
 
     /**
-     * Debug level to show connection status, client -> server and server -> client messages
+     * Debug level to show connection status, client -> serverExpress and serverExpress -> client messages
      */
     const DEBUG_CONNECTION = 3;
 
@@ -84,7 +84,7 @@ class SMTP
     public $Version = '5.2.15';
 
     /**
-     * SMTP server port number.
+     * SMTP serverExpress port number.
      * @var integer
      * @deprecated This is only ever used as a default value, so use the `DEFAULT_SMTP_PORT` constant instead
      * @see SMTP::DEFAULT_SMTP_PORT
@@ -104,7 +104,7 @@ class SMTP
      * Options:
      * * self::DEBUG_OFF (`0`) No debug output, default
      * * self::DEBUG_CLIENT (`1`) Client commands
-     * * self::DEBUG_SERVER (`2`) Client commands and server responses
+     * * self::DEBUG_SERVER (`2`) Client commands and serverExpress responses
      * * self::DEBUG_CONNECTION (`3`) As DEBUG_SERVER plus connection status
      * * self::DEBUG_LOWLEVEL (`4`) Low-level data output, all messages
      * @var integer
@@ -151,7 +151,7 @@ class SMTP
     public $Timelimit = 300;
 
     /**
-     * The socket for the server connection.
+     * The socket for the serverExpress connection.
      * @var resource
      */
     protected $smtp_conn;
@@ -168,7 +168,7 @@ class SMTP
     );
 
     /**
-     * The reply the server sent to us for HELO.
+     * The reply the serverExpress sent to us for HELO.
      * If null, no HELO string has yet been received.
      * @var string|null
      */
@@ -178,7 +178,7 @@ class SMTP
      * The set of SMTP extensions sent in reply to EHLO command.
      * Indexes of the array are extension names.
      * Value at index 'HELO' or 'EHLO' (according to command that was sent)
-     * represents the server name. In case of HELO it is the only element of the array.
+     * represents the serverExpress name. In case of HELO it is the only element of the array.
      * Other values can be boolean TRUE or an array containing extension options.
      * If null, no HELO/EHLO string has yet been received.
      * @var array|null
@@ -186,7 +186,7 @@ class SMTP
     protected $server_caps = null;
 
     /**
-     * The most recent reply received from the server.
+     * The most recent reply received from the serverExpress.
      * @var string
      */
     protected $last_reply = '';
@@ -236,8 +236,8 @@ class SMTP
     }
 
     /**
-     * Connect to an SMTP server.
-     * @param string $host SMTP server IP or host name
+     * Connect to an SMTP serverExpress.
+     * @param string $host SMTP serverExpress IP or host name
      * @param integer $port The port number to connect to
      * @param integer $timeout How long to wait for the connection to open
      * @param array $options An array of options for stream_context_create()
@@ -257,13 +257,13 @@ class SMTP
         // Make sure we are __not__ connected
         if ($this->connected()) {
             // Already connected, generate error
-            $this->setError('Already connected to a server');
+            $this->setError('Already connected to a serverExpress');
             return false;
         }
         if (empty($port)) {
             $port = self::DEFAULT_SMTP_PORT;
         }
-        // Connect to the SMTP server
+        // Connect to the SMTP serverExpress
         $this->edebug(
             "Connection: opening to $host:$port, timeout=$timeout, options=".var_export($options, true),
             self::DEBUG_CONNECTION
@@ -298,7 +298,7 @@ class SMTP
         // Verify we connected properly
         if (!is_resource($this->smtp_conn)) {
             $this->setError(
-                'Failed to connect to server',
+                'Failed to connect to serverExpress',
                 $errno,
                 $errstr
             );
@@ -310,7 +310,7 @@ class SMTP
             return false;
         }
         $this->edebug('Connection: opened', self::DEBUG_CONNECTION);
-        // SMTP server can take longer to respond, give longer timeout for first read
+        // SMTP serverExpress can take longer to respond, give longer timeout for first read
         // Windows does not have support for this timeout function
         if (substr(PHP_OS, 0, 3) != 'WIN') {
             $max = ini_get('max_execution_time');
@@ -395,7 +395,7 @@ class SMTP
 
             self::edebug('Auth method requested: ' . ($authtype ? $authtype : 'UNKNOWN'), self::DEBUG_LOWLEVEL);
             self::edebug(
-                'Auth methods available on the server: ' . implode(',', $this->server_caps['AUTH']),
+                'Auth methods available on the serverExpress: ' . implode(',', $this->server_caps['AUTH']),
                 self::DEBUG_LOWLEVEL
             );
 
@@ -414,7 +414,7 @@ class SMTP
             }
 
             if (!in_array($authtype, $this->server_caps['AUTH'])) {
-                $this->setError("The requested authentication method \"$authtype\" is not supported by the server");
+                $this->setError("The requested authentication method \"$authtype\" is not supported by the serverExpress");
                 return false;
             }
         } elseif (empty($authtype)) {
@@ -612,7 +612,7 @@ class SMTP
 
     /**
      * Send an SMTP DATA command.
-     * Issues a data command and sends the msg_data to the server,
+     * Issues a data command and sends the msg_data to the serverExpress,
      * finializing the mail transaction. $msg_data is the message
      * that is to be send with the headers. Each header needs to be
      * on a single line followed by a <CRLF> with the message headers
@@ -629,7 +629,7 @@ class SMTP
             return false;
         }
 
-        /* The server is ready to accept data!
+        /* The serverExpress is ready to accept data!
          * According to rfc821 we should not send more than 1000 characters on a single line (including the CRLF)
          * so we will break the data up into lines by \r and/or \n then if needed we will break each of those into
          * smaller lines to fit within the limit.
@@ -681,7 +681,7 @@ class SMTP
             }
             $lines_out[] = $line;
 
-            //Send the lines to the server
+            //Send the lines to the serverExpress
             foreach ($lines_out as $line_out) {
                 //RFC2821 section 4.5.2
                 if (!empty($line_out) and $line_out[0] == '.') {
@@ -703,8 +703,8 @@ class SMTP
 
     /**
      * Send an SMTP HELO or EHLO command.
-     * Used to identify the sending server to the receiving server.
-     * This makes sure that client and server are in a known state.
+     * Used to identify the sending serverExpress to the receiving serverExpress.
+     * This makes sure that client and serverExpress are in a known state.
      * Implements RFC 821: HELO <SP> <domain> <CRLF>
      * and RFC 2821 EHLO.
      * @param string $host The host name or IP to connect to
@@ -739,8 +739,8 @@ class SMTP
     }
 
     /**
-     * Parse a reply to HELO/EHLO command to discover server extensions.
-     * In case of HELO, the only parameter that can be discovered is a server name.
+     * Parse a reply to HELO/EHLO command to discover serverExpress extensions.
+     * In case of HELO, the only parameter that can be discovered is a serverExpress name.
      * @access protected
      * @param string $type - 'HELO' or 'EHLO'
      */
@@ -851,8 +851,8 @@ class SMTP
     }
 
     /**
-     * Send a command to an SMTP server and check its return code.
-     * @param string $command The command name - not sent to the server
+     * Send a command to an SMTP serverExpress and check its return code.
+     * @param string $command The command name - not sent to the serverExpress
      * @param string $commandstring The actual command to send
      * @param integer|array $expect One or more expected integer success codes
      * @access protected
@@ -967,10 +967,10 @@ class SMTP
     }
 
     /**
-     * Send raw data to the server.
+     * Send raw data to the serverExpress.
      * @param string $data The data to send
      * @access public
-     * @return integer|boolean The number of bytes sent to the server or false on error
+     * @return integer|boolean The number of bytes sent to the serverExpress or false on error
      */
     public function client_send($data)
     {
@@ -989,7 +989,7 @@ class SMTP
     }
 
     /**
-     * Get SMTP extensions available on the server
+     * Get SMTP extensions available on the serverExpress
      * @access public
      * @return array|null
      */
@@ -1003,11 +1003,11 @@ class SMTP
      * The method works in three ways, dependent on argument value and current state
      *   1. HELO/EHLO was not sent - returns null and set up $this->error
      *   2. HELO was sent
-     *     $name = 'HELO': returns server name
+     *     $name = 'HELO': returns serverExpress name
      *     $name = 'EHLO': returns boolean false
      *     $name = any string: returns null and set up $this->error
      *   3. EHLO was sent
-     *     $name = 'HELO'|'EHLO': returns server name
+     *     $name = 'HELO'|'EHLO': returns serverExpress name
      *     $name = any string: if extension $name exists, returns boolean True
      *       or its options. Otherwise returns boolean False
      * In other words, one can use this method to detect 3 conditions:
@@ -1032,7 +1032,7 @@ class SMTP
             if ($name == 'EHLO' || array_key_exists('EHLO', $this->server_caps)) {
                 return false;
             }
-            $this->setError('HELO handshake was used. Client knows nothing about server extensions');
+            $this->setError('HELO handshake was used. Client knows nothing about serverExpress extensions');
             return null;
         }
 
@@ -1040,7 +1040,7 @@ class SMTP
     }
 
     /**
-     * Get the last reply from the server.
+     * Get the last reply from the serverExpress.
      * @access public
      * @return string
      */
@@ -1050,7 +1050,7 @@ class SMTP
     }
 
     /**
-     * Read the SMTP server's response.
+     * Read the SMTP serverExpress's response.
      * Either before eof or socket timeout occurs on the operation.
      * With SMTP we can tell if we have more lines to read if the
      * 4th character is '-' symbol. If it is a space then we don't

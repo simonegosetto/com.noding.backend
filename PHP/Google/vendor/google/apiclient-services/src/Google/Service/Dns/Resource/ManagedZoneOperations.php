@@ -56,7 +56,7 @@ class Google_Service_Dns_Resource_ManagedZoneOperations extends Google_Service_R
    * @param array $optParams Optional parameters.
    *
    * @opt_param int maxResults Optional. Maximum number of results to be returned.
-   * If unspecified, the server will decide how many results to return.
+   * If unspecified, the serverExpress will decide how many results to return.
    * @opt_param string pageToken Optional. A tag returned by a previous list
    * request that was truncated. Use this parameter to continue a previous list
    * request.

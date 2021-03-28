@@ -81,7 +81,7 @@ class Google_Service_SQLAdmin_Resource_SslCerts extends Google_Service_Resource
   }
   /**
    * Creates an SSL certificate and returns it along with the private key and
-   * server certificate authority. The new certificate will not be usable until
+   * serverExpress certificate authority. The new certificate will not be usable until
    * the instance is restarted. (sslCerts.insert)
    *
    * @param string $project Project ID of the project that contains the instance.

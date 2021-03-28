@@ -27,7 +27,7 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
 {
   /**
    * Mark the proposal as accepted at the given revision number. If the number
-   * does not match the server's revision number an `ABORTED` error message will
+   * does not match the serverExpress's revision number an `ABORTED` error message will
    * be returned. This call updates the proposal_state from `PROPOSED` to
    * `BUYER_ACCEPTED`, or from `SELLER_ACCEPTED` to `FINALIZED`.
    * (proposals.accept)
@@ -46,7 +46,7 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
   }
   /**
    * Create a new note and attach it to the proposal. The note is assigned a
-   * unique ID by the server. The proposal revision number will not increase when
+   * unique ID by the serverExpress. The proposal revision number will not increase when
    * associated with a new note. (proposals.addNote)
    *
    * @param string $accountId Account ID of the buyer.
@@ -83,7 +83,7 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
    * method is called by the buyer when the line items have been created on their
    * end for a finalized proposal and all the required creatives have been
    * uploaded using the creatives API. This call updates the `is_setup_completed`
-   * bit on the proposal and also notifies the seller. The server will advance the
+   * bit on the proposal and also notifies the seller. The serverExpress will advance the
    * revision number of the most recent proposal. (proposals.completeSetup)
    *
    * @param string $accountId Account ID of the buyer.
@@ -100,7 +100,7 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
   }
   /**
    * Create the given proposal. Each created proposal and any deals it contains
-   * are assigned a unique ID by the server. (proposals.create)
+   * are assigned a unique ID by the serverExpress. (proposals.create)
    *
    * @param string $accountId Account ID of the buyer.
    * @param Google_Service_AdExchangeBuyerII_Proposal $postBody
@@ -139,8 +139,8 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
    * @param string $accountId Account ID of the buyer.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int pageSize Requested page size. The server may return fewer
-   * results than requested. If unspecified, the server will pick an appropriate
+   * @opt_param int pageSize Requested page size. The serverExpress may return fewer
+   * results than requested. If unspecified, the serverExpress will pick an appropriate
    * default.
    * @opt_param string filterSyntax Syntax the filter is written in. Current
    * implementation defaults to PQL but in the future it will be LIST_FILTER.
@@ -205,13 +205,13 @@ class Google_Service_AdExchangeBuyerII_Resource_AccountsProposals extends Google
     return $this->call('resume', array($params), "Google_Service_AdExchangeBuyerII_Proposal");
   }
   /**
-   * Update the given proposal at the client known revision number. If the server
+   * Update the given proposal at the client known revision number. If the serverExpress
    * revision has advanced since the passed-in `proposal.proposal_revision`, an
    * `ABORTED` error message will be returned. Only the buyer-modifiable fields of
    * the proposal will be updated.
    *
    * Note that the deals in the proposal will be updated to match the passed-in
-   * copy. If a passed-in deal does not have a `deal_id`, the server will assign a
+   * copy. If a passed-in deal does not have a `deal_id`, the serverExpress will assign a
    * new unique ID and create the deal. If passed-in deal has a `deal_id`, it will
    * be updated to match the passed-in copy. Any existing deals not present in the
    * passed-in proposal will be deleted. It is an error to pass in a deal with a

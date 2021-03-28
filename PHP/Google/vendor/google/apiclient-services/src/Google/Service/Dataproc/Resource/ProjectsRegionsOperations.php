@@ -26,9 +26,9 @@
 class Google_Service_Dataproc_Resource_ProjectsRegionsOperations extends Google_Service_Resource
 {
   /**
-   * Starts asynchronous cancellation on a long-running operation. The server
+   * Starts asynchronous cancellation on a long-running operation. The serverExpress
    * makes a best effort to cancel the operation, but success is not guaranteed.
-   * If the server doesn't support this method, it returns
+   * If the serverExpress doesn't support this method, it returns
    * google.rpc.Code.UNIMPLEMENTED. Clients can use Operations.GetOperation or
    * other methods to check whether the cancellation succeeded or whether the
    * operation completed despite cancellation. On successful cancellation, the
@@ -49,7 +49,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsOperations extends Google_
   /**
    * Deletes a long-running operation. This method indicates that the client is no
    * longer interested in the operation result. It does not cancel the operation.
-   * If the server doesn't support this method, it returns
+   * If the serverExpress doesn't support this method, it returns
    * google.rpc.Code.UNIMPLEMENTED. (operations.delete)
    *
    * @param string $name The name of the operation resource to be deleted.
@@ -96,7 +96,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsOperations extends Google_
   }
   /**
    * Lists operations that match the specified filter in the request. If the
-   * server doesn't support this method, it returns UNIMPLEMENTED.NOTE: the name
+   * serverExpress doesn't support this method, it returns UNIMPLEMENTED.NOTE: the name
    * binding allows API services to override the binding to use different resource
    * name schemes, such as users/operations. To override the binding, API services
    * can add a binding such as "/v1/{name=users}/operations" to their service

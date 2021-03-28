@@ -177,7 +177,7 @@ use Predis\Profile\ProfileInterface;
 interface ClientInterface
 {
     /**
-     * Returns the server profile used by the client.
+     * Returns the serverExpress profile used by the client.
      *
      * @return ProfileInterface
      */
@@ -191,12 +191,12 @@ interface ClientInterface
     public function getOptions();
 
     /**
-     * Opens the underlying connection to the server.
+     * Opens the underlying connection to the serverExpress.
      */
     public function connect();
 
     /**
-     * Closes the underlying connection from the server.
+     * Closes the underlying connection from the serverExpress.
      */
     public function disconnect();
 
@@ -228,7 +228,7 @@ interface ClientInterface
 
     /**
      * Creates a Redis command with the specified arguments and sends a request
-     * to the server.
+     * to the serverExpress.
      *
      * @param string $method    Command ID.
      * @param array  $arguments Arguments for the command.

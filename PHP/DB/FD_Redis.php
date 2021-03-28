@@ -21,7 +21,7 @@ final class FD_Redis
                 $this->redis = new PredisClient();
             else 
             {
-                //connessione a server remoto
+                //connessione a serverExpress remoto
                 $redis = new PredisClient(array(
                     "scheme" => $scheme,
                     "host" => $host, //"153.202.124.2",

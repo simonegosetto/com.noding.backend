@@ -17,7 +17,7 @@ use Monolog\Logger;
 use Raven_Client;
 
 /**
- * Handler to send messages to a Sentry (https://github.com/getsentry/sentry) server
+ * Handler to send messages to a Sentry (https://github.com/getsentry/sentry) serverExpress
  * using sentry-php (https://github.com/getsentry/sentry-php)
  *
  * @author Marc Abramowitz <marc@marc-abramowitz.com>
@@ -45,7 +45,7 @@ class RavenHandler extends AbstractProcessingHandler
     protected $release;
 
     /**
-     * @var Raven_Client the client object that sends the message to the server
+     * @var Raven_Client the client object that sends the message to the serverExpress
      */
     protected $ravenClient;
 

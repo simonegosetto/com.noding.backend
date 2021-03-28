@@ -36,7 +36,7 @@ class Google_Service_Partners_Resource_Analytics extends Google_Service_Resource
    * @opt_param string requestMetadata.partnersSessionId Google Partners session
    * ID.
    * @opt_param string pageToken A token identifying a page of results that the
-   * server returns. Typically, this is the value of
+   * serverExpress returns. Typically, this is the value of
    * `ListAnalyticsResponse.next_page_token` returned from the previous call to
    * ListAnalytics. Will be a date string in `YYYY-MM-DD` format representing the
    * end date of the date range of results to return. If unspecified or set to "",

@@ -33,7 +33,7 @@ final class FD_MsSQL extends FD_DB
         $this->conn = mssql_connect($this->hostname, $this->username, $this->password);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server: ' . mssql_get_last_message   ().PHP_EOL;
+            $this->lastError = 'Nessuna connessione al serverExpress: ' . mssql_get_last_message   ().PHP_EOL;
             $this->connected = false;
             return false;
         }

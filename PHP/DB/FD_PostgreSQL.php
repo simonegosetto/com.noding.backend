@@ -39,7 +39,7 @@ final class FD_PostgreSQL extends FD_DB
         $this->conn = pg_connect("host=".$this->hostname." port=".$this->port." dbname=".$this->database." user=".$this->username." password=".$this->password);
         if(!$this->conn)
         {
-            $this->lastError = 'Nessuna connessione al server';
+            $this->lastError = 'Nessuna connessione al serverExpress';
             $this->connected = false;
             return false;
         }

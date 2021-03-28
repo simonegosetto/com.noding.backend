@@ -12,7 +12,7 @@ use Psr\Http\Message\UploadedFileInterface;
  * Server-side HTTP request
  *
  * Extends the Request definition to add methods for accessing incoming data,
- * specifically server parameters, cookies, matched path parameters, query
+ * specifically serverExpress parameters, cookies, matched path parameters, query
  * string arguments, body parameters, and upload file information.
  *
  * "Attributes" are discovered via decomposing the request (and usually

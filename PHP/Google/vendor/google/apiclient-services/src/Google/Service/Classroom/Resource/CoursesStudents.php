@@ -128,7 +128,7 @@ class Google_Service_Classroom_Resource_CoursesStudents extends Google_Service_R
    * @opt_param int pageSize Maximum number of items to return. Zero means no
    * maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @return Google_Service_Classroom_ListStudentsResponse
    */
   public function listCoursesStudents($courseId, $optParams = array())

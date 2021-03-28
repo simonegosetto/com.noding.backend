@@ -129,9 +129,9 @@ class Google_Service_Classroom_Resource_UserProfilesGuardians extends Google_Ser
    * that the original invitation was sent to, resulting in this guardian link.
    * This filter can only be used by domain administrators.
    * @opt_param int pageSize Maximum number of items to return. Zero or
-   * unspecified indicates that the server may assign a maximum.
+   * unspecified indicates that the serverExpress may assign a maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @return Google_Service_Classroom_ListGuardiansResponse
    */
   public function listUserProfilesGuardians($studentId, $optParams = array())

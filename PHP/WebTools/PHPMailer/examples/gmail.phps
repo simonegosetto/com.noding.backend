@@ -18,13 +18,13 @@ $mail->isSMTP();
 //Enable SMTP debugging
 // 0 = off (for production use)
 // 1 = client messages
-// 2 = client and server messages
+// 2 = client and serverExpress messages
 $mail->SMTPDebug = 2;
 
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
 
-//Set the hostname of the mail server
+//Set the hostname of the mail serverExpress
 $mail->Host = 'smtp.gmail.com';
 // use
 // $mail->Host = gethostbyname('smtp.gmail.com');

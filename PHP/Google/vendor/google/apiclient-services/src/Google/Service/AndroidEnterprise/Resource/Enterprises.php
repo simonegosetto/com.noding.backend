@@ -143,7 +143,7 @@ class Google_Service_AndroidEnterprise_Resource_Enterprises extends Google_Servi
    * Returns a service account and credentials. The service account can be bound
    * to the enterprise by calling setAccount. The service account is unique to
    * this enterprise and EMM, and will be deleted if the enterprise is unbound.
-   * The credentials contain private key data and are not stored server-side.
+   * The credentials contain private key data and are not stored serverExpress-side.
    *
    * This method can only be called after calling Enterprises.Enroll or
    * Enterprises.CompleteSignup, and before Enterprises.SetAccount; at other times

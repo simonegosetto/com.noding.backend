@@ -30,7 +30,7 @@ final class DB_TYPE extends FD_Define
     const POSTGRES = 3;
     const SQLITE = 4;
 }
-
+/*
 final class REDIS_DATA_TYPE extends FD_Define
 {
     const STRING = 1;
@@ -40,7 +40,7 @@ final class REDIS_DATA_TYPE extends FD_Define
     const SORTED_SET = 5;
     const JSON = 6;
 }
-
+*/
 final class GOOLE_SERVICE_ACTION extends FD_Define
 {
     const AUTHENTICATION_URL_GET = 'authentication_url_get';

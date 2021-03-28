@@ -37,7 +37,7 @@ class Google_Service_Container_Resource_ProjectsZones extends Google_Service_Res
    * has been deprecated and replaced by the name field.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string name The name (project and location) of the server config
+   * @opt_param string name The name (project and location) of the serverExpress config
    * to get Specified in the format 'projects/locations'.
    * @return Google_Service_Container_ServerConfig
    */

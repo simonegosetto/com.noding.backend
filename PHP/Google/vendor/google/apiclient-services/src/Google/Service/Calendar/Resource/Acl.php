@@ -96,7 +96,7 @@ class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
    * the result of this list request contain only entries that have changed since
    * then. All entries deleted since the previous list request will always be in
    * the result set and it is not allowed to set showDeleted to False. If the
-   * syncToken expires, the server will respond with a 410 GONE response code and
+   * syncToken expires, the serverExpress will respond with a 410 GONE response code and
    * the client should clear its storage and perform a full synchronization
    * without any syncToken. Learn more about incremental synchronization.
    * Optional. The default is to return all entries.
@@ -173,7 +173,7 @@ class Google_Service_Calendar_Resource_Acl extends Google_Service_Resource
    * the result of this list request contain only entries that have changed since
    * then. All entries deleted since the previous list request will always be in
    * the result set and it is not allowed to set showDeleted to False. If the
-   * syncToken expires, the server will respond with a 410 GONE response code and
+   * syncToken expires, the serverExpress will respond with a 410 GONE response code and
    * the client should clear its storage and perform a full synchronization
    * without any syncToken. Learn more about incremental synchronization.
    * Optional. The default is to return all entries.

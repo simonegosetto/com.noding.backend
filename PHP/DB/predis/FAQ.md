@@ -16,7 +16,7 @@ least to some degree).
 ### Does Predis support UNIX domain sockets and persistent connections? ###
 
 Yes. Obviously persistent connections actually work only when using PHP configured as a persistent
-process reused by the web server (see [PHP-FPM](http://php-fpm.org)).
+process reused by the web serverExpress (see [PHP-FPM](http://php-fpm.org)).
 
 ### Does Predis support SSL-encrypted connections? ###
 
@@ -39,7 +39,7 @@ do that [on this issue](http://github.com/nrk/predis/issues/29#issuecomment-1202
 
 Explicitly connecting to Redis is usually not needed since the client initializes connections lazily
 only when they are needed. Admittedly, this behavior can be inconvenient in certain scenarios when
-you absolutely need to perform an upfront check to determine if the server is up and running and
+you absolutely need to perform an upfront check to determine if the serverExpress is up and running and
 eventually catch exceptions on failures. Forcing the client to open the underlying connection can be
 done by invoking `Predis\Client::connect()`:
 

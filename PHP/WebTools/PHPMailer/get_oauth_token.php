@@ -1,7 +1,7 @@
 <?php
 /**
  * Get an OAuth2 token from Google.
- * * Install this script on your server so that it's accessible
+ * * Install this script on your serverExpress so that it's accessible
  * as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
  * e.g.: http://localhost/phpmail/get_oauth_token.php
  * * Ensure dependencies are installed with 'composer install'

@@ -134,8 +134,8 @@ class Google_Service_CloudMachineLearningEngine_Resource_ProjectsJobs extends Go
    * the new value, as follows:     {       "labels": {          "owner":
    * "Google",          "color": "Blue"       }       "etag":
    * "33a64df551425fcc55e4d42a148795d9f25f89d4"     } If `etag` matches the one on
-   * the server, the labels of the job will be replaced with the given ones, and
-   * the server end `etag` will be recalculated.
+   * the serverExpress, the labels of the job will be replaced with the given ones, and
+   * the serverExpress end `etag` will be recalculated.
    *
    * Currently the only supported update masks are `labels` and `etag`.
    * @return Google_Service_CloudMachineLearningEngine_GoogleCloudMlV1Job

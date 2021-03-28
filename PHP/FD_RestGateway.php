@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
-//Metodo per la richiesta POST al server API
+//Metodo per la richiesta POST al serverExpress API
 function httpPost($url, $data){//, $token){
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_POST, 1);

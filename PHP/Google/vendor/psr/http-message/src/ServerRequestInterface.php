@@ -3,7 +3,7 @@
 namespace Psr\Http\Message;
 
 /**
- * Representation of an incoming, server-side HTTP request.
+ * Representation of an incoming, serverExpress-side HTTP request.
  *
  * Per the HTTP specification, this interface includes properties for
  * each of the following:
@@ -43,7 +43,7 @@ namespace Psr\Http\Message;
 interface ServerRequestInterface extends RequestInterface
 {
     /**
-     * Retrieve server parameters.
+     * Retrieve serverExpress parameters.
      *
      * Retrieves data related to the incoming request environment,
      * typically derived from PHP's $_SERVER superglobal. The data IS NOT
@@ -56,7 +56,7 @@ interface ServerRequestInterface extends RequestInterface
     /**
      * Retrieve cookies.
      *
-     * Retrieves cookies sent by the client to the server.
+     * Retrieves cookies sent by the client to the serverExpress.
      *
      * The data MUST be compatible with the structure of the $_COOKIE
      * superglobal.
@@ -73,7 +73,7 @@ interface ServerRequestInterface extends RequestInterface
      * be injected at instantiation.
      *
      * This method MUST NOT update the related Cookie header of the request
-     * instance, nor related values in the server params.
+     * instance, nor related values in the serverExpress params.
      *
      * This method MUST be implemented in such a way as to retain the
      * immutability of the message, and MUST return an instance that has the
@@ -89,10 +89,10 @@ interface ServerRequestInterface extends RequestInterface
      *
      * Retrieves the deserialized query string arguments, if any.
      *
-     * Note: the query params might not be in sync with the URI or server
+     * Note: the query params might not be in sync with the URI or serverExpress
      * params. If you need to ensure you are only getting the original
      * values, you may need to parse the query string from `getUri()->getQuery()`
-     * or from the `QUERY_STRING` server param.
+     * or from the `QUERY_STRING` serverExpress param.
      *
      * @return array
      */
@@ -110,7 +110,7 @@ interface ServerRequestInterface extends RequestInterface
      * sets are handled.
      *
      * Setting query string arguments MUST NOT change the URI stored by the
-     * request, nor the values in the server params.
+     * request, nor the values in the serverExpress params.
      *
      * This method MUST be implemented in such a way as to retain the
      * immutability of the message, and MUST return an instance that has the

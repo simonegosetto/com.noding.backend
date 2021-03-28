@@ -34,7 +34,7 @@ class Google_Http_REST
    * @param Google_Client $client
    * @param Psr\Http\Message\RequestInterface $req
    * @return array decoded result
-   * @throws Google_Service_Exception on server side error (ie: not authenticated,
+   * @throws Google_Service_Exception on serverExpress side error (ie: not authenticated,
    *  invalid or malformed post body, invalid url)
    */
   public static function execute(
@@ -64,7 +64,7 @@ class Google_Http_REST
    * @param Google_Client $client
    * @param Psr\Http\Message\RequestInterface $request
    * @return array decoded result
-   * @throws Google_Service_Exception on server side error (ie: not authenticated,
+   * @throws Google_Service_Exception on serverExpress side error (ie: not authenticated,
    *  invalid or malformed post body, invalid url)
    */
   public static function doExecute(ClientInterface $client, RequestInterface $request, $expectedClass = null)

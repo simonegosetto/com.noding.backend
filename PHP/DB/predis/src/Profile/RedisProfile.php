@@ -15,7 +15,7 @@ use Predis\ClientException;
 use Predis\Command\Processor\ProcessorInterface;
 
 /**
- * Base class implementing common functionalities for Redis server profiles.
+ * Base class implementing common functionalities for Redis serverExpress profiles.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */
@@ -64,7 +64,7 @@ abstract class RedisProfile implements ProfileInterface
 
     /**
      * Returns the fully-qualified name of a class representing the specified
-     * command ID registered in the current server profile.
+     * command ID registered in the current serverExpress profile.
      *
      * @param string $commandID Command ID.
      *
@@ -100,7 +100,7 @@ abstract class RedisProfile implements ProfileInterface
     }
 
     /**
-     * Defines a new command in the server profile.
+     * Defines a new command in the serverExpress profile.
      *
      * @param string $commandID Command ID.
      * @param string $class     Fully-qualified name of a Predis\Command\CommandInterface.
@@ -135,7 +135,7 @@ abstract class RedisProfile implements ProfileInterface
     }
 
     /**
-     * Returns the version of server profile as its string representation.
+     * Returns the version of serverExpress profile as its string representation.
      *
      * @return string
      */

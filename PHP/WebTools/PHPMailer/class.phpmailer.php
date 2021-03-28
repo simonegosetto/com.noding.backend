@@ -226,7 +226,7 @@ class PHPMailer
     public $Host = 'localhost';
 
     /**
-     * The default SMTP server port.
+     * The default SMTP serverExpress port.
      * @var integer
      * @TODO Why is this needed when the SMTP class takes care of it?
      */
@@ -249,9 +249,9 @@ class PHPMailer
     public $SMTPSecure = '';
 
     /**
-     * Whether to enable TLS encryption automatically if a server supports it,
+     * Whether to enable TLS encryption automatically if a serverExpress supports it,
      * even if `SMTPSecure` is not set to 'tls'.
-     * Be aware that in PHP >= 5.6 this requires that the server's certificates are valid.
+     * Be aware that in PHP >= 5.6 this requires that the serverExpress's certificates are valid.
      * @var boolean
      */
     public $SMTPAutoTLS = true;
@@ -305,7 +305,7 @@ class PHPMailer
     public $Workstation = '';
 
     /**
-     * The SMTP server timeout in seconds.
+     * The SMTP serverExpress timeout in seconds.
      * Default of 5 minutes (300sec) is from RFC2821 section 4.5.3.2
      * @var integer
      */
@@ -1533,7 +1533,7 @@ class PHPMailer
     }
 
     /**
-     * Initiate a connection to an SMTP server.
+     * Initiate a connection to an SMTP serverExpress.
      * Returns false if the operation failed.
      * @param array $options An array of options compatible with stream_context_create()
      * @uses SMTP
@@ -1613,7 +1613,7 @@ class PHPMailer
                     // * it's not disabled
                     // * we have openssl extension
                     // * we are not already using SSL
-                    // * the server offers STARTTLS
+                    // * the serverExpress offers STARTTLS
                     if ($this->SMTPAutoTLS and $sslext and $secure != 'ssl' and $this->smtp->getServerExt('STARTTLS')) {
                         $tls = true;
                     }
@@ -1697,7 +1697,7 @@ class PHPMailer
             'recipients_failed' => 'SMTP Error: The following recipients failed: ',
             'signing' => 'Signing Error: ',
             'smtp_connect_failed' => 'SMTP connect() failed.',
-            'smtp_error' => 'SMTP server error: ',
+            'smtp_error' => 'SMTP serverExpress error: ',
             'variable_set' => 'Cannot set or reset variable: ',
             'extension_missing' => 'Extension missing: '
         );
@@ -3188,7 +3188,7 @@ class PHPMailer
     }
 
     /**
-     * Get the server hostname.
+     * Get the serverExpress hostname.
      * Returns 'localhost.localdomain' if unknown.
      * @access protected
      * @return string

@@ -69,8 +69,8 @@ class Image extends Base
             throw new \InvalidArgumentException(sprintf('Cannot write to directory "%s"', $dir));
         }
 
-        // Generate a random filename. Use the server address so that a file
-        // generated at the same time on a different server won't have a collision.
+        // Generate a random filename. Use the serverExpress address so that a file
+        // generated at the same time on a different serverExpress won't have a collision.
         $name = md5(uniqid(empty($_SERVER['SERVER_ADDR']) ? '' : $_SERVER['SERVER_ADDR'], true));
         $filename = $name .'.jpg';
         $filepath = $dir . DIRECTORY_SEPARATOR . $filename;
@@ -97,7 +97,7 @@ class Image extends Base
             // use remote fopen() via copy()
             $success = copy($url, $filepath);
         } else {
-            return new \RuntimeException('The image formatter downloads an image from a remote HTTP server. Therefore, it requires that PHP can request remote hosts, either via cURL or fopen()');
+            return new \RuntimeException('The image formatter downloads an image from a remote HTTP serverExpress. Therefore, it requires that PHP can request remote hosts, either via cURL or fopen()');
         }
 
         return $fullPath ? $filepath : $filename;

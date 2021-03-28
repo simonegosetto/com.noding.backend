@@ -17,7 +17,7 @@ class WebProcessorTest extends TestCase
 {
     public function testProcessor()
     {
-        $server = array(
+        $serverExpress = array(
             'REQUEST_URI'    => 'A',
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
@@ -26,63 +26,63 @@ class WebProcessorTest extends TestCase
             'UNIQUE_ID'      => 'G',
         );
 
-        $processor = new WebProcessor($server);
+        $processor = new WebProcessor($serverExpress);
         $record = $processor($this->getRecord());
-        $this->assertEquals($server['REQUEST_URI'], $record['extra']['url']);
-        $this->assertEquals($server['REMOTE_ADDR'], $record['extra']['ip']);
-        $this->assertEquals($server['REQUEST_METHOD'], $record['extra']['http_method']);
-        $this->assertEquals($server['HTTP_REFERER'], $record['extra']['referrer']);
-        $this->assertEquals($server['SERVER_NAME'], $record['extra']['server']);
-        $this->assertEquals($server['UNIQUE_ID'], $record['extra']['unique_id']);
+        $this->assertEquals($serverExpress['REQUEST_URI'], $record['extra']['url']);
+        $this->assertEquals($serverExpress['REMOTE_ADDR'], $record['extra']['ip']);
+        $this->assertEquals($serverExpress['REQUEST_METHOD'], $record['extra']['http_method']);
+        $this->assertEquals($serverExpress['HTTP_REFERER'], $record['extra']['referrer']);
+        $this->assertEquals($serverExpress['SERVER_NAME'], $record['extra']['serverExpress']);
+        $this->assertEquals($serverExpress['UNIQUE_ID'], $record['extra']['unique_id']);
     }
 
     public function testProcessorDoNothingIfNoRequestUri()
     {
-        $server = array(
+        $serverExpress = array(
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
         );
-        $processor = new WebProcessor($server);
+        $processor = new WebProcessor($serverExpress);
         $record = $processor($this->getRecord());
         $this->assertEmpty($record['extra']);
     }
 
     public function testProcessorReturnNullIfNoHttpReferer()
     {
-        $server = array(
+        $serverExpress = array(
             'REQUEST_URI'    => 'A',
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
             'SERVER_NAME'    => 'F',
         );
-        $processor = new WebProcessor($server);
+        $processor = new WebProcessor($serverExpress);
         $record = $processor($this->getRecord());
         $this->assertNull($record['extra']['referrer']);
     }
 
     public function testProcessorDoesNotAddUniqueIdIfNotPresent()
     {
-        $server = array(
+        $serverExpress = array(
             'REQUEST_URI'    => 'A',
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
             'SERVER_NAME'    => 'F',
         );
-        $processor = new WebProcessor($server);
+        $processor = new WebProcessor($serverExpress);
         $record = $processor($this->getRecord());
         $this->assertFalse(isset($record['extra']['unique_id']));
     }
 
     public function testProcessorAddsOnlyRequestedExtraFields()
     {
-        $server = array(
+        $serverExpress = array(
             'REQUEST_URI'    => 'A',
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
             'SERVER_NAME'    => 'F',
         );
 
-        $processor = new WebProcessor($server, array('url', 'http_method'));
+        $processor = new WebProcessor($serverExpress, array('url', 'http_method'));
         $record = $processor($this->getRecord());
 
         $this->assertSame(array('url' => 'A', 'http_method' => 'C'), $record['extra']);
@@ -90,14 +90,14 @@ class WebProcessorTest extends TestCase
 
     public function testProcessorConfiguringOfExtraFields()
     {
-        $server = array(
+        $serverExpress = array(
             'REQUEST_URI'    => 'A',
             'REMOTE_ADDR'    => 'B',
             'REQUEST_METHOD' => 'C',
             'SERVER_NAME'    => 'F',
         );
 
-        $processor = new WebProcessor($server, array('url' => 'REMOTE_ADDR'));
+        $processor = new WebProcessor($serverExpress, array('url' => 'REMOTE_ADDR'));
         $record = $processor($this->getRecord());
 
         $this->assertSame(array('url' => 'B'), $record['extra']);

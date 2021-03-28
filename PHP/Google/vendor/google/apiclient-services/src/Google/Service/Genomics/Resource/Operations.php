@@ -26,7 +26,7 @@
 class Google_Service_Genomics_Resource_Operations extends Google_Service_Resource
 {
   /**
-   * Starts asynchronous cancellation on a long-running operation. The server
+   * Starts asynchronous cancellation on a long-running operation. The serverExpress
    * makes a best effort to cancel the operation, but success is not guaranteed.
    * Clients may use Operations.GetOperation or Operations.ListOperations to check
    * whether the cancellation succeeded or the operation completed despite

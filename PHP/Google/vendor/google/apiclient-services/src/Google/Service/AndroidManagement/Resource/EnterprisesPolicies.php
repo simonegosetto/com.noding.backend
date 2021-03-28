@@ -62,7 +62,7 @@ class Google_Service_AndroidManagement_Resource_EnterprisesPolicies extends Goog
    * @param array $optParams Optional parameters.
    *
    * @opt_param string pageToken A token identifying a page of results returned by
-   * the server.
+   * the serverExpress.
    * @opt_param int pageSize The requested page size. The actual page size may be
    * fixed to a min or max value.
    * @return Google_Service_AndroidManagement_ListPoliciesResponse

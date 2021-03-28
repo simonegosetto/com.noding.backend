@@ -87,9 +87,9 @@ class SSH2
     /**#@+
      * Channel constants
      *
-     * RFC4254 refers not to client and server channels but rather to sender and recipient channels.  we don't refer
+     * RFC4254 refers not to client and serverExpress channels but rather to sender and recipient channels.  we don't refer
      * to them in that way because RFC4254 toggles the meaning. the client sends a SSH_MSG_CHANNEL_OPEN message with
-     * a sender channel and the server sends a SSH_MSG_CHANNEL_OPEN_CONFIRMATION in response, with a sender and a
+     * a sender channel and the serverExpress sends a SSH_MSG_CHANNEL_OPEN_CONFIRMATION in response, with a sender and a
      * recepient channel.  at first glance, you might conclude that SSH_MSG_CHANNEL_OPEN_CONFIRMATION's sender channel
      * would be the same thing as SSH_MSG_CHANNEL_OPEN's sender channel, but it's not, per this snipet:
      *     The 'recipient channel' is the channel number given in the original
@@ -377,10 +377,10 @@ class SSH2
     var $hmac_check = false;
 
     /**
-     * Size of server to client HMAC
+     * Size of serverExpress to client HMAC
      *
-     * We need to know how big the HMAC will be for the server to client direction so that we know how many bytes to read.
-     * For the client to server side, the HMAC object will make the HMAC as long as it needs to be.  All we need to do is
+     * We need to know how big the HMAC will be for the serverExpress to client direction so that we know how many bytes to read.
+     * For the client to serverExpress side, the HMAC object will make the HMAC as long as it needs to be.  All we need to do is
      * append it.
      *
      * @see self::_get_binary_packet()
@@ -496,7 +496,7 @@ class SSH2
     /**
      * Server Channels
      *
-     * Maps client channels to server channels
+     * Maps client channels to serverExpress channels
      *
      * @see self::_get_channel_packet()
      * @see self::exec()
@@ -571,7 +571,7 @@ class SSH2
     var $window_size = 0x7FFFFFFF;
 
     /**
-     * Window size, server to client
+     * Window size, serverExpress to client
      *
      * Window size indexed by channel
      *
@@ -582,7 +582,7 @@ class SSH2
     var $window_size_server_to_client = array();
 
     /**
-     * Window size, client to server
+     * Window size, client to serverExpress
      *
      * Window size indexed by channel
      *
@@ -1110,7 +1110,7 @@ class SSH2
     }
 
     /**
-     * Connect to an SSHv2 server
+     * Connect to an SSHv2 serverExpress
      *
      * @return bool
      * @access private
@@ -1157,7 +1157,7 @@ class SSH2
 
         /* According to the SSH2 specs,
 
-          "The server MAY send other lines of data before sending the version
+          "The serverExpress MAY send other lines of data before sending the version
            string.  Each line SHOULD be terminated by a Carriage Return and Line
            Feed.  Such lines MUST NOT begin with "SSH-", and SHOULD be encoded
            in ISO-10646 UTF-8 [RFC3629] (language is not specified).  Clients
@@ -1211,7 +1211,7 @@ class SSH2
 
         if (feof($this->fsock)) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -1240,7 +1240,7 @@ class SSH2
             $response = $this->_get_binary_packet();
             if ($response === false) {
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
 
@@ -1481,7 +1481,7 @@ class SSH2
             $kexinit_payload_server = $this->_get_binary_packet();
             if ($kexinit_payload_server === false) {
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
 
@@ -1571,14 +1571,14 @@ class SSH2
         $decrypt = $this->_array_intersect_first($encryption_algorithms, $this->encryption_algorithms_server_to_client);
         $decryptKeyLength = $this->_encryption_algorithm_to_key_size($decrypt);
         if ($decryptKeyLength === null) {
-            user_error('No compatible server to client encryption algorithms found');
+            user_error('No compatible serverExpress to client encryption algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
 
         $encrypt = $this->_array_intersect_first($encryption_algorithms, $this->encryption_algorithms_client_to_server);
         $encryptKeyLength = $this->_encryption_algorithm_to_key_size($encrypt);
         if ($encryptKeyLength === null) {
-            user_error('No compatible client to server encryption algorithms found');
+            user_error('No compatible client to serverExpress encryption algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
 
@@ -1618,7 +1618,7 @@ class SSH2
                 $response = $this->_get_binary_packet();
                 if ($response === false) {
                     $this->bitmap = 0;
-                    user_error('Connection closed by server');
+                    user_error('Connection closed by serverExpress');
                     return false;
                 }
                 extract(unpack('Ctype', $this->_string_shift($response, 1)));
@@ -1690,7 +1690,7 @@ class SSH2
                     $kexHash = new Hash('sha1');
             }
 
-            /* To increase the speed of the key exchange, both client and server may
+            /* To increase the speed of the key exchange, both client and serverExpress may
             reduce the size of their private exponents.  It should be at least
             twice as long as the key material that is generated from the shared
             secret.  For more details, see the paper by van Oorschot and Wiener
@@ -1711,14 +1711,14 @@ class SSH2
 
         if (!$this->_send_binary_packet($data)) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
         $response = $this->_get_binary_packet();
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
         if (!strlen($response)) {
@@ -1803,7 +1803,7 @@ class SSH2
 
         $server_host_key_algorithm = $this->_array_intersect_first($server_host_key_algorithms, $this->server_host_key_algorithms);
         if ($server_host_key_algorithm === false) {
-            user_error('No compatible server host key algorithms found');
+            user_error('No compatible serverExpress host key algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
 
@@ -1836,7 +1836,7 @@ class SSH2
 
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -1918,7 +1918,7 @@ class SSH2
 
         $mac_algorithm = $this->_array_intersect_first($mac_algorithms, $this->mac_algorithms_client_to_server);
         if ($mac_algorithm === false) {
-            user_error('No compatible client to server message authentication algorithms found');
+            user_error('No compatible client to serverExpress message authentication algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
 
@@ -1947,7 +1947,7 @@ class SSH2
 
         $mac_algorithm = $this->_array_intersect_first($mac_algorithms, $this->mac_algorithms_server_to_client);
         if ($mac_algorithm === false) {
-            user_error('No compatible server to client message authentication algorithms found');
+            user_error('No compatible serverExpress to client message authentication algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
 
@@ -1994,14 +1994,14 @@ class SSH2
 
         $compression_algorithm = $this->_array_intersect_first($compression_algorithms, $this->compression_algorithms_server_to_client);
         if ($compression_algorithm === false) {
-            user_error('No compatible server to client compression algorithms found');
+            user_error('No compatible serverExpress to client compression algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
         $this->decompress = $compression_algorithm == 'zlib';
 
         $compression_algorithm = $this->_array_intersect_first($compression_algorithms, $this->compression_algorithms_client_to_server);
         if ($compression_algorithm === false) {
-            user_error('No compatible client to server compression algorithms found');
+            user_error('No compatible client to serverExpress compression algorithms found');
             return $this->_disconnect(NET_SSH2_DISCONNECT_KEY_EXCHANGE_FAILED);
         }
         $this->compress = $compression_algorithm == 'zlib';
@@ -2205,7 +2205,7 @@ class SSH2
                     return $this->_login_helper($username, $password);
                 }
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
 
@@ -2258,7 +2258,7 @@ class SSH2
             $response = $this->_get_binary_packet();
             if ($response === false) {
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
 
@@ -2317,7 +2317,7 @@ class SSH2
         $response = $this->_get_binary_packet();
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -2338,7 +2338,7 @@ class SSH2
                 $this->errors[] = 'SSH_MSG_USERAUTH_PASSWD_CHANGEREQ: ' . $this->_string_shift($response, $length);
                 return $this->_disconnect(NET_SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER);
             case NET_SSH2_MSG_USERAUTH_FAILURE:
-                // can we use keyboard-interactive authentication?  if not then either the login is bad or the server employees
+                // can we use keyboard-interactive authentication?  if not then either the login is bad or the serverExpress employees
                 // multi-factor authentication
                 if (strlen($response) < 4) {
                     return false;
@@ -2418,7 +2418,7 @@ class SSH2
             $orig = $response = $this->_get_binary_packet();
             if ($response === false) {
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
         }
@@ -2518,7 +2518,7 @@ class SSH2
                 }
 
                 /*
-                   After receiving the response, the server MUST send either an
+                   After receiving the response, the serverExpress MUST send either an
                    SSH_MSG_USERAUTH_SUCCESS, SSH_MSG_USERAUTH_FAILURE, or another
                    SSH_MSG_USERAUTH_INFO_REQUEST message.
                 */
@@ -2607,7 +2607,7 @@ class SSH2
         $response = $this->_get_binary_packet();
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -2664,7 +2664,7 @@ class SSH2
         $response = $this->_get_binary_packet();
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -2675,7 +2675,7 @@ class SSH2
 
         switch ($type) {
             case NET_SSH2_MSG_USERAUTH_FAILURE:
-                // either the login is bad or the server employs multi-factor authentication
+                // either the login is bad or the serverExpress employs multi-factor authentication
                 return false;
             case NET_SSH2_MSG_USERAUTH_SUCCESS:
                 $this->bitmap |= self::MASK_LOGIN;
@@ -2791,7 +2791,7 @@ class SSH2
             $response = $this->_get_binary_packet();
             if ($response === false) {
                 $this->bitmap = 0;
-                user_error('Connection closed by server');
+                user_error('Connection closed by serverExpress');
                 return false;
             }
 
@@ -2931,7 +2931,7 @@ class SSH2
         $response = $this->_get_binary_packet();
         if ($response === false) {
             $this->bitmap = 0;
-            user_error('Connection closed by server');
+            user_error('Connection closed by serverExpress');
             return false;
         }
 
@@ -3246,7 +3246,7 @@ class SSH2
     }
 
     /**
-     * Pings a server connection, or tries to reconnect if the connection has gone down
+     * Pings a serverExpress connection, or tries to reconnect if the connection has gone down
      *
      * Inspired by http://php.net/manual/en/mysqli.ping.php
      *
@@ -3706,7 +3706,7 @@ class SSH2
                 $response = $this->_get_binary_packet(true);
                 if ($response === false) {
                     $this->bitmap = 0;
-                    user_error('Connection closed by server');
+                    user_error('Connection closed by serverExpress');
                     return false;
                 }
             }
@@ -3870,7 +3870,7 @@ class SSH2
                 case NET_SSH2_MSG_CHANNEL_DATA:
                     /*
                     if ($channel == self::CHANNEL_EXEC) {
-                        // SCP requires null packets, such as this, be sent.  further, in the case of the ssh.com SSH server
+                        // SCP requires null packets, such as this, be sent.  further, in the case of the ssh.com SSH serverExpress
                         // this actually seems to make things twice as fast.  more to the point, the message right after
                         // SSH_MSG_CHANNEL_DATA (usually SSH_MSG_IGNORE) won't block for as long as it would have otherwise.
                         // in OpenSSH it slows things down but only by a couple thousandths of a second.
@@ -4108,7 +4108,7 @@ class SSH2
     /**
      * Closes and flushes a channel
      *
-     * \phpseclib\Net\SSH2 doesn't properly close most channels.  For exec() channels are normally closed by the server
+     * \phpseclib\Net\SSH2 doesn't properly close most channels.  For exec() channels are normally closed by the serverExpress
      * and for SFTP channels are presumably closed when the client disconnects.  This functions is intended
      * for SCP more than anything.
      *
@@ -4337,7 +4337,7 @@ class SSH2
     }
 
     /**
-     * Return the server identification.
+     * Return the serverExpress identification.
      *
      * @return string
      * @access public
@@ -4350,7 +4350,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the key exchange algorithms the server supports.
+     * Return a list of the key exchange algorithms the serverExpress supports.
      *
      * @return array
      * @access public
@@ -4363,7 +4363,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the host key (public key) algorithms the server supports.
+     * Return a list of the host key (public key) algorithms the serverExpress supports.
      *
      * @return array
      * @access public
@@ -4376,7 +4376,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the (symmetric key) encryption algorithms the server supports, when receiving stuff from the client.
+     * Return a list of the (symmetric key) encryption algorithms the serverExpress supports, when receiving stuff from the client.
      *
      * @return array
      * @access public
@@ -4389,7 +4389,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the (symmetric key) encryption algorithms the server supports, when sending stuff to the client.
+     * Return a list of the (symmetric key) encryption algorithms the serverExpress supports, when sending stuff to the client.
      *
      * @return array
      * @access public
@@ -4402,7 +4402,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the MAC algorithms the server supports, when receiving stuff from the client.
+     * Return a list of the MAC algorithms the serverExpress supports, when receiving stuff from the client.
      *
      * @return array
      * @access public
@@ -4415,7 +4415,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the MAC algorithms the server supports, when sending stuff to the client.
+     * Return a list of the MAC algorithms the serverExpress supports, when sending stuff to the client.
      *
      * @return array
      * @access public
@@ -4428,7 +4428,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the compression algorithms the server supports, when receiving stuff from the client.
+     * Return a list of the compression algorithms the serverExpress supports, when receiving stuff from the client.
      *
      * @return array
      * @access public
@@ -4441,7 +4441,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the compression algorithms the server supports, when sending stuff to the client.
+     * Return a list of the compression algorithms the serverExpress supports, when sending stuff to the client.
      *
      * @return array
      * @access public
@@ -4454,7 +4454,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the languages the server supports, when sending stuff to the client.
+     * Return a list of the languages the serverExpress supports, when sending stuff to the client.
      *
      * @return array
      * @access public
@@ -4467,7 +4467,7 @@ class SSH2
     }
 
     /**
-     * Return a list of the languages the server supports, when receiving stuff from the client.
+     * Return a list of the languages the serverExpress supports, when receiving stuff from the client.
      *
      * @return array
      * @access public
@@ -4494,10 +4494,10 @@ class SSH2
     }
 
     /**
-     * Returns the server public host key.
+     * Returns the serverExpress public host key.
      *
-     * Caching this the first time you connect to a server and checking the result on subsequent connections
-     * is recommended.  Returns false if the server signature is not signed correctly with the public host key.
+     * Caching this the first time you connect to a serverExpress and checking the result on subsequent connections
+     * is recommended.  Returns false if the serverExpress signature is not signed correctly with the public host key.
      *
      * @return mixed
      * @access public
@@ -4592,7 +4592,7 @@ class SSH2
                 list(, $v) = $v->divide($q);
 
                 if (!$v->equals($r)) {
-                    user_error('Bad server signature');
+                    user_error('Bad serverExpress signature');
                     return $this->_disconnect(NET_SSH2_DISCONNECT_HOST_KEY_NOT_VERIFIABLE);
                 }
 
@@ -4638,7 +4638,7 @@ class SSH2
                 $rsa->loadKey(array('e' => $e, 'n' => $n), RSA::PUBLIC_FORMAT_RAW);
 
                 if (!$rsa->verify($this->exchange_hash, $signature)) {
-                    user_error('Bad server signature');
+                    user_error('Bad serverExpress signature');
                     return $this->_disconnect(NET_SSH2_DISCONNECT_HOST_KEY_NOT_VERIFIABLE);
                 }
                 */
@@ -4690,7 +4690,7 @@ class SSH2
                 $h = chr(0x01) . str_repeat(chr(0xFF), $nLength - 2 - strlen($h)) . $h;
 
                 if ($s != $h) {
-                    user_error('Bad server signature');
+                    user_error('Bad serverExpress signature');
                     return $this->_disconnect(NET_SSH2_DISCONNECT_HOST_KEY_NOT_VERIFIABLE);
                 }
                 break;

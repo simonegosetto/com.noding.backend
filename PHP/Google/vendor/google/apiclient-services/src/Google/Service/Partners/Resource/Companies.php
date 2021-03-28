@@ -92,7 +92,7 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * @opt_param string requestMetadata.partnersSessionId Google Partners session
    * ID.
    * @opt_param string pageToken A token identifying a page of results that the
-   * server returns. Typically, this is the value of
+   * serverExpress returns. Typically, this is the value of
    * `ListCompaniesResponse.next_page_token` returned from the previous call to
    * ListCompanies.
    * @opt_param string companyName Company name to search for.
@@ -105,7 +105,7 @@ class Google_Service_Partners_Resource_Companies extends Google_Service_Resource
    * support. Only primary language subtags are accepted as defined by BCP 47
    * (IETF BCP 47, "Tags for Identifying Languages").
    * @opt_param int pageSize Requested page size. Server may return fewer
-   * companies than requested. If unspecified, server picks an appropriate
+   * companies than requested. If unspecified, serverExpress picks an appropriate
    * default.
    * @opt_param string requestMetadata.userOverrides.ipAddress IP address to use
    * instead of the user's geo-located IP address.

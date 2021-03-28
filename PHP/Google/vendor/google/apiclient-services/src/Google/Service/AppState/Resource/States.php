@@ -34,7 +34,7 @@ class Google_Service_AppState_Resource_States extends Google_Service_Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string currentDataVersion The version of the data to be cleared.
-   * Version strings are returned by the server.
+   * Version strings are returned by the serverExpress.
    * @return Google_Service_AppState_WriteResult
    */
   public function clear($stateKey, $optParams = array())
@@ -61,7 +61,7 @@ class Google_Service_AppState_Resource_States extends Google_Service_Resource
   }
   /**
    * Retrieves the data corresponding to the passed key. If the key does not exist
-   * on the server, an HTTP 404 will be returned. (states.get)
+   * on the serverExpress, an HTTP 404 will be returned. (states.get)
    *
    * @param int $stateKey The key for the data to be retrieved.
    * @param array $optParams Optional parameters.
@@ -100,7 +100,7 @@ class Google_Service_AppState_Resource_States extends Google_Service_Resource
    * @opt_param string currentStateVersion The version of the app state your
    * application is attempting to update. If this does not match the current
    * version, this method will return a conflict error. If there is no data stored
-   * on the server for this key, the update will succeed irrespective of the value
+   * on the serverExpress for this key, the update will succeed irrespective of the value
    * of this parameter.
    * @return Google_Service_AppState_WriteResult
    */

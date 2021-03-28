@@ -67,7 +67,7 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * Sets the maximum number of retries for commands upon server failure.
+     * Sets the maximum number of retries for commands upon serverExpress failure.
      *
      * -1 = unlimited retry attempts
      *  0 = no retry attempts (fails immediatly)
@@ -285,7 +285,7 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
     /**
      * Returns the current slots map for the cluster.
      *
-     * The order of the returned $slot => $server dictionary is not guaranteed.
+     * The order of the returned $slot => $serverExpress dictionary is not guaranteed.
      *
      * @return array
      */
@@ -532,7 +532,7 @@ class RedisCluster implements ClusterInterface, \IteratorAggregate, \Countable
      *
      * The connection to the node that generated the error is evicted from the
      * pool before trying to fetch an updated slots map from another node. If
-     * the new slots map points to an unreachable server the client gives up and
+     * the new slots map points to an unreachable serverExpress the client gives up and
      * throws the exception as the nodes participating in the cluster may still
      * have to agree that something changed in the configuration of the cluster.
      *

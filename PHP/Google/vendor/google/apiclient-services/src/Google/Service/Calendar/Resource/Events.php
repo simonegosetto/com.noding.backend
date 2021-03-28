@@ -242,7 +242,7 @@ class Google_Service_Calendar_Resource_Events extends Google_Service_Resource
    *
    * These are:  - iCalUID  - orderBy  - privateExtendedProperty  - q  -
    * sharedExtendedProperty  - timeMin  - timeMax  - updatedMin If the syncToken
-   * expires, the server will respond with a 410 GONE response code and the client
+   * expires, the serverExpress will respond with a 410 GONE response code and the client
    * should clear its storage and perform a full synchronization without any
    * syncToken. Learn more about incremental synchronization. Optional. The
    * default is to return all entries.
@@ -464,7 +464,7 @@ class Google_Service_Calendar_Resource_Events extends Google_Service_Resource
    *
    * These are:  - iCalUID  - orderBy  - privateExtendedProperty  - q  -
    * sharedExtendedProperty  - timeMin  - timeMax  - updatedMin If the syncToken
-   * expires, the server will respond with a 410 GONE response code and the client
+   * expires, the serverExpress will respond with a 410 GONE response code and the client
    * should clear its storage and perform a full synchronization without any
    * syncToken. Learn more about incremental synchronization. Optional. The
    * default is to return all entries.

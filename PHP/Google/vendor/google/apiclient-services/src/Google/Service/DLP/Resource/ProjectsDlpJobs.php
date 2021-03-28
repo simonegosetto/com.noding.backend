@@ -26,7 +26,7 @@
 class Google_Service_DLP_Resource_ProjectsDlpJobs extends Google_Service_Resource
 {
   /**
-   * Starts asynchronous cancellation on a long-running DlpJob. The server makes a
+   * Starts asynchronous cancellation on a long-running DlpJob. The serverExpress makes a
    * best effort to cancel the DlpJob, but success is not guaranteed. See
    * https://cloud.google.com/dlp/docs/inspecting-storage and
    * https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.

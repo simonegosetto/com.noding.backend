@@ -226,7 +226,7 @@ class Pipeline implements ClientContextInterface
     }
 
     /**
-     * Returns if the pipeline should throw exceptions on server errors.
+     * Returns if the pipeline should throw exceptions on serverExpress errors.
      *
      * @return bool
      */

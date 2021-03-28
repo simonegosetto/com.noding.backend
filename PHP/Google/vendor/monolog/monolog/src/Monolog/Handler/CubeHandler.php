@@ -79,7 +79,7 @@ class CubeHandler extends AbstractProcessingHandler
     }
 
     /**
-     * Establish a connection to a http server
+     * Establish a connection to a http serverExpress
      * @throws \LogicException when no curl extension
      */
     protected function connectHttp()

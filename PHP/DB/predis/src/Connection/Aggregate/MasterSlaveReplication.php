@@ -201,7 +201,7 @@ class MasterSlaveReplication implements ReplicationInterface
     }
 
     /**
-     * Switches to the master server.
+     * Switches to the master serverExpress.
      */
     public function switchToMaster()
     {
@@ -209,7 +209,7 @@ class MasterSlaveReplication implements ReplicationInterface
     }
 
     /**
-     * Switches to a random slave server.
+     * Switches to a random slave serverExpress.
      */
     public function switchToSlave()
     {
@@ -234,14 +234,14 @@ class MasterSlaveReplication implements ReplicationInterface
     }
 
     /**
-     * Returns the connection associated to the master server.
+     * Returns the connection associated to the master serverExpress.
      *
      * @return NodeConnectionInterface
      */
     private function getMasterOrDie()
     {
         if (!$connection = $this->getMaster()) {
-            throw new MissingMasterException('No master server available for replication');
+            throw new MissingMasterException('No master serverExpress available for replication');
         }
 
         return $connection;

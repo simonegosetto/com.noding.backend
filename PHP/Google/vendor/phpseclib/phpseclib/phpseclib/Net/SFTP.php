@@ -6,8 +6,8 @@
  * PHP version 5
  *
  * Currently only supports SFTPv2 and v3, which, according to wikipedia.org, "is the most widely used version,
- * implemented by the popular OpenSSH SFTP server".  If you want SFTPv4/5/6 support, provide me with access
- * to an SFTPv4/5/6 server.
+ * implemented by the popular OpenSSH SFTP serverExpress".  If you want SFTPv4/5/6 support, provide me with access
+ * to an SFTPv4/5/6 serverExpress.
  *
  * The API for this library is modeled after the API from PHP's {@link http://php.net/book.ftp FTP extension}.
  *
@@ -137,7 +137,7 @@ class SFTP extends SSH2
     var $packet_buffer = '';
 
     /**
-     * Extensions supported by the server
+     * Extensions supported by the serverExpress
      *
      * @var array
      * @see self::_initChannel()
@@ -240,7 +240,7 @@ class SFTP extends SSH2
      * Canonicalization Flag
      *
      * Determines whether or not paths should be canonicalized before being
-     * passed on to the remote server.
+     * passed on to the remote serverExpress.
      *
      * @see self::enablePathCanonicalization()
      * @see self::disablePathCanonicalization()
@@ -253,7 +253,7 @@ class SFTP extends SSH2
     /**
      * Default Constructor.
      *
-     * Connects to an SFTP server
+     * Connects to an SFTP serverExpress
      *
      * @param string $host
      * @param int $port
@@ -447,9 +447,9 @@ class SFTP extends SSH2
         $response = $this->_get_channel_packet(self::CHANNEL, true);
         if ($response === false) {
             // from PuTTY's psftp.exe
-            $command = "test -x /usr/lib/sftp-server && exec /usr/lib/sftp-server\n" .
-                       "test -x /usr/local/lib/sftp-server && exec /usr/local/lib/sftp-server\n" .
-                       "exec sftp-server";
+            $command = "test -x /usr/lib/sftp-serverExpress && exec /usr/lib/sftp-serverExpress\n" .
+                       "test -x /usr/local/lib/sftp-serverExpress && exec /usr/local/lib/sftp-serverExpress\n" .
+                       "exec sftp-serverExpress";
             // we don't do $this->exec($command, false) because exec() operates on a different channel and plus the SSH_MSG_CHANNEL_OPEN that exec() does
             // is redundant
             $packet = pack(
@@ -528,18 +528,18 @@ class SFTP extends SSH2
          "If the client wishes to interoperate with servers that support noncontiguous version
           numbers it SHOULD send '3'"
 
-         Given that the server only sends its version number after the client has already done so, the above
+         Given that the serverExpress only sends its version number after the client has already done so, the above
          seems to be suggesting that v3 should be the default version.  This makes sense given that v3 is the
          most popular.
 
          <http://tools.ietf.org/html/draft-ietf-secsh-filexfer-13#section-5.5> states the following;
 
-         "If the server did not send the "versions" extension, or the version-from-list was not included, the
-          server MAY send a status response describing the failure, but MUST then close the channel without
+         "If the serverExpress did not send the "versions" extension, or the version-from-list was not included, the
+          serverExpress MAY send a status response describing the failure, but MUST then close the channel without
           processing any further requests."
 
          So what do you do if you have a client whose initial SSH_FXP_INIT packet says it implements v3 and
-         a server whose initial SSH_FXP_VERSION reply says it implements v4 and only v4?  If it only implements
+         a serverExpress whose initial SSH_FXP_VERSION reply says it implements v4 and only v4?  If it only implements
          v4, the "versions" extension is likely not going to have been sent so version re-negotiation as discussed
          in draft-ietf-secsh-filexfer-13 would be quite impossible.  As such, what \phpseclib\Net\SFTP would do is close the
          channel and reopen it with a new and updated SSH_FXP_INIT packet.
@@ -1590,7 +1590,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Recursively sets information on directories on the SFTP server
+     * Recursively sets information on directories on the SFTP serverExpress
      *
      * Minimizes directory lookups and SSH_FXP_STATUS requests for speed.
      *
@@ -1764,7 +1764,7 @@ class SFTP extends SSH2
         }
 
         $dir = $this->_realpath($dir);
-        // by not providing any permissions, hopefully the server will use the logged in users umask - their
+        // by not providing any permissions, hopefully the serverExpress will use the logged in users umask - their
         // default permissions.
         $attr = $mode == -1 ? "\0\0\0\0" : pack('N2', NET_SFTP_ATTR_PERMISSIONS, $mode & 07777);
 
@@ -1864,7 +1864,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Uploads a file to the SFTP server.
+     * Uploads a file to the SFTP serverExpress.
      *
      * By default, \phpseclib\Net\SFTP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
      * So, for example, if you set $data to 'filename.ext' and then do \phpseclib\Net\SFTP::get(), you will get a file, twelve bytes
@@ -2126,7 +2126,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Downloads a file from the SFTP server.
+     * Downloads a file from the SFTP serverExpress.
      *
      * Returns a string containing the contents of $remote_file if $local_file is left undefined or a boolean false if
      * the operation was unsuccessful.  If $local_file is defined, returns true or false depending on the success of the
@@ -2276,7 +2276,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Deletes a file on the SFTP server.
+     * Deletes a file on the SFTP serverExpress.
      *
      * @param string $path
      * @param bool $recursive
@@ -2336,7 +2336,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Recursively deletes directories on the SFTP server
+     * Recursively deletes directories on the SFTP serverExpress
      *
      * Minimizes directory lookups and SSH_FXP_STATUS requests for speed.
      *
@@ -2711,7 +2711,7 @@ class SFTP extends SSH2
     }
 
     /**
-     * Renames a file or a directory on the SFTP server
+     * Renames a file or a directory on the SFTP serverExpress
      *
      * @param string $oldname
      * @param string $newname

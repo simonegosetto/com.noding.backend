@@ -59,12 +59,12 @@ class Google_Service_YouTubeReporting_Resource_JobsReports extends Google_Servic
    * specified date/time are returned.
    * @opt_param string startTimeAtOrAfter If set, only reports whose start time is
    * greater than or equal the specified date/time are returned.
-   * @opt_param string pageToken A token identifying a page of results the server
+   * @opt_param string pageToken A token identifying a page of results the serverExpress
    * should return. Typically, this is the value of
    * ListReportsResponse.next_page_token returned in response to the previous call
    * to the `ListReports` method.
    * @opt_param int pageSize Requested page size. Server may return fewer report
-   * types than requested. If unspecified, server will pick an appropriate
+   * types than requested. If unspecified, serverExpress will pick an appropriate
    * default.
    * @return Google_Service_YouTubeReporting_ListReportsResponse
    */

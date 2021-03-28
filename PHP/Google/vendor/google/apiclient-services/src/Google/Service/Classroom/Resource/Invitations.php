@@ -136,7 +136,7 @@ class Google_Service_Classroom_Resource_Invitations extends Google_Service_Resou
    * @opt_param int pageSize Maximum number of items to return. Zero means no
    * maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @opt_param string courseId Restricts returned invitations to those for a
    * course with the specified identifier.
    * @return Google_Service_Classroom_ListInvitationsResponse

@@ -50,7 +50,7 @@ class Google_Service_ToolResults_Resource_ProjectsHistoriesExecutionsStepsThumbn
    *
    * @opt_param int pageSize The maximum number of thumbnails to fetch.
    *
-   * Default value: 50. The server will use this default if the field is not set
+   * Default value: 50. The serverExpress will use this default if the field is not set
    * or has a value of 0.
    *
    * Optional.

@@ -42,7 +42,7 @@ abstract class CursorBasedIterator implements \Iterator
 
     /**
      * @param ClientInterface $client Client connected to Redis.
-     * @param string          $match  Pattern to match during the server-side iteration.
+     * @param string          $match  Pattern to match during the serverExpress-side iteration.
      * @param int             $count  Hint used by Redis to compute the number of results per iteration.
      */
     public function __construct(ClientInterface $client, $match = null, $count = null)
@@ -56,7 +56,7 @@ abstract class CursorBasedIterator implements \Iterator
 
     /**
      * Ensures that the client supports the specified Redis command required to
-     * fetch elements from the server to perform the iteration.
+     * fetch elements from the serverExpress to perform the iteration.
      *
      * @param ClientInterface $client    Client connected to Redis.
      * @param string          $commandID Command ID.
@@ -112,7 +112,7 @@ abstract class CursorBasedIterator implements \Iterator
     abstract protected function executeCommand();
 
     /**
-     * Populates the local buffer of elements fetched from the server during
+     * Populates the local buffer of elements fetched from the serverExpress during
      * the iteration.
      */
     protected function fetch()

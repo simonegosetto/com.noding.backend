@@ -62,7 +62,7 @@ class OAuth2 implements FetchAuthTokenInterface
 
     /**
      * - authorizationUri
-     *   The authorization server's HTTP endpoint capable of
+     *   The authorization serverExpress's HTTP endpoint capable of
      *   authenticating the end-user and obtaining authorization.
      *
      * @var UriInterface
@@ -71,7 +71,7 @@ class OAuth2 implements FetchAuthTokenInterface
 
     /**
      * - tokenCredentialUri
-     *   The authorization server's HTTP endpoint capable of issuing
+     *   The authorization serverExpress's HTTP endpoint capable of issuing
      *   tokens and refreshing expired tokens.
      *
      * @var UriInterface
@@ -87,14 +87,14 @@ class OAuth2 implements FetchAuthTokenInterface
 
     /**
      * A unique identifier issued to the client to identify itself to the
-     * authorization server.
+     * authorization serverExpress.
      *
      * @var string
      */
     private $clientId;
 
     /**
-     * A shared symmetric secret issued by the authorization server, which is
+     * A shared symmetric secret issued by the authorization serverExpress, which is
      * used to authenticate the client.
      *
      * @var string
@@ -250,19 +250,19 @@ class OAuth2 implements FetchAuthTokenInterface
      * The configuration array accepts various options
      *
      * - authorizationUri
-     *   The authorization server's HTTP endpoint capable of
+     *   The authorization serverExpress's HTTP endpoint capable of
      *   authenticating the end-user and obtaining authorization.
      *
      * - tokenCredentialUri
-     *   The authorization server's HTTP endpoint capable of issuing
+     *   The authorization serverExpress's HTTP endpoint capable of issuing
      *   tokens and refreshing expired tokens.
      *
      * - clientId
      *   A unique identifier issued to the client to identify itself to the
-     *   authorization server.
+     *   authorization serverExpress.
      *
      * - clientSecret
-     *   A shared symmetric secret issued by the authorization server,
+     *   A shared symmetric secret issued by the authorization serverExpress,
      *   which is used to authenticate the client.
      *
      * - scope
@@ -671,7 +671,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Sets the authorization server's HTTP endpoint capable of authenticating
+     * Sets the authorization serverExpress's HTTP endpoint capable of authenticating
      * the end-user and obtaining authorization.
      *
      * @param string $uri
@@ -682,7 +682,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Gets the authorization server's HTTP endpoint capable of authenticating
+     * Gets the authorization serverExpress's HTTP endpoint capable of authenticating
      * the end-user and obtaining authorization.
      *
      * @return UriInterface
@@ -693,7 +693,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Gets the authorization server's HTTP endpoint capable of issuing tokens
+     * Gets the authorization serverExpress's HTTP endpoint capable of issuing tokens
      * and refreshing expired tokens.
      *
      * @return string
@@ -704,7 +704,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Sets the authorization server's HTTP endpoint capable of issuing tokens
+     * Sets the authorization serverExpress's HTTP endpoint capable of issuing tokens
      * and refreshing expired tokens.
      *
      * @param string $uri
@@ -739,7 +739,7 @@ class OAuth2 implements FetchAuthTokenInterface
         // redirect URI must be absolute
         if (!$this->isAbsoluteUri($uri)) {
             // "postmessage" is a reserved URI string in Google-land
-            // @see https://developers.google.com/identity/sign-in/web/server-side-flow
+            // @see https://developers.google.com/identity/sign-in/web/serverExpress-side-flow
             if ('postmessage' !== (string)$uri) {
                 throw new InvalidArgumentException(
                     'Redirect URI must be absolute');
@@ -920,7 +920,7 @@ class OAuth2 implements FetchAuthTokenInterface
 
     /**
      * Sets a unique identifier issued to the client to identify itself to the
-     * authorization server.
+     * authorization serverExpress.
      */
     public function getClientId()
     {
@@ -929,7 +929,7 @@ class OAuth2 implements FetchAuthTokenInterface
 
     /**
      * Sets a unique identifier issued to the client to identify itself to the
-     * authorization server.
+     * authorization serverExpress.
      *
      * @param $clientId
      */
@@ -939,7 +939,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Gets a shared symmetric secret issued by the authorization server, which
+     * Gets a shared symmetric secret issued by the authorization serverExpress, which
      * is used to authenticate the client.
      */
     public function getClientSecret()
@@ -948,7 +948,7 @@ class OAuth2 implements FetchAuthTokenInterface
     }
 
     /**
-     * Sets a shared symmetric secret issued by the authorization server, which
+     * Sets a shared symmetric secret issued by the authorization serverExpress, which
      * is used to authenticate the client.
      *
      * @param $clientSecret

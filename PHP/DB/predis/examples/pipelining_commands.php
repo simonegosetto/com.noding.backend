@@ -11,7 +11,7 @@
 
 require __DIR__.'/shared.php';
 
-// When you have a whole set of consecutive commands to send to a redis server,
+// When you have a whole set of consecutive commands to send to a redis serverExpress,
 // you can use a pipeline to dramatically improve performances. Pipelines can
 // greatly reduce the effects of network round-trips.
 

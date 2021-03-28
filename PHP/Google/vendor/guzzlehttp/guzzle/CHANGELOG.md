@@ -62,7 +62,7 @@
 * Fixing timeout bug with StreamHandler:
   https://github.com/guzzle/guzzle/pull/1488
 * Only read up to `Content-Length` in PHP StreamHandler to avoid timeouts when
-  a server does not honor `Connection: close`.
+  a serverExpress does not honor `Connection: close`.
 * Ignore URI fragment when sending requests.
 
 ## 6.2.0 - 2016-03-21
@@ -567,7 +567,7 @@ interfaces.
 * Various performance optimizations
 * Streams are created with the faster `Stream\create()` function
 * Marked deprecation_proxy() as internal
-* Test server is now a collection of static methods on a class
+* Test serverExpress is now a collection of static methods on a class
 
 ## 4.0.0-rc.1 - 2014-03-15
 
@@ -821,7 +821,7 @@ interfaces.
 * Bug fix: Removing `Transfer-Encoding: chunked` header when a Content-Length is present
 * Bug fix: AsyncPlugin no longer forces HEAD requests
 * Bug fix: DateTime timezones are now properly handled when using the service description schema formatter
-* Bug fix: CachePlugin now properly handles stale-if-error directives when a request to the origin server fails
+* Bug fix: CachePlugin now properly handles stale-if-error directives when a request to the origin serverExpress fails
 * Setting a response on a request will write to the custom request body from the response body if one is specified
 * LogPlugin now writes to php://output when STDERR is undefined
 * Added the ability to set multiple POST files for the same key in a single call
@@ -1158,7 +1158,7 @@ interfaces.
 * BC: Removed magic setX methods from commands
 * BC: Magic methods mapped to service description commands are now inflected in the command factory rather than the client __call() method
 * Verbose cURL options are no longer enabled by default. Set curl.debug to true on a client to enable.
-* Bug: Now allowing colons in a response start-line (e.g. HTTP/1.1 503 Service Unavailable: Back-end server is at capacity)
+* Bug: Now allowing colons in a response start-line (e.g. HTTP/1.1 503 Service Unavailable: Back-end serverExpress is at capacity)
 * Guzzle\Service\Resource\ResourceIteratorApplyBatched now internally uses the Guzzle\Common\Batch namespace
 * Added Guzzle\Service\Plugin namespace and a PluginCollectionPlugin
 * Added the ability to set POST fields and files in a service description

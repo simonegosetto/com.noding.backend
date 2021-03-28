@@ -54,14 +54,14 @@ final class FD_SSH
         }
 
         if (!($this->connection = ssh2_connect($this->host, $this->port))) {
-            throw new Exception('Cannot connect to server');
+            throw new Exception('Cannot connect to serverExpress');
         }
         /*$fingerprint = ssh2_fingerprint($this->connection, SSH2_FINGERPRINT_MD5 | SSH2_FINGERPRINT_HEX);
         if (strcmp($this->ssh_server_fp, $fingerprint) !== 0) {
-            throw new Exception('Unable to verify server identity!');
+            throw new Exception('Unable to verify serverExpress identity!');
         } */
         if (!ssh2_auth_password($this->connection, $this->user, $this->pass)) {
-            throw new Exception('Autentication rejected by server');
+            throw new Exception('Autentication rejected by serverExpress');
         }
     }
 

@@ -28,7 +28,7 @@ class Google_Service_CloudProfiler_Resource_ProjectsProfiles extends Google_Serv
   /**
    * CreateProfile creates a new profile resource in the online mode.
    *
-   * The server ensures that the new profiles are created at a constant rate per
+   * The serverExpress ensures that the new profiles are created at a constant rate per
    * deployment, so the creation request may hang for some time until the next
    * profile session is available.
    *
@@ -53,7 +53,7 @@ class Google_Service_CloudProfiler_Resource_ProjectsProfiles extends Google_Serv
   /**
    * CreateOfflineProfile creates a new profile resource in the offline mode. The
    * client provides the profile to create along with the profile bytes, the
-   * server records it. (profiles.createOffline)
+   * serverExpress records it. (profiles.createOffline)
    *
    * @param string $parent Parent project to create the profile in.
    * @param Google_Service_CloudProfiler_Profile $postBody
@@ -72,7 +72,7 @@ class Google_Service_CloudProfiler_Resource_ProjectsProfiles extends Google_Serv
    * offline mode is currently not supported: the profile content must be provided
    * at the time of the profile creation. (profiles.patch)
    *
-   * @param string $name Output only. Opaque, server-assigned, unique ID for this
+   * @param string $name Output only. Opaque, serverExpress-assigned, unique ID for this
    * profile.
    * @param Google_Service_CloudProfiler_Profile $postBody
    * @param array $optParams Optional parameters.

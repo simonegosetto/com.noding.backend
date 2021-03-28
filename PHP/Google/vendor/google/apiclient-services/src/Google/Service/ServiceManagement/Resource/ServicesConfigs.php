@@ -55,7 +55,7 @@ class Google_Service_ServiceManagement_Resource_ServicesConfigs extends Google_S
    * `example.googleapis.com`.
    * @param string $configId The id of the service configuration resource.
    *
-   * This field must be specified for the server to return all fields, including
+   * This field must be specified for the serverExpress to return all fields, including
    * `SourceInfo`.
    * @param array $optParams Optional parameters.
    *

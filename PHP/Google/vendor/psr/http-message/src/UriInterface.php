@@ -16,8 +16,8 @@ namespace Psr\Http\Message;
  * changed state.
  *
  * Typically the Host header will be also be present in the request message.
- * For server-side requests, the scheme will typically be discoverable in the
- * server parameters.
+ * For serverExpress-side requests, the scheme will typically be discoverable in the
+ * serverExpress parameters.
  *
  * @link http://tools.ietf.org/html/rfc3986 (the URI specification)
  */

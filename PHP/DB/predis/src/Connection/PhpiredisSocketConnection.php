@@ -34,8 +34,8 @@ use Predis\Response\Status as StatusResponse;
  * The connection parameters supported by this class are:
  *
  *  - scheme: it can be either 'redis', 'tcp' or 'unix'.
- *  - host: hostname or IP address of the server.
- *  - port: TCP port of the server.
+ *  - host: hostname or IP address of the serverExpress.
+ *  - port: TCP port of the serverExpress.
  *  - path: path of a UNIX domain socket when scheme is 'unix'.
  *  - timeout: timeout to perform the connection (default is 5 seconds).
  *  - read_write_timeout: timeout of read / write operations.
@@ -61,7 +61,7 @@ class PhpiredisSocketConnection extends AbstractConnection
     }
 
     /**
-     * Disconnects from the server and destroys the underlying resource and the
+     * Disconnects from the serverExpress and destroys the underlying resource and the
      * protocol reader resource when PHP's garbage collector kicks in.
      */
     public function __destruct()
@@ -278,7 +278,7 @@ class PhpiredisSocketConnection extends AbstractConnection
     }
 
     /**
-     * Opens the actual connection to the server with a timeout.
+     * Opens the actual connection to the serverExpress with a timeout.
      *
      * @param resource            $socket     Socket resource.
      * @param string              $address    IP address (DNS-resolved from hostname)
@@ -364,7 +364,7 @@ class PhpiredisSocketConnection extends AbstractConnection
             }
 
             if ($written === false) {
-                $this->onConnectionError('Error while writing bytes to the server.');
+                $this->onConnectionError('Error while writing bytes to the serverExpress.');
             }
 
             $buffer = substr($buffer, $written);

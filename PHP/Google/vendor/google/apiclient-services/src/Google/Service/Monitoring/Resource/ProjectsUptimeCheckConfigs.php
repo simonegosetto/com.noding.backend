@@ -85,8 +85,8 @@ class Google_Service_Monitoring_Resource_ProjectsUptimeCheckConfigs extends Goog
    * this field causes the method to return more results from the previous method
    * call.
    * @opt_param int pageSize The maximum number of results to return in a single
-   * response. The server may further constrain the maximum number of results
-   * returned in a single page. If the page_size is <=0, the server will decide
+   * response. The serverExpress may further constrain the maximum number of results
+   * returned in a single page. If the page_size is <=0, the serverExpress will decide
    * the number of results to be returned.
    * @return Google_Service_Monitoring_ListUptimeCheckConfigsResponse
    */
@@ -105,7 +105,7 @@ class Google_Service_Monitoring_Resource_ProjectsUptimeCheckConfigs extends Goog
    * @param string $name A unique resource name for this UptimeCheckConfig. The
    * format is:projects/[PROJECT_ID]/uptimeCheckConfigs/[UPTIME_CHECK_ID].This
    * field should be omitted when creating the uptime check configuration; on
-   * create, the resource name is assigned by the server and included in the
+   * create, the resource name is assigned by the serverExpress and included in the
    * response.
    * @param Google_Service_Monitoring_UptimeCheckConfig $postBody
    * @param array $optParams Optional parameters.

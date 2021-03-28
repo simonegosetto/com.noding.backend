@@ -22,13 +22,13 @@ $mail->isSMTP();
 //Enable SMTP debugging
 // 0 = off (for production use)
 // 1 = client messages
-// 2 = client and server messages
+// 2 = client and serverExpress messages
 $mail->SMTPDebug = 0;
 
 //Ask for HTML-friendly debug output
 $mail->Debugoutput = 'html';
 
-//Set the hostname of the mail server
+//Set the hostname of the mail serverExpress
 $mail->Host = 'smtp.gmail.com';
 
 //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission

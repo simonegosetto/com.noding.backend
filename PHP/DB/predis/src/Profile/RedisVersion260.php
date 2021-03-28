@@ -110,7 +110,7 @@ class RedisVersion260 extends RedisProfile
             'ECHO' => 'Predis\Command\ConnectionEcho',
             'QUIT' => 'Predis\Command\ConnectionQuit',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'INFO' => 'Predis\Command\ServerInfoV26x',
             'SLAVEOF' => 'Predis\Command\ServerSlaveOf',
             'MONITOR' => 'Predis\Command\ServerMonitor',
@@ -168,7 +168,7 @@ class RedisVersion260 extends RedisProfile
             'PUNSUBSCRIBE' => 'Predis\Command\PubSubUnsubscribeByPattern',
             'PUBLISH' => 'Predis\Command\PubSubPublish',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'CONFIG' => 'Predis\Command\ServerConfig',
 
             /* ---------------- Redis 2.2 ---------------- */
@@ -196,13 +196,13 @@ class RedisVersion260 extends RedisProfile
             'WATCH' => 'Predis\Command\TransactionWatch',
             'UNWATCH' => 'Predis\Command\TransactionUnwatch',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'OBJECT' => 'Predis\Command\ServerObject',
             'SLOWLOG' => 'Predis\Command\ServerSlowlog',
 
             /* ---------------- Redis 2.4 ---------------- */
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'CLIENT' => 'Predis\Command\ServerClient',
 
             /* ---------------- Redis 2.6 ---------------- */
@@ -227,7 +227,7 @@ class RedisVersion260 extends RedisProfile
             'EVALSHA' => 'Predis\Command\ServerEvalSHA',
             'SCRIPT' => 'Predis\Command\ServerScript',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'TIME' => 'Predis\Command\ServerTime',
             'SENTINEL' => 'Predis\Command\ServerSentinel',
         );

@@ -82,7 +82,7 @@ class Atomic extends Pipeline
         if (!isset($executed)) {
             // TODO: should be throwing a more appropriate exception.
             throw new ClientException(
-                'The underlying transaction has been aborted by the server.'
+                'The underlying transaction has been aborted by the serverExpress.'
             );
         }
 

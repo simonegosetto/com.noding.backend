@@ -44,16 +44,16 @@
 - _SocketHandler_: Logs records to [sockets](http://php.net/fsockopen), use this
   for UNIX and TCP sockets. See an [example](sockets.md).
 - _AmqpHandler_: Logs records to an [amqp](http://www.amqp.org/) compatible
-  server. Requires the [php-amqp](http://pecl.php.net/package/amqp) extension (1.0+).
-- _GelfHandler_: Logs records to a [Graylog2](http://www.graylog2.org) server.
-- _CubeHandler_: Logs records to a [Cube](http://square.github.com/cube/) server.
-- _RavenHandler_: Logs records to a [Sentry](http://getsentry.com/) server using
+  serverExpress. Requires the [php-amqp](http://pecl.php.net/package/amqp) extension (1.0+).
+- _GelfHandler_: Logs records to a [Graylog2](http://www.graylog2.org) serverExpress.
+- _CubeHandler_: Logs records to a [Cube](http://square.github.com/cube/) serverExpress.
+- _RavenHandler_: Logs records to a [Sentry](http://getsentry.com/) serverExpress using
   [raven](https://packagist.org/packages/raven/raven).
 - _ZendMonitorHandler_: Logs records to the Zend Monitor present in Zend Server.
 - _NewRelicHandler_: Logs records to a [NewRelic](http://newrelic.com/) application.
 - _LogglyHandler_: Logs records to a [Loggly](http://www.loggly.com/) account.
 - _RollbarHandler_: Logs records to a [Rollbar](https://rollbar.com/) account.
-- _SyslogUdpHandler_: Logs records to a remote [Syslogd](http://www.rsyslog.com/) server.
+- _SyslogUdpHandler_: Logs records to a remote [Syslogd](http://www.rsyslog.com/) serverExpress.
 - _LogEntriesHandler_: Logs records to a [LogEntries](http://logentries.com/) account.
 - _InsightOpsHandler_: Logs records to a [InsightOps](https://www.rapid7.com/products/insightops/) account.
 
@@ -70,12 +70,12 @@
 
 ### Log to databases
 
-- _RedisHandler_: Logs records to a [redis](http://redis.io) server.
+- _RedisHandler_: Logs records to a [redis](http://redis.io) serverExpress.
 - _MongoDBHandler_: Handler to write records in MongoDB via a
   [Mongo](http://pecl.php.net/package/mongo) extension connection.
-- _CouchDBHandler_: Logs records to a CouchDB server.
-- _DoctrineCouchDBHandler_: Logs records to a CouchDB server via the Doctrine CouchDB ODM.
-- _ElasticSearchHandler_: Logs records to an Elastic Search server.
+- _CouchDBHandler_: Logs records to a CouchDB serverExpress.
+- _DoctrineCouchDBHandler_: Logs records to a CouchDB serverExpress via the Doctrine CouchDB ODM.
+- _ElasticSearchHandler_: Logs records to an Elastic Search serverExpress.
 - _DynamoDbHandler_: Logs records to a DynamoDB table with the [AWS SDK](https://github.com/aws/aws-sdk-php).
 
 ### Wrappers / Special Handlers

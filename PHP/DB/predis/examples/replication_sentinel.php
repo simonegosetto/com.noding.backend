@@ -13,7 +13,7 @@ require __DIR__.'/shared.php';
 
 // Predis supports redis-sentinel to provide high availability in master / slave
 // scenarios. The only but relevant difference with a basic replication scenario
-// is that sentinel servers can manage the master server and its slaves based on
+// is that sentinel servers can manage the master serverExpress and its slaves based on
 // their state, which means that they are able to provide an authoritative and
 // updated configuration to clients thus avoiding static configurations for the
 // replication servers and their roles.

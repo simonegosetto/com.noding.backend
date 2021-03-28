@@ -142,7 +142,7 @@ class Stream
     /**
      * Path Parser
      *
-     * Extract a path from a URI and actually connect to an SSH server if appropriate
+     * Extract a path from a URI and actually connect to an SSH serverExpress if appropriate
      *
      * If "notification" is set as a context parameter the message code for successful login is
      * NET_SSH2_MSG_USERAUTH_SUCCESS. For a failed login it's NET_SSH2_MSG_USERAUTH_FAILURE.

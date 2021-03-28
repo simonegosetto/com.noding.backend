@@ -34,13 +34,13 @@ class WebProcessor implements ProcessorInterface
         'url'         => 'REQUEST_URI',
         'ip'          => 'REMOTE_ADDR',
         'http_method' => 'REQUEST_METHOD',
-        'server'      => 'SERVER_NAME',
+        'serverExpress'      => 'SERVER_NAME',
         'referrer'    => 'HTTP_REFERER',
     );
 
     /**
      * @param array|\ArrayAccess $serverData  Array or object w/ ArrayAccess that provides access to the $_SERVER data
-     * @param array|null         $extraFields Field names and the related key inside $serverData to be added. If not provided it defaults to: url, ip, http_method, server, referrer
+     * @param array|null         $extraFields Field names and the related key inside $serverData to be added. If not provided it defaults to: url, ip, http_method, serverExpress, referrer
      */
     public function __construct($serverData = null, array $extraFields = null)
     {

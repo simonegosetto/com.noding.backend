@@ -62,7 +62,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRingsCryptoKeysCrypto
   /**
    * Create a new CryptoKeyVersion in a CryptoKey.
    *
-   * The server will assign the next sequential id. If unset, state will be set to
+   * The serverExpress will assign the next sequential id. If unset, state will be set to
    * ENABLED. (cryptoKeyVersions.create)
    *
    * @param string $parent Required. The name of the CryptoKey associated with the
@@ -140,7 +140,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRingsCryptoKeysCrypto
    * @opt_param int pageSize Optional limit on the number of CryptoKeyVersions to
    * include in the response. Further CryptoKeyVersions can subsequently be
    * obtained by including the ListCryptoKeyVersionsResponse.next_page_token in a
-   * subsequent request. If unspecified, the server will pick an appropriate
+   * subsequent request. If unspecified, the serverExpress will pick an appropriate
    * default.
    * @opt_param string view The fields to include in the response.
    * @return Google_Service_CloudKMS_ListCryptoKeyVersionsResponse

@@ -52,7 +52,7 @@ class Google_Service_Spanner_Resource_ProjectsInstanceConfigs extends Google_Ser
    * @opt_param string pageToken If non-empty, `page_token` should contain a
    * next_page_token from a previous ListInstanceConfigsResponse.
    * @opt_param int pageSize Number of instance configurations to be returned in
-   * the response. If 0 or less, defaults to the server's maximum allowed page
+   * the response. If 0 or less, defaults to the serverExpress's maximum allowed page
    * size.
    * @return Google_Service_Spanner_ListInstanceConfigsResponse
    */

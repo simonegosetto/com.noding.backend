@@ -83,7 +83,7 @@ class Google_Service_WebSecurityScanner_Resource_ProjectsScanConfigs extends Goo
    * returned. This should be a `next_page_token` value returned from a previous
    * List request. If unspecified, the first page of results is returned.
    * @opt_param int pageSize The maximum number of ScanConfigs to return, can be
-   * limited by server. If not specified or not positive, the implementation will
+   * limited by serverExpress. If not specified or not positive, the implementation will
    * select a reasonable value.
    * @return Google_Service_WebSecurityScanner_ListScanConfigsResponse
    */

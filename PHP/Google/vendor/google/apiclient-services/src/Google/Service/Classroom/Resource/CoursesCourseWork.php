@@ -134,9 +134,9 @@ class Google_Service_Classroom_Resource_CoursesCourseWork extends Google_Service
    * The list request must be otherwise identical to the one that resulted in this
    * token.
    * @opt_param int pageSize Maximum number of items to return. Zero or
-   * unspecified indicates that the server may assign a maximum.
+   * unspecified indicates that the serverExpress may assign a maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @opt_param string courseWorkStates Restriction on the work status to return.
    * Only courseWork that matches is returned. If unspecified, items with a work
    * status of `PUBLISHED` is returned.

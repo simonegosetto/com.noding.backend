@@ -34,7 +34,7 @@ class Google_Service_Container_Resource_ProjectsZonesOperations extends Google_S
    * @param string $zone Deprecated. The name of the Google Compute Engine
    * [zone](/compute/docs/zones#available) in which the operation resides. This
    * field has been deprecated and replaced by the name field.
-   * @param string $operationId Deprecated. The server-assigned `name` of the
+   * @param string $operationId Deprecated. The serverExpress-assigned `name` of the
    * operation. This field has been deprecated and replaced by the name field.
    * @param Google_Service_Container_CancelOperationRequest $postBody
    * @param array $optParams Optional parameters.
@@ -55,7 +55,7 @@ class Google_Service_Container_Resource_ProjectsZonesOperations extends Google_S
    * @param string $zone Deprecated. The name of the Google Compute Engine
    * [zone](/compute/docs/zones#available) in which the cluster resides. This
    * field has been deprecated and replaced by the name field.
-   * @param string $operationId Deprecated. The server-assigned `name` of the
+   * @param string $operationId Deprecated. The serverExpress-assigned `name` of the
    * operation. This field has been deprecated and replaced by the name field.
    * @param array $optParams Optional parameters.
    *

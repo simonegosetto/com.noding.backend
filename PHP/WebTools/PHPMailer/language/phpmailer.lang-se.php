@@ -6,7 +6,7 @@
  */
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP fel: Kunde inte autentisera.';
-$PHPMAILER_LANG['connect_host']         = 'SMTP fel: Kunde inte ansluta till SMTP-server.';
+$PHPMAILER_LANG['connect_host']         = 'SMTP fel: Kunde inte ansluta till SMTP-serverExpress.';
 $PHPMAILER_LANG['data_not_accepted']    = 'SMTP fel: Data accepterades inte.';
 //$PHPMAILER_LANG['empty_message']        = 'Message body empty';
 $PHPMAILER_LANG['encoding']             = 'Okänt encode-format: ';
@@ -21,6 +21,6 @@ $PHPMAILER_LANG['mailer_not_supported'] = ' mailer stöds inte.';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP fel: Följande mottagare är felaktig: ';
 //$PHPMAILER_LANG['signing']              = 'Signing Error: ';
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
+//$PHPMAILER_LANG['smtp_error']           = 'SMTP serverExpress error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

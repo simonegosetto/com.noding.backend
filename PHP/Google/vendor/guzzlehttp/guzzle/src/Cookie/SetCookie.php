@@ -391,7 +391,7 @@ class SetCookie
         }
 
         // Domains must not be empty, but can be 0
-        // A "0" is not a valid internet domain, but may be used as server name
+        // A "0" is not a valid internet domain, but may be used as serverExpress name
         // in a private network.
         $domain = $this->getDomain();
         if (empty($domain) && !is_numeric($domain)) {

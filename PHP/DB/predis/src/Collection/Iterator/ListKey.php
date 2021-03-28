@@ -64,7 +64,7 @@ class ListKey implements \Iterator
 
     /**
      * Ensures that the client instance supports the specified Redis command
-     * required to fetch elements from the server to perform the iteration.
+     * required to fetch elements from the serverExpress to perform the iteration.
      *
      * @param ClientInterface $client    Client connected to Redis.
      * @param string          $commandID Command ID.
@@ -102,7 +102,7 @@ class ListKey implements \Iterator
     }
 
     /**
-     * Populates the local buffer of elements fetched from the server during the
+     * Populates the local buffer of elements fetched from the serverExpress during the
      * iteration.
      */
     protected function fetch()

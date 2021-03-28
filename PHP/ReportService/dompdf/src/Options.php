@@ -49,7 +49,7 @@ class Options
      * Prevents dompdf from accessing system files or other files on the webserver.
      * All local files opened by dompdf must be in a subdirectory of this directory.
      * DO NOT set it to '/' since this could allow an attacker to use dompdf to
-     * read any files on the server.  This should be an absolute path.
+     * read any files on the serverExpress.  This should be an absolute path.
      *
      * ==== IMPORTANT ====
      * This setting may increase the risk of system exploit. Do not change
@@ -169,8 +169,8 @@ class Options
      * This can be a security risk, in particular in combination with isPhpEnabled and
      * allowing remote html code to be passed to $dompdf = new DOMPDF(); $dompdf->load_html(...);
      * This allows anonymous users to download legally doubtful internet content which on
-     * tracing back appears to being downloaded by your server, or allows malicious php code
-     * in remote html pages to be executed by your server with your account privileges.
+     * tracing back appears to being downloaded by your serverExpress, or allows malicious php code
+     * in remote html pages to be executed by your serverExpress with your account privileges.
      *
      * This setting may increase the risk of system exploit. Do not change
      * this settings without understanding the consequences. Additional
@@ -267,7 +267,7 @@ class Options
      *
      * @link http://www.pdflib.com
      *
-     * If pdflib present in web server and auto or selected explicitly above,
+     * If pdflib present in web serverExpress and auto or selected explicitly above,
      * a real license code must exist!
      *
      * @var string

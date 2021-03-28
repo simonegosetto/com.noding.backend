@@ -82,7 +82,7 @@ class Google_Service_DLP_Resource_ProjectsJobTriggers extends Google_Service_Res
    * @param array $optParams Optional parameters.
    *
    * @opt_param int pageSize Optional size of the page, can be limited by a
-   * server.
+   * serverExpress.
    * @opt_param string pageToken Optional page token to continue retrieval. Comes
    * from previous call to ListJobTriggers. `order_by` field must not change for
    * subsequent calls.

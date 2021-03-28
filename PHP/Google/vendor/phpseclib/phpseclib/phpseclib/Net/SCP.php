@@ -97,7 +97,7 @@ class SCP
     /**
      * Default Constructor.
      *
-     * Connects to an SSH server
+     * Connects to an SSH serverExpress
      *
      * @param \phpseclib\Net\SSH1|\phpseclib\Net\SSH2 $ssh
      * @return \phpseclib\Net\SCP
@@ -118,7 +118,7 @@ class SCP
     }
 
     /**
-     * Uploads a file to the SCP server.
+     * Uploads a file to the SCP serverExpress.
      *
      * By default, \phpseclib\Net\SCP::put() does not read from the local filesystem.  $data is dumped directly into $remote_file.
      * So, for example, if you set $data to 'filename.ext' and then do \phpseclib\Net\SCP::get(), you will get a file, twelve bytes
@@ -201,7 +201,7 @@ class SCP
     }
 
     /**
-     * Downloads a file from the SCP server.
+     * Downloads a file from the SCP serverExpress.
      *
      * Returns a string containing the contents of $remote_file if $local_file is left undefined or a boolean false if
      * the operation was unsuccessful.  If $local_file is defined, returns true or false depending on the success of the
@@ -263,7 +263,7 @@ class SCP
     }
 
     /**
-     * Sends a packet to an SSH server
+     * Sends a packet to an SSH serverExpress
      *
      * @param string $data
      * @access private
@@ -281,7 +281,7 @@ class SCP
     }
 
     /**
-     * Receives a packet from an SSH server
+     * Receives a packet from an SSH serverExpress
      *
      * @return string
      * @access private
@@ -320,7 +320,7 @@ class SCP
     }
 
     /**
-     * Closes the connection to an SSH server
+     * Closes the connection to an SSH serverExpress
      *
      * @access private
      */

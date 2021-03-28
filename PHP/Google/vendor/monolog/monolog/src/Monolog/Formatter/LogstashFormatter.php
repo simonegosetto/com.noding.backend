@@ -107,8 +107,8 @@ class LogstashFormatter extends NormalizerFormatter
         if ($this->applicationName) {
             $message['@type'] = $this->applicationName;
         }
-        if (isset($record['extra']['server'])) {
-            $message['@source_host'] = $record['extra']['server'];
+        if (isset($record['extra']['serverExpress'])) {
+            $message['@source_host'] = $record['extra']['serverExpress'];
         }
         if (isset($record['extra']['url'])) {
             $message['@source_path'] = $record['extra']['url'];

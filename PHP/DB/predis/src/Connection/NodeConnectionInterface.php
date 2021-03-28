@@ -50,7 +50,7 @@ interface NodeConnectionInterface extends ConnectionInterface
     public function addConnectCommand(CommandInterface $command);
 
     /**
-     * Reads a response from the server.
+     * Reads a response from the serverExpress.
      *
      * @return mixed
      */

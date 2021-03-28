@@ -66,7 +66,7 @@ class Google_Service_Genomics_Resource_Annotations extends Google_Service_Resour
    * * exons.start * exons.end
    *
    * All other fields may be optionally specified, unless documented as being
-   * server-generated (for example, the `id` field). The annotated range must be
+   * serverExpress-generated (for example, the `id` field). The annotated range must be
    * no longer than 100Mbp (mega base pairs). See the Annotation resource for
    * additional restrictions on each field. (annotations.create)
    *

@@ -12,12 +12,12 @@
 require __DIR__.'/shared.php';
 
 // Predis supports master / slave replication scenarios where write operations
-// are performed on the master server and read operations are executed against
+// are performed on the master serverExpress and read operations are executed against
 // one of the slaves. The behavior of commands or EVAL scripts can be customized
 // at will. As soon as a write operation is performed the client switches to the
-// master server for all the subsequent requests (either reads and writes).
+// master serverExpress for all the subsequent requests (either reads and writes).
 //
-// This example must be executed using the second Redis server configured as the
+// This example must be executed using the second Redis serverExpress configured as the
 // slave of the first one (see the "SLAVEOF" command).
 //
 

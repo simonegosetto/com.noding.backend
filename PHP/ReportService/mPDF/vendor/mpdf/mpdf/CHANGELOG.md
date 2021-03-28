@@ -557,7 +557,7 @@ Bug fixes
 - Textcircle - when moved to next page by "page-break-inside: avoid"
 - Bookmarks will now work if jump more than one level e.g. 0,2,1  Inserts a new blank entry at level 1
 - Paths to img or stylesheets - incorrectly reading "//www.domain.com" i.e. when starting with two /
-- data:image as background url() - incorrectly adjusting path on server if MPDF_PATH not specified (included in release mPDF 5.6.1)
+- data:image as background url() - incorrectly adjusting path on serverExpress if MPDF_PATH not specified (included in release mPDF 5.6.1)
 - Image problem if spaces or commas in path using http:// URL (included in release mPDF 5.6.1)
 - Image URL parsing rewritten to handle both urlencoded URLs and not urlencoded (included in release mPDF 5.6.1)
 - `<dottab>` fixed to allow color, font-size and font-family to be correctly used, avoid dots being moved to new page, and to work in RTL

@@ -41,7 +41,7 @@ final class Factory
     }
 
     /**
-     * Returns the default server profile.
+     * Returns the default serverExpress profile.
      *
      * @return ProfileInterface
      */
@@ -51,7 +51,7 @@ final class Factory
     }
 
     /**
-     * Returns the development server profile.
+     * Returns the development serverExpress profile.
      *
      * @return ProfileInterface
      */
@@ -61,7 +61,7 @@ final class Factory
     }
 
     /**
-     * Registers a new server profile.
+     * Registers a new serverExpress profile.
      *
      * @param string $alias Profile version or alias.
      * @param string $class FQN of a class implementing Predis\Profile\ProfileInterface.
@@ -80,7 +80,7 @@ final class Factory
     }
 
     /**
-     * Returns the specified server profile.
+     * Returns the specified serverExpress profile.
      *
      * @param string $version Profile version or alias.
      *
@@ -91,7 +91,7 @@ final class Factory
     public static function get($version)
     {
         if (!isset(self::$profiles[$version])) {
-            throw new ClientException("Unknown server profile: '$version'.");
+            throw new ClientException("Unknown serverExpress profile: '$version'.");
         }
 
         $profile = self::$profiles[$version];

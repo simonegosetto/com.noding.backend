@@ -200,7 +200,7 @@ class Mandrill_Messages {
      *         - smtp_events[] struct information about a specific smtp event
      *             - ts integer the Unix timestamp when the event occured
      *             - type string the message's state as a result of this event
-     *             - diag string the SMTP response from the recipient's server
+     *             - diag string the SMTP response from the recipient's serverExpress
      */
     public function search($query='*', $date_from=null, $date_to=null, $tags=null, $senders=null, $api_keys=null, $limit=100) {
         $_params = array("query" => $query, "date_from" => $date_from, "date_to" => $date_to, "tags" => $tags, "senders" => $senders, "api_keys" => $api_keys, "limit" => $limit);
@@ -266,7 +266,7 @@ class Mandrill_Messages {
      *         - smtp_events[] struct information about a specific smtp event
      *             - ts integer the Unix timestamp when the event occured
      *             - type string the message's state as a result of this event
-     *             - diag string the SMTP response from the recipient's server
+     *             - diag string the SMTP response from the recipient's serverExpress
      */
     public function info($id) {
         $_params = array("id" => $id);

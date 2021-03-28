@@ -33,8 +33,8 @@ use Predis\Response\Status as StatusResponse;
  * The connection parameters supported by this class are:
  *
  *  - scheme: it can be either 'redis', 'tcp' or 'unix'.
- *  - host: hostname or IP address of the server.
- *  - port: TCP port of the server.
+ *  - host: hostname or IP address of the serverExpress.
+ *  - port: TCP port of the serverExpress.
  *  - path: path of a UNIX domain socket when scheme is 'unix'.
  *  - timeout: timeout to perform the connection.
  *  - read_write_timeout: timeout of read / write operations.
@@ -201,7 +201,7 @@ class PhpiredisStreamConnection extends StreamConnection
             $buffer = stream_socket_recvfrom($socket, 4096);
 
             if ($buffer === false || $buffer === '') {
-                $this->onConnectionError('Error while reading bytes from the server.');
+                $this->onConnectionError('Error while reading bytes from the serverExpress.');
             }
 
             phpiredis_reader_feed($reader, $buffer);

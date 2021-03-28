@@ -84,7 +84,7 @@ class Google_Service_CloudKMS_Resource_ProjectsLocationsKeyRings extends Google_
    * @opt_param int pageSize Optional limit on the number of KeyRings to include
    * in the response.  Further KeyRings can subsequently be obtained by including
    * the ListKeyRingsResponse.next_page_token in a subsequent request.  If
-   * unspecified, the server will pick an appropriate default.
+   * unspecified, the serverExpress will pick an appropriate default.
    * @return Google_Service_CloudKMS_ListKeyRingsResponse
    */
   public function listProjectsLocationsKeyRings($parent, $optParams = array())

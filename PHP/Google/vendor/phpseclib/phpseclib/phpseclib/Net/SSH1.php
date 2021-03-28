@@ -105,8 +105,8 @@ class SSH1
      * @internal According to the SSH1 specs:
      *
      *        "The first 16 bytes of the session key are used as the key for
-     *         the server to client direction.  The remaining 16 bytes are used
-     *         as the key for the client to server direction.  This gives
+     *         the serverExpress to client direction.  The remaining 16 bytes are used
+     *         as the key for the client to serverExpress direction.  This gives
      *         independent 128-bit keys for each direction."
      *
      *     This library currently only supports encryption when the same key is being used for both directions.  This is
@@ -495,7 +495,7 @@ class SSH1
     /**
      * Default Constructor.
      *
-     * Connects to an SSHv1 server
+     * Connects to an SSHv1 serverExpress
      *
      * @param string $host
      * @param int $port
@@ -534,7 +534,7 @@ class SSH1
     }
 
     /**
-     * Connect to an SSHv1 server
+     * Connect to an SSHv1 serverExpress
      *
      * @return bool
      * @access private
@@ -798,8 +798,8 @@ class SSH1
     /**
      * Executes a command on a non-interactive shell, returns the output, and quits.
      *
-     * An SSH1 server will close the connection after a command has been executed on a non-interactive shell.  SSH2
-     * servers don't, however, this isn't an SSH2 client.  The way this works, on the server, is by initiating a
+     * An SSH1 serverExpress will close the connection after a command has been executed on a non-interactive shell.  SSH2
+     * servers don't, however, this isn't an SSH2 client.  The way this works, on the serverExpress, is by initiating a
      * shell with the -s option, as discussed in the following links:
      *
      * {@link http://www.faqs.org/docs/bashman/bashref_65.html http://www.faqs.org/docs/bashman/bashref_65.html}
@@ -1143,7 +1143,7 @@ class SSH1
         $temp = unpack('Ncrc', substr($raw, -4));
 
         //if ( $temp['crc'] != $this->_crc($padding . $type . $data) ) {
-        //    user_error('Bad CRC in packet from server');
+        //    user_error('Bad CRC in packet from serverExpress');
         //    return false;
         //}
 
@@ -1474,7 +1474,7 @@ class SSH1
     }
 
     /**
-     * Return the server key public exponent
+     * Return the serverExpress key public exponent
      *
      * Returns, by default, the base-10 representation.  If $raw_output is set to true, returns, instead,
      * the raw bytes.  This behavior is similar to PHP's md5() function.
@@ -1489,7 +1489,7 @@ class SSH1
     }
 
     /**
-     * Return the server key public modulus
+     * Return the serverExpress key public modulus
      *
      * Returns, by default, the base-10 representation.  If $raw_output is set to true, returns, instead,
      * the raw bytes.  This behavior is similar to PHP's md5() function.
@@ -1534,9 +1534,9 @@ class SSH1
     }
 
     /**
-     * Return a list of ciphers supported by SSH1 server.
+     * Return a list of ciphers supported by SSH1 serverExpress.
      *
-     * Just because a cipher is supported by an SSH1 server doesn't mean it's supported by this library. If $raw_output
+     * Just because a cipher is supported by an SSH1 serverExpress doesn't mean it's supported by this library. If $raw_output
      * is set to true, returns, instead, an array of constants.  ie. instead of array('Triple-DES in CBC mode'), you'll
      * get array(self::CIPHER_3DES).
      *
@@ -1550,9 +1550,9 @@ class SSH1
     }
 
     /**
-     * Return a list of authentications supported by SSH1 server.
+     * Return a list of authentications supported by SSH1 serverExpress.
      *
-     * Just because a cipher is supported by an SSH1 server doesn't mean it's supported by this library. If $raw_output
+     * Just because a cipher is supported by an SSH1 serverExpress doesn't mean it's supported by this library. If $raw_output
      * is set to true, returns, instead, an array of constants.  ie. instead of array('password authentication'), you'll
      * get array(self::AUTH_PASSWORD).
      *
@@ -1566,7 +1566,7 @@ class SSH1
     }
 
     /**
-     * Return the server identification.
+     * Return the serverExpress identification.
      *
      * @return string
      * @access public

@@ -412,16 +412,16 @@
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
-                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB serverExpress",
+                "ext-amqp": "Allow sending log messages to an AMQP serverExpress (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB serverExpress",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 serverExpress",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB serverExpress via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP serverExpress using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "sentry/sentry": "Allow sending log messages to a Sentry server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search serverExpress",
+                "sentry/sentry": "Allow sending log messages to a Sentry serverExpress"
             },
             "type": "library",
             "extra": {

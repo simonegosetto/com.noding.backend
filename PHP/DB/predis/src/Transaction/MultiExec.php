@@ -210,7 +210,7 @@ class MultiExec implements ClientContextInterface
         } elseif ($response instanceof ErrorResponseInterface) {
             throw new AbortedMultiExecException($this, $response->getMessage());
         } else {
-            $this->onProtocolError('The server did not return a +QUEUED status response.');
+            $this->onProtocolError('The serverExpress did not return a +QUEUED status response.');
         }
 
         return $this;
@@ -243,7 +243,7 @@ class MultiExec implements ClientContextInterface
     }
 
     /**
-     * Finalizes the transaction by executing MULTI on the server.
+     * Finalizes the transaction by executing MULTI on the serverExpress.
      *
      * @return MultiExec
      */
@@ -282,7 +282,7 @@ class MultiExec implements ClientContextInterface
 
     /**
      * Resets the transaction by UNWATCH-ing the keys that are being WATCHed and
-     * DISCARD-ing pending commands that have been already sent to the server.
+     * DISCARD-ing pending commands that have been already sent to the serverExpress.
      *
      * @return MultiExec
      */
@@ -381,7 +381,7 @@ class MultiExec implements ClientContextInterface
             if ($execResponse === null) {
                 if ($attempts === 0) {
                     throw new AbortedMultiExecException(
-                        $this, 'The current transaction has been aborted by the server.'
+                        $this, 'The current transaction has been aborted by the serverExpress.'
                     );
                 }
 

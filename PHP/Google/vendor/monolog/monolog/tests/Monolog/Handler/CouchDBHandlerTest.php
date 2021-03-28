@@ -25,7 +25,7 @@ class CouchDBHandlerTest extends TestCase
         try {
             $handler->handle($record);
         } catch (\RuntimeException $e) {
-            $this->markTestSkipped('Could not connect to couchdb server on http://localhost:5984');
+            $this->markTestSkipped('Could not connect to couchdb serverExpress on http://localhost:5984');
         }
     }
 }

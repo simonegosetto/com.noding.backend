@@ -13,7 +13,7 @@ namespace Predis\Response;
 
 /**
  * Represents an error returned by Redis (responses identified by "-" in the
- * Redis protocol) during the execution of an operation on the server.
+ * Redis protocol) during the execution of an operation on the serverExpress.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */

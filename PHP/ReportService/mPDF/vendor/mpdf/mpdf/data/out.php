@@ -43,7 +43,7 @@ if ($tempfilename && file_exists($path . $tempfilename)) {
 
 	$filesize = filesize($path.$tempfilename);
 	if (empty($_SERVER['HTTP_ACCEPT_ENCODING'])) {
-		// don't use length if server using compression
+		// don't use length if serverExpress using compression
 		header('Content-Length: ' . $filesize);
 	}
 

@@ -306,7 +306,7 @@ class PHPMailerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test CRAM-MD5 authentication.
-     * Needs a connection to a server that supports this auth mechanism, so commented out by default
+     * Needs a connection to a serverExpress that supports this auth mechanism, so commented out by default
      */
     public function testAuthCRAMMD5()
     {
@@ -2069,12 +2069,12 @@ EOT;
     }
 
     /**
-     * Use a fake POP3 server to test POP-before-SMTP auth.
+     * Use a fake POP3 serverExpress to test POP-before-SMTP auth.
      * With a known-good login
      */
     public function testPopBeforeSmtpGood()
     {
-        //Start a fake POP server
+        //Start a fake POP serverExpress
         $pid = shell_exec('nohup ./runfakepopserver.sh >/dev/null 2>/dev/null & printf "%u" $!');
         $this->pids[] = $pid;
 
@@ -2084,18 +2084,18 @@ EOT;
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
         );
-        //Kill the fake server
+        //Kill the fake serverExpress
         shell_exec('kill -TERM ' . escapeshellarg($pid));
         sleep(2);
     }
 
     /**
-     * Use a fake POP3 server to test POP-before-SMTP auth
+     * Use a fake POP3 serverExpress to test POP-before-SMTP auth
      * with a known-bad login.
      */
     public function testPopBeforeSmtpBad()
     {
-        //Start a fake POP server on a different port
+        //Start a fake POP serverExpress on a different port
         //so we don't inadvertently connect to the previous instance
         $pid = shell_exec('nohup ./runfakepopserver.sh 1101 >/dev/null 2>/dev/null & printf "%u" $!');
         $this->pids[] = $pid;

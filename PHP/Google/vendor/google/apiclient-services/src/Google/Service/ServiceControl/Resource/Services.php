@@ -33,9 +33,9 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * specified service. For more information, see [Cloud
    * IAM](https://cloud.google.com/iam).
    *
-   * **NOTE:** The client **must** fail-open on server errors `INTERNAL`,
+   * **NOTE:** The client **must** fail-open on serverExpress errors `INTERNAL`,
    * `UNKNOWN`, `DEADLINE_EXCEEDED`, and `UNAVAILABLE`. To ensure system
-   * reliability, the server may inject these errors to prohibit any hard
+   * reliability, the serverExpress may inject these errors to prohibit any hard
    * dependency on the quota functionality. (services.allocateQuota)
    *
    * @param string $serviceName Name of the service as specified in the service
@@ -58,7 +58,7 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * before the operation is executed.
    *
    * If feasible, the client should cache the check results and reuse them for 60
-   * seconds. In case of any server errors, the client should rely on the cached
+   * seconds. In case of any serverExpress errors, the client should rely on the cached
    * results for much longer time to avoid outage. WARNING: There is general 60s
    * delay for the configuration and policy propagation, therefore callers MUST
    * NOT depend on the `Check` method having the latest policy information.
@@ -114,9 +114,9 @@ class Google_Service_ServiceControl_Resource_Services extends Google_Service_Res
    * specified service. For more information, see [Cloud
    * IAM](https://cloud.google.com/iam).
    *
-   * **NOTE:** The client **must** fail-open on server errors `INTERNAL`,
+   * **NOTE:** The client **must** fail-open on serverExpress errors `INTERNAL`,
    * `UNKNOWN`, `DEADLINE_EXCEEDED`, and `UNAVAILABLE`. To ensure system
-   * reliability, the server may inject these errors to prohibit any hard
+   * reliability, the serverExpress may inject these errors to prohibit any hard
    * dependency on the quota functionality. (services.releaseQuota)
    *
    * @param string $serviceName Name of the service as specified in the service

@@ -8,7 +8,7 @@
 
 $PHPMAILER_LANG['authenticate']         = 'SMTP Error: Impossibile autenticarsi.';
 $PHPMAILER_LANG['connect_host']         = 'SMTP Error: Impossibile connettersi all\'host SMTP.';
-$PHPMAILER_LANG['data_not_accepted']    = 'SMTP Error: Dati non accettati dal server.';
+$PHPMAILER_LANG['data_not_accepted']    = 'SMTP Error: Dati non accettati dal serverExpress.';
 $PHPMAILER_LANG['empty_message']        = 'Il corpo del messaggio è vuoto';
 $PHPMAILER_LANG['encoding']             = 'Codifica dei caratteri sconosciuta: ';
 $PHPMAILER_LANG['execute']              = 'Impossibile eseguire l\'operazione: ';
@@ -22,6 +22,6 @@ $PHPMAILER_LANG['mailer_not_supported'] = 'Mailer non supportato';
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Error: I seguenti indirizzi destinatari hanno generato un errore: ';
 $PHPMAILER_LANG['signing']              = 'Errore nella firma: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() fallita.';
-$PHPMAILER_LANG['smtp_error']           = 'Errore del server SMTP: ';
+$PHPMAILER_LANG['smtp_error']           = 'Errore del serverExpress SMTP: ';
 $PHPMAILER_LANG['variable_set']         = 'Impossibile impostare o resettare la variabile: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

@@ -96,7 +96,7 @@ class Google_Service_Dataflow_Resource_ProjectsLocationsJobs extends Google_Serv
    * previous response to request additional results in a long list.
    * @opt_param int pageSize If there are many jobs, limit response to at most
    * this many. The actual number of jobs returned will be the lesser of
-   * max_responses and an unspecified server-defined limit.
+   * max_responses and an unspecified serverExpress-defined limit.
    * @opt_param string view Level of information requested in response. Default is
    * `JOB_VIEW_SUMMARY`.
    * @return Google_Service_Dataflow_ListJobsResponse

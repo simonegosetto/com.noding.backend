@@ -98,8 +98,8 @@ class Google_Service_DLP_Resource_OrganizationsStoredInfoTypes extends Google_Se
    * was created. - `state`: corresponds to the state of the resource. - `name`:
    * corresponds to resource name. - `display_name`: corresponds to info type's
    * display name.
-   * @opt_param int pageSize Optional size of the page, can be limited by server.
-   * If zero server returns a page of max size 100.
+   * @opt_param int pageSize Optional size of the page, can be limited by serverExpress.
+   * If zero serverExpress returns a page of max size 100.
    * @return Google_Service_DLP_GooglePrivacyDlpV2ListStoredInfoTypesResponse
    */
   public function listOrganizationsStoredInfoTypes($parent, $optParams = array())

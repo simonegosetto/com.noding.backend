@@ -82,7 +82,7 @@ class Google_Service_Licensing_Resource_LicenseAssignments extends Google_Servic
    * @opt_param string maxResults Maximum number of campaigns to return at one
    * time. Must be positive. Optional. Default value is 100.
    * @opt_param string pageToken Token to fetch the next page.Optional. By default
-   * server will return first page
+   * serverExpress will return first page
    * @return Google_Service_Licensing_LicenseAssignmentList
    */
   public function listForProduct($productId, $customerId, $optParams = array())
@@ -104,7 +104,7 @@ class Google_Service_Licensing_Resource_LicenseAssignments extends Google_Servic
    * @opt_param string maxResults Maximum number of campaigns to return at one
    * time. Must be positive. Optional. Default value is 100.
    * @opt_param string pageToken Token to fetch the next page.Optional. By default
-   * server will return first page
+   * serverExpress will return first page
    * @return Google_Service_Licensing_LicenseAssignmentList
    */
   public function listForProductAndSku($productId, $skuId, $customerId, $optParams = array())

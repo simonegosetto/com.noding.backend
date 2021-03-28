@@ -92,7 +92,7 @@ class Google_Service_AndroidProvisioningPartner_Resource_CustomersConfigurations
    *
    * @param string $name Output only. The API resource name in the format
    * `customers/[CUSTOMER_ID]/configurations/[CONFIGURATION_ID]`. Assigned by the
-   * server.
+   * serverExpress.
    * @param Google_Service_AndroidProvisioningPartner_Configuration $postBody
    * @param array $optParams Optional parameters.
    *

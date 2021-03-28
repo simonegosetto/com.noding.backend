@@ -75,7 +75,7 @@ class SentinelReplication implements ReplicationInterface
     protected $sentinelTimeout = 0.100;
 
     /**
-     * Max number of automatic retries of commands upon server failure.
+     * Max number of automatic retries of commands upon serverExpress failure.
      *
      * -1 = unlimited retry attempts
      *  0 = no retry attempts (fails immediatly)
@@ -132,7 +132,7 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Sets the maximum number of retries for commands upon server failure.
+     * Sets the maximum number of retries for commands upon serverExpress failure.
      *
      * -1 = unlimited retry attempts
      *  0 = no retry attempts (fails immediatly)
@@ -224,7 +224,7 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Creates a new connection to a sentinel server.
+     * Creates a new connection to a sentinel serverExpress.
      *
      * @return NodeConnectionInterface
      */
@@ -265,7 +265,7 @@ class SentinelReplication implements ReplicationInterface
     {
         if (!$this->sentinelConnection) {
             if (!$this->sentinels) {
-                throw new \Predis\ClientException('No sentinel server available for autodiscovery.');
+                throw new \Predis\ClientException('No sentinel serverExpress available for autodiscovery.');
             }
 
             $sentinel = array_shift($this->sentinels);
@@ -289,7 +289,7 @@ class SentinelReplication implements ReplicationInterface
                 );
 
                 $this->sentinels = array();
-                // NOTE: sentinel server does not return itself, so we add it back.
+                // NOTE: sentinel serverExpress does not return itself, so we add it back.
                 $this->sentinels[] = $sentinel->getParameters()->toArray();
 
                 foreach ($payload as $sentinel) {
@@ -321,7 +321,7 @@ class SentinelReplication implements ReplicationInterface
     /**
      * Handles error responses returned by redis-sentinel.
      *
-     * @param NodeConnectionInterface $sentinel Connection to a sentinel server.
+     * @param NodeConnectionInterface $sentinel Connection to a sentinel serverExpress.
      * @param ErrorResponseInterface  $error    Error response.
      */
     private function handleSentinelErrorResponse(NodeConnectionInterface $sentinel, ErrorResponseInterface $error)
@@ -334,9 +334,9 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Fetches the details for the master server from a sentinel.
+     * Fetches the details for the master serverExpress from a sentinel.
      *
-     * @param NodeConnectionInterface $sentinel Connection to a sentinel server.
+     * @param NodeConnectionInterface $sentinel Connection to a sentinel serverExpress.
      * @param string                  $service  Name of the service.
      *
      * @return array
@@ -365,7 +365,7 @@ class SentinelReplication implements ReplicationInterface
     /**
      * Fetches the details for the slave servers from a sentinel.
      *
-     * @param NodeConnectionInterface $sentinel Connection to a sentinel server.
+     * @param NodeConnectionInterface $sentinel Connection to a sentinel serverExpress.
      * @param string                  $service  Name of the service.
      *
      * @return array
@@ -515,8 +515,8 @@ class SentinelReplication implements ReplicationInterface
     /**
      * Asserts that the specified connection matches an expected role.
      *
-     * @param NodeConnectionInterface $connection Connection to a redis server.
-     * @param string                  $role       Expected role of the server ("master", "slave" or "sentinel").
+     * @param NodeConnectionInterface $connection Connection to a redis serverExpress.
+     * @param string                  $role       Expected role of the serverExpress ("master", "slave" or "sentinel").
      *
      * @throws RoleException
      */
@@ -539,7 +539,7 @@ class SentinelReplication implements ReplicationInterface
 
         if (!$connection->isConnected()) {
             // When we do not have any available slave in the pool we can expect
-            // read-only operations to hit the master server.
+            // read-only operations to hit the master serverExpress.
             $expectedRole = $this->strategy->isReadOperation($command) && $this->slaves ? 'slave' : 'master';
             $this->assertConnectionRole($connection, $expectedRole);
         }
@@ -590,7 +590,7 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Switches to the master server.
+     * Switches to the master serverExpress.
      */
     public function switchToMaster()
     {
@@ -598,7 +598,7 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Switches to a random slave server.
+     * Switches to a random slave serverExpress.
      */
     public function switchToSlave()
     {
@@ -643,7 +643,7 @@ class SentinelReplication implements ReplicationInterface
     }
 
     /**
-     * Retries the execution of a command upon server failure after asking a new
+     * Retries the execution of a command upon serverExpress failure after asking a new
      * configuration to one of the sentinels.
      *
      * @param CommandInterface $command Command instance.

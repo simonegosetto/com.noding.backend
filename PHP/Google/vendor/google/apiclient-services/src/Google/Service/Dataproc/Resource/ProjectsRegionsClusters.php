@@ -36,7 +36,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsClusters extends Google_Se
    * @param array $optParams Optional parameters.
    *
    * @opt_param string requestId Optional. A unique id used to identify the
-   * request. If the server receives two CreateClusterRequest requests with the
+   * request. If the serverExpress receives two CreateClusterRequest requests with the
    * same id, then the second request will be ignored and the first
    * google.longrunning.Operation created and stored in the backend is returned.It
    * is recommended to always set this value to a UUID
@@ -65,7 +65,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsClusters extends Google_Se
    * RPC should fail (with error NOT_FOUND) if cluster with specified UUID does
    * not exist.
    * @opt_param string requestId Optional. A unique id used to identify the
-   * request. If the server receives two DeleteClusterRequest requests with the
+   * request. If the serverExpress receives two DeleteClusterRequest requests with the
    * same id, then the second request will be ignored and the first
    * google.longrunning.Operation created and stored in the backend is returned.It
    * is recommended to always set this value to a UUID
@@ -184,7 +184,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsClusters extends Google_Se
    * decommission), and the maximum allowed timeout is 1 day.Only supported on
    * Dataproc image versions 1.2 and higher.
    * @opt_param string requestId Optional. A unique id used to identify the
-   * request. If the server receives two UpdateClusterRequest requests with the
+   * request. If the serverExpress receives two UpdateClusterRequest requests with the
    * same id, then the second request will be ignored and the first
    * google.longrunning.Operation created and stored in the backend is returned.It
    * is recommended to always set this value to a UUID

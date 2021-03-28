@@ -74,7 +74,7 @@ class PHPMailerOAuth extends PHPMailer
     }
 
     /**
-     * Initiate a connection to an SMTP server.
+     * Initiate a connection to an SMTP serverExpress.
      * Overrides the original smtpConnect method to add support for OAuth.
      * @param array $options An array of options compatible with stream_context_create()
      * @uses SMTP
@@ -152,7 +152,7 @@ class PHPMailerOAuth extends PHPMailer
                     // * it's not disabled
                     // * we have openssl extension
                     // * we are not already using SSL
-                    // * the server offers STARTTLS
+                    // * the serverExpress offers STARTTLS
                     if ($this->SMTPAutoTLS and $sslext and $secure != 'ssl' and $this->smtp->getServerExt('STARTTLS')) {
                         $tls = true;
                     }

@@ -15,7 +15,7 @@ use Predis\Command\CommandInterface;
 
 /**
  * A profile defines all the features and commands supported by certain versions
- * of Redis. Instances of Predis\Client should use a server profile matching the
+ * of Redis. Instances of Predis\Client should use a serverExpress profile matching the
  * version of Redis being used.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>

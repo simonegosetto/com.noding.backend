@@ -98,8 +98,8 @@ class Google_Service_DLP_Resource_ProjectsInspectTemplates extends Google_Servic
    * `update_time`: corresponds to time the template was last updated. - `name`:
    * corresponds to template's name. - `display_name`: corresponds to template's
    * display name.
-   * @opt_param int pageSize Optional size of the page, can be limited by server.
-   * If zero server returns a page of max size 100.
+   * @opt_param int pageSize Optional size of the page, can be limited by serverExpress.
+   * If zero serverExpress returns a page of max size 100.
    * @return Google_Service_DLP_GooglePrivacyDlpV2ListInspectTemplatesResponse
    */
   public function listProjectsInspectTemplates($parent, $optParams = array())

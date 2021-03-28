@@ -108,7 +108,7 @@ class RedisVersion200 extends RedisProfile
             'ECHO' => 'Predis\Command\ConnectionEcho',
             'QUIT' => 'Predis\Command\ConnectionQuit',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'INFO' => 'Predis\Command\ServerInfo',
             'SLAVEOF' => 'Predis\Command\ServerSlaveOf',
             'MONITOR' => 'Predis\Command\ServerMonitor',
@@ -166,7 +166,7 @@ class RedisVersion200 extends RedisProfile
             'PUNSUBSCRIBE' => 'Predis\Command\PubSubUnsubscribeByPattern',
             'PUBLISH' => 'Predis\Command\PubSubPublish',
 
-            /* remote server control commands */
+            /* remote serverExpress control commands */
             'CONFIG' => 'Predis\Command\ServerConfig',
         );
     }

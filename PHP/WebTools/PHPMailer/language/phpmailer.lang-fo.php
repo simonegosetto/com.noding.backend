@@ -21,6 +21,6 @@ $PHPMAILER_LANG['provide_address']      = 'Tú skal uppgeva minst móttakara-ema
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP Feilur: Fylgjandi móttakarar miseydnaðust: ';
 //$PHPMAILER_LANG['signing']              = 'Signing Error: ';
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
+//$PHPMAILER_LANG['smtp_error']           = 'SMTP serverExpress error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

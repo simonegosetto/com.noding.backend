@@ -132,9 +132,9 @@ class Google_Service_Classroom_Resource_UserProfilesGuardianInvitations extends 
    * `state` values will be returned. Otherwise, results with a `state` of
    * `PENDING` will be returned.
    * @opt_param int pageSize Maximum number of items to return. Zero or
-   * unspecified indicates that the server may assign a maximum.
+   * unspecified indicates that the serverExpress may assign a maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @return Google_Service_Classroom_ListGuardianInvitationsResponse
    */
   public function listUserProfilesGuardianInvitations($studentId, $optParams = array())

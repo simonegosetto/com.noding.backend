@@ -789,15 +789,15 @@
             },
             "suggest": {
                 "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB serverExpress",
+                "ext-amqp": "Allow sending log messages to an AMQP serverExpress (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB serverExpress",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 serverExpress",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "raven/raven": "Allow sending log messages to a Sentry server",
+                "raven/raven": "Allow sending log messages to a Sentry serverExpress",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
-                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search serverExpress",
+                "videlalvaro/php-amqplib": "Allow sending log messages to an AMQP serverExpress using php-amqplib"
             },
             "type": "library",
             "extra": {
@@ -3217,13 +3217,13 @@
                 "fabpot/php-cs-fixer": "1.7.*",
                 "phpunit/phpunit": "~4.0",
                 "zendframework/zend-http": "~2.5",
-                "zendframework/zend-server": "~2.5",
+                "zendframework/zend-serverExpress": "~2.5",
                 "zendframework/zend-stdlib": "~2.5",
                 "zendframework/zendxml": "~1.0"
             },
             "suggest": {
                 "zendframework/zend-http": "Zend\\Http component",
-                "zendframework/zend-server": "Zend\\Server component",
+                "zendframework/zend-serverExpress": "Zend\\Server component",
                 "zendframework/zend-stdlib": "To use the cache for Zend\\Server",
                 "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
             },

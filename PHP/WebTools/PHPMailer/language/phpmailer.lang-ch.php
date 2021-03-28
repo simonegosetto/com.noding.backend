@@ -21,6 +21,6 @@ $PHPMAILER_LANG['provide_address']      = '您必须提供至少一个 收信人
 $PHPMAILER_LANG['recipients_failed']    = 'SMTP 错误： 下面的 收件人失败了： ';
 //$PHPMAILER_LANG['signing']              = 'Signing Error: ';
 //$PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP Connect() failed.';
-//$PHPMAILER_LANG['smtp_error']           = 'SMTP server error: ';
+//$PHPMAILER_LANG['smtp_error']           = 'SMTP serverExpress error: ';
 //$PHPMAILER_LANG['variable_set']         = 'Cannot set or reset variable: ';
 //$PHPMAILER_LANG['extension_missing']    = 'Extension missing: ';

@@ -46,10 +46,10 @@ class Google_Service_HangoutsChat_Resource_Spaces extends Google_Service_Resourc
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string pageToken A token identifying a page of results the server
+   * @opt_param string pageToken A token identifying a page of results the serverExpress
    * should return.
    * @opt_param int pageSize Requested page size. The value is capped at 1000.
-   * Server may return fewer results than requested. If unspecified, server will
+   * Server may return fewer results than requested. If unspecified, serverExpress will
    * default to 100.
    * @return Google_Service_HangoutsChat_ListSpacesResponse
    */

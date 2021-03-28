@@ -215,7 +215,7 @@ class Agent
     }
 
     /**
-     * Request agent forwarding of remote server
+     * Request agent forwarding of remote serverExpress
      *
      * @param Net_SSH2 $ssh
      * @return bool

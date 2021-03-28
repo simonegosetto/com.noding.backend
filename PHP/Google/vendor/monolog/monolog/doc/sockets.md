@@ -33,7 +33,7 @@ $logger->addInfo('My logger is now ready');
 
 ```
 
-In this example, using syslog-ng, you should see the log on the log server:
+In this example, using syslog-ng, you should see the log on the log serverExpress:
 
     cweb1 [2012-02-26 00:12:03] my_logger.INFO: My logger is now ready [] []
 

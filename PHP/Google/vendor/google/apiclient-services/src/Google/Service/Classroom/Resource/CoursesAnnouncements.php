@@ -130,9 +130,9 @@ class Google_Service_Classroom_Resource_CoursesAnnouncements extends Google_Serv
    * The list request must be otherwise identical to the one that resulted in this
    * token.
    * @opt_param int pageSize Maximum number of items to return. Zero or
-   * unspecified indicates that the server may assign a maximum.
+   * unspecified indicates that the serverExpress may assign a maximum.
    *
-   * The server may return fewer than the specified number of results.
+   * The serverExpress may return fewer than the specified number of results.
    * @return Google_Service_Classroom_ListAnnouncementsResponse
    */
   public function listCoursesAnnouncements($courseId, $optParams = array())

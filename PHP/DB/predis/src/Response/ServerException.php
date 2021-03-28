@@ -14,7 +14,7 @@ namespace Predis\Response;
 use Predis\PredisException;
 
 /**
- * Exception class that identifies server-side Redis errors.
+ * Exception class that identifies serverExpress-side Redis errors.
  *
  * @author Daniele Alessandri <suppakilla@gmail.com>
  */

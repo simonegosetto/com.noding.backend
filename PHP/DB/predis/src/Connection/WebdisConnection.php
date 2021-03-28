@@ -20,7 +20,7 @@ use Predis\Response\Status as StatusResponse;
 /**
  * This class implements a Predis connection that actually talks with Webdis
  * instead of connecting directly to Redis. It relies on the cURL extension to
- * communicate with the web server and the phpiredis extension to parse the
+ * communicate with the web serverExpress and the phpiredis extension to parse the
  * protocol for responses returned in the http response bodies.
  *
  * Some features are not yet available or they simply cannot be implemented:
@@ -31,8 +31,8 @@ use Predis\Response\Status as StatusResponse;
  * The connection parameters supported by this class are:
  *
  *  - scheme: must be 'http'.
- *  - host: hostname or IP address of the server.
- *  - port: TCP port of the server.
+ *  - host: hostname or IP address of the serverExpress.
+ *  - port: TCP port of the serverExpress.
  *  - timeout: timeout to perform the connection (default is 5 seconds).
  *  - user: username for authentication.
  *  - pass: password for authentication.

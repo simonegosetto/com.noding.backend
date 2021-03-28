@@ -45,7 +45,7 @@ class Google_Service_ToolResults_Resource_ProjectsHistoriesExecutions extends Go
    * @param Google_Service_ToolResults_Execution $postBody
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string requestId A unique request ID for server to detect
+   * @opt_param string requestId A unique request ID for serverExpress to detect
    * duplicated requests. For example, a UUID.
    *
    * Optional, but strongly recommended.
@@ -108,7 +108,7 @@ class Google_Service_ToolResults_Resource_ProjectsHistoriesExecutions extends Go
    *
    * @opt_param int pageSize The maximum number of Executions to fetch.
    *
-   * Default value: 25. The server will use this default if the field is not set
+   * Default value: 25. The serverExpress will use this default if the field is not set
    * or has a value of 0.
    *
    * Optional.
@@ -140,7 +140,7 @@ class Google_Service_ToolResults_Resource_ProjectsHistoriesExecutions extends Go
    * @param Google_Service_ToolResults_Execution $postBody
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string requestId A unique request ID for server to detect
+   * @opt_param string requestId A unique request ID for serverExpress to detect
    * duplicated requests. For example, a UUID.
    *
    * Optional, but strongly recommended.

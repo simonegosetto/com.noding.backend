@@ -1199,5 +1199,5 @@ $client->addSubscriber($backoffPlugin);
 (See #217) (Fixed in 09daeb8c666fb44499a0646d655a8ae36456575e)
 
 In version 2.8 setting the `Accept-Encoding` header would set the CURLOPT_ENCODING option, which permitted cURL to
-properly handle gzip/deflate compressed responses from the server. In versions affected by this bug this does not happen.
+properly handle gzip/deflate compressed responses from the serverExpress. In versions affected by this bug this does not happen.
 See issue #217 for a workaround, or use a version containing the fix.

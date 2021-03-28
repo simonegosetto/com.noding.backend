@@ -67,7 +67,7 @@ class Google_Service_CloudDebugger_Resource_DebuggerDebuggeesBreakpoints extends
    * @param array $optParams Optional parameters.
    *
    * @opt_param string waitToken A wait token that, if specified, blocks the call
-   * until the breakpoints list has changed, or a server selected timeout has
+   * until the breakpoints list has changed, or a serverExpress selected timeout has
    * expired.  The value should be set from the last response. The error code
    * `google.rpc.Code.ABORTED` (RPC) is returned on wait timeout, which should be
    * called again with the same `wait_token`.

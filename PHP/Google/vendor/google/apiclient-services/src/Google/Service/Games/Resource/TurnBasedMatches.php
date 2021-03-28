@@ -182,7 +182,7 @@ class Google_Service_Games_Resource_TurnBasedMatches extends Google_Service_Reso
    *
    * @opt_param bool includeMatchData True if match data should be returned in the
    * response. Note that not all data will necessarily be returned if
-   * include_match_data is true; the server may decide to only return data for
+   * include_match_data is true; the serverExpress may decide to only return data for
    * some of the matches to limit download size for the client. The remainder of
    * the data for these matches will be retrievable on request.
    * @opt_param string language The preferred language to use for strings returned
@@ -214,7 +214,7 @@ class Google_Service_Games_Resource_TurnBasedMatches extends Google_Service_Reso
    * @opt_param string language The preferred language to use for strings returned
    * by this method.
    * @opt_param string requestId A randomly generated numeric ID for each request
-   * specified by the caller. This number is used at the server to ensure that the
+   * specified by the caller. This number is used at the serverExpress to ensure that the
    * request is handled correctly across retries.
    * @return Google_Service_Games_TurnBasedMatchRematch
    */
@@ -234,7 +234,7 @@ class Google_Service_Games_Resource_TurnBasedMatches extends Google_Service_Reso
    *
    * @opt_param bool includeMatchData True if match data should be returned in the
    * response. Note that not all data will necessarily be returned if
-   * include_match_data is true; the server may decide to only return data for
+   * include_match_data is true; the serverExpress may decide to only return data for
    * some of the matches to limit download size for the client. The remainder of
    * the data for these matches will be retrievable on request.
    * @opt_param string language The preferred language to use for strings returned

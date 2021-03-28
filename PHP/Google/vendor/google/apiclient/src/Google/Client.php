@@ -470,7 +470,7 @@ class Google_Client
       // check the ID token for "iat"
       // signature verification is not required here, as we are just
       // using this for convenience to save a round trip request
-      // to the Google API server
+      // to the Google API serverExpress
       $idToken = $this->token['id_token'];
       if (substr_count($idToken, '.') == 2) {
         $parts = explode('.', $idToken);

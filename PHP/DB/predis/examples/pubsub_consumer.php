@@ -51,7 +51,7 @@ foreach ($pubsub as $message) {
 
 // Always unset the pubsub consumer instance when you are done! The
 // class destructor will take care of cleanups and prevent protocol
-// desynchronizations between the client and the server.
+// desynchronizations between the client and the serverExpress.
 unset($pubsub);
 
 // Say goodbye :-)

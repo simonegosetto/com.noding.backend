@@ -47,7 +47,7 @@ class Google_Service_Container_Resource_ProjectsLocationsOperations extends Goog
    * operation to get. Specified in the format 'projects/locations/operations'.
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string operationId Deprecated. The server-assigned `name` of the
+   * @opt_param string operationId Deprecated. The serverExpress-assigned `name` of the
    * operation. This field has been deprecated and replaced by the name field.
    * @opt_param string projectId Deprecated. The Google Developers Console
    * [project ID or project

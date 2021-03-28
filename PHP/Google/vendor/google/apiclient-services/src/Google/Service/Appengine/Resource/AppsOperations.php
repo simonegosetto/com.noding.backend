@@ -43,7 +43,7 @@ class Google_Service_Appengine_Resource_AppsOperations extends Google_Service_Re
   }
   /**
    * Lists operations that match the specified filter in the request. If the
-   * server doesn't support this method, it returns UNIMPLEMENTED.NOTE: the name
+   * serverExpress doesn't support this method, it returns UNIMPLEMENTED.NOTE: the name
    * binding allows API services to override the binding to use different resource
    * name schemes, such as users/operations. To override the binding, API services
    * can add a binding such as "/v1/{name=users}/operations" to their service

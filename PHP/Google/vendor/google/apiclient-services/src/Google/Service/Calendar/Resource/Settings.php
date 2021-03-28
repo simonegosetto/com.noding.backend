@@ -51,7 +51,7 @@ class Google_Service_Calendar_Resource_Settings extends Google_Service_Resource
    * @opt_param string syncToken Token obtained from the nextSyncToken field
    * returned on the last page of results from the previous list request. It makes
    * the result of this list request contain only entries that have changed since
-   * then. If the syncToken expires, the server will respond with a 410 GONE
+   * then. If the syncToken expires, the serverExpress will respond with a 410 GONE
    * response code and the client should clear its storage and perform a full
    * synchronization without any syncToken. Learn more about incremental
    * synchronization. Optional. The default is to return all entries.
@@ -77,7 +77,7 @@ class Google_Service_Calendar_Resource_Settings extends Google_Service_Resource
    * @opt_param string syncToken Token obtained from the nextSyncToken field
    * returned on the last page of results from the previous list request. It makes
    * the result of this list request contain only entries that have changed since
-   * then. If the syncToken expires, the server will respond with a 410 GONE
+   * then. If the syncToken expires, the serverExpress will respond with a 410 GONE
    * response code and the client should clear its storage and perform a full
    * synchronization without any syncToken. Learn more about incremental
    * synchronization. Optional. The default is to return all entries.

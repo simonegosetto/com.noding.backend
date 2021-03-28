@@ -51,7 +51,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsWorkflowTemplates extends 
    * @param array $optParams Optional parameters.
    *
    * @opt_param int version Optional. The version of workflow template to delete.
-   * If specified, will only delete the template if the current server version
+   * If specified, will only delete the template if the current serverExpress version
    * matches specified version.
    * @return Google_Service_Dataproc_DataprocEmpty
    */
@@ -214,7 +214,7 @@ class Google_Service_Dataproc_Resource_ProjectsRegionsWorkflowTemplates extends 
   }
   /**
    * Updates (replaces) workflow template. The updated template must contain
-   * version that matches the current server version. (workflowTemplates.update)
+   * version that matches the current serverExpress version. (workflowTemplates.update)
    *
    * @param string $name Output only. The "resource name" of the template, as
    * described in https://cloud.google.com/apis/design/resource_names of the form

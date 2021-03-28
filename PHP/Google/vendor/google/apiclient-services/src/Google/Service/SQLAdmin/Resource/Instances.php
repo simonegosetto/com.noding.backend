@@ -80,7 +80,7 @@ class Google_Service_SQLAdmin_Resource_Instances extends Google_Service_Resource
   }
   /**
    * Demotes the stand-alone instance to be a Cloud SQL read replica for an
-   * external database server. (instances.demoteMaster)
+   * external database serverExpress. (instances.demoteMaster)
    *
    * @param string $project ID of the project that contains the instance.
    * @param string $instance Cloud SQL instance name.
@@ -252,7 +252,7 @@ class Google_Service_SQLAdmin_Resource_Instances extends Google_Service_Resource
     return $this->call('promoteReplica', array($params), "Google_Service_SQLAdmin_Operation");
   }
   /**
-   * Deletes all client certificates and generates a new server SSL certificate
+   * Deletes all client certificates and generates a new serverExpress SSL certificate
    * for the instance. (instances.resetSslConfig)
    *
    * @param string $project Project ID of the project that contains the instance.
@@ -300,7 +300,7 @@ class Google_Service_SQLAdmin_Resource_Instances extends Google_Service_Resource
     return $this->call('restoreBackup', array($params), "Google_Service_SQLAdmin_Operation");
   }
   /**
-   * Rotates the server certificate to one signed by the Certificate Authority
+   * Rotates the serverExpress certificate to one signed by the Certificate Authority
    * (CA) version previously added with the addServerCA method.
    * (instances.rotateServerCa)
    *

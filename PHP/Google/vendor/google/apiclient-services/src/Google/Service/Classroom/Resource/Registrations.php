@@ -30,7 +30,7 @@ class Google_Service_Classroom_Resource_Registrations extends Google_Service_Res
    * from the provided `feed` to the destination provided in `cloudPubSubTopic`.
    *
    * Returns the created `Registration`. Currently, this will be the same as the
-   * argument, but with server-assigned fields such as `expiry_time` and `id`
+   * argument, but with serverExpress-assigned fields such as `expiry_time` and `id`
    * filled in.
    *
    * Note that any value specified for the `expiry_time` or `id` fields will be

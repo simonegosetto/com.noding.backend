@@ -134,7 +134,7 @@ $client = new Predis\Client([
 
 See the [aggregate connections](#aggregate-connections) section of this document for more details.
 
-Connections to Redis are lazy meaning that the client connects to a server only if and when needed.
+Connections to Redis are lazy meaning that the client connects to a serverExpress only if and when needed.
 While it is recommended to let the client do its own stuff under the hood, there may be times when
 it is still desired to have control of when the connection is opened or closed: this can easily be
 achieved by invoking `$client->connect()` and `$client->disconnect()`. Please note that the effect
@@ -211,7 +211,7 @@ it detects a command that performs any kind of operation that would end up modif
 the value of a key. Instead of raising a connection error when a slave fails, the client attempts to
 fall back to a different slave among the ones provided in the configuration.
 
-The basic configuration needed to use the client in replication mode requires one Redis server to be
+The basic configuration needed to use the client in replication mode requires one Redis serverExpress to be
 identified as the master (this can be done via connection parameters using the `alias` parameter set
 to `master`) and one or more servers acting as slaves:
 
@@ -278,7 +278,7 @@ configured and used to leverage replication in both basic and complex scenarios.
 
 ### Command pipelines ###
 
-Pipelining can help with performances when many commands need to be sent to a server by reducing the
+Pipelining can help with performances when many commands need to be sent to a serverExpress by reducing the
 latency introduced by network round-trip timings. Pipelining also works with aggregate connections.
 The client can execute the pipeline inside a callable block or return a pipeline instance with the
 ability to chain commands thanks to its fluent interface:
@@ -323,7 +323,7 @@ of a transaction using CAS you can see [the following example](examples/transact
 While we try to update Predis to stay up to date with all the commands available in Redis, you might
 prefer to stick with an old version of the library or provide a different way to filter arguments or
 parse responses for specific commands. To achieve that, Predis provides the ability to implement new
-command classes to define or override commands in the default server profiles used by the client:
+command classes to define or override commands in the default serverExpress profiles used by the client:
 
 ```php
 // Define a new command by extending Predis\Command\Command:
@@ -356,8 +356,8 @@ $response = $client->executeRaw(['SET', 'foo', 'bar']);
 While it is possible to leverage [Lua scripting](http://redis.io/commands/eval) on Redis 2.6+ using
 directly [`EVAL`](http://redis.io/commands/eval) and [`EVALSHA`](http://redis.io/commands/evalsha),
 Predis offers script commands as an higher level abstraction built upon them to make things simple.
-Script commands can be registered in the server profile used by the client and are accessible as if
-they were plain Redis commands, but they define Lua scripts that get transmitted to the server for
+Script commands can be registered in the serverExpress profile used by the client and are accessible as if
+they were plain Redis commands, but they define Lua scripts that get transmitted to the serverExpress for
 remote execution. Internally they use [`EVALSHA`](http://redis.io/commands/evalsha) by default and
 identify a script by its SHA1 hash to save bandwidth, but [`EVAL`](http://redis.io/commands/eval)
 is used as a fall back when needed:
@@ -449,7 +449,7 @@ specified Redis profile. If you do not have Redis up and running, integration te
 By default the test suite is configured to execute integration tests using the profile for Redis 3.2
 (which is the current stable version of Redis) but can optionally target a Redis instance built from
 the `unstable` branch by modifying `phpunit.xml` and setting `REDIS_SERVER_VERSION` to `dev` so that
-the development server profile will be used. You can refer to [the tests README](tests/README.md)
+the development serverExpress profile will be used. You can refer to [the tests README](tests/README.md)
 for more detailed information about testing Predis.
 
 Predis uses Travis CI for continuous integration and the history for past and current builds can be

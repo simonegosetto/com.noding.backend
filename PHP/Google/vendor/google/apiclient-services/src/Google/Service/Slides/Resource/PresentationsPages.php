@@ -59,7 +59,7 @@ class Google_Service_Slides_Resource_PresentationsPages extends Google_Service_R
    * @opt_param string thumbnailProperties.thumbnailSize The optional thumbnail
    * image size.
    *
-   * If you don't specify the size, the server chooses a default size of the
+   * If you don't specify the size, the serverExpress chooses a default size of the
    * image.
    * @return Google_Service_Slides_Thumbnail
    */

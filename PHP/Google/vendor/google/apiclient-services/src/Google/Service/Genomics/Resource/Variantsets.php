@@ -30,7 +30,7 @@ class Google_Service_Genomics_Resource_Variantsets extends Google_Service_Resour
    *
    * The provided variant set must have a valid `datasetId` set - all other fields
    * are optional. Note that the `id` field will be ignored, as this is assigned
-   * by the server. (variantsets.create)
+   * by the serverExpress. (variantsets.create)
    *
    * @param Google_Service_Genomics_VariantSet $postBody
    * @param array $optParams Optional parameters.

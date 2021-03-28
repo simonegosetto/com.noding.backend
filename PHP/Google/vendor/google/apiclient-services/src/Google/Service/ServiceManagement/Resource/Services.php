@@ -147,7 +147,7 @@ class Google_Service_ServiceManagement_Resource_Services extends Google_Service_
    *
    * @opt_param string configId The id of the service configuration resource.
    *
-   * This field must be specified for the server to return all fields, including
+   * This field must be specified for the serverExpress to return all fields, including
    * `SourceInfo`.
    * @opt_param string view Specifies which parts of the Service Config should be
    * returned in the response.

@@ -40,15 +40,15 @@ use PhpConsole\Helper;
 class PHPConsoleHandler extends AbstractProcessingHandler
 {
     private $options = array(
-        'enabled' => true, // bool Is PHP Console server enabled
+        'enabled' => true, // bool Is PHP Console serverExpress enabled
         'classesPartialsTraceIgnore' => array('Monolog\\'), // array Hide calls of classes started with...
-        'debugTagsKeysInContext' => array(0, 'tag'), // bool Is PHP Console server enabled
+        'debugTagsKeysInContext' => array(0, 'tag'), // bool Is PHP Console serverExpress enabled
         'useOwnErrorsHandler' => false, // bool Enable errors handling
         'useOwnExceptionsHandler' => false, // bool Enable exceptions handling
         'sourcesBasePath' => null, // string Base path of all project sources to strip in errors source paths
         'registerHelper' => true, // bool Register PhpConsole\Helper that allows short debug calls like PC::debug($var, 'ta.g.s')
         'serverEncoding' => null, // string|null Server internal encoding
-        'headersLimit' => null, // int|null Set headers size limit for your web-server
+        'headersLimit' => null, // int|null Set headers size limit for your web-serverExpress
         'password' => null, // string|null Protect PHP Console connection by password
         'enableSslOnlyMode' => false, // bool Force connection by SSL for clients with PHP Console installed
         'ipMasks' => array(), // array Set IP masks of clients that will be allowed to connect to PHP Console: array('192.168.*.*', '127.0.0.1')
