@@ -54,10 +54,12 @@ try {
         'order' => 'DESC',
         'meta_value' => get_current_user_id(),
         'post_type' => wc_get_order_types(),
-        'post_status' => array_keys(wc_get_order_statuses()), 'post_status' => array('wc-processing'),
+        'post_status' => array_keys(wc_get_order_statuses()),
+        'post_status' => array('wc-completed'),
     ));
 
-	// var_dump($customer_orders);
+	/* var_dump($customer_orders);
+	return; */
 
     $Order_Array = []; //
     foreach ($customer_orders as $customer_order)

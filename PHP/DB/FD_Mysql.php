@@ -46,6 +46,7 @@ final class FD_Mysql extends FD_DB
     {
         //echo $this->hostname.$this->username.$this->password.$this->database;
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
+        mysqli_options($this->conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
         if(!$this->conn)
         {
             $this->lastError = 'Nessuna connessione al serverExpress: ' . mysqli_connect_error().PHP_EOL;
@@ -239,11 +240,11 @@ final class FD_Mysql extends FD_DB
         if($this->affected == 1)
         {
             $rows[] = $this->arrayedResult;
-        } else
+        }
+        else
         {
             $rows = $this->arrayedResult;
         }
-
         return $this->json_encode($rows);
     }
 
@@ -252,8 +253,13 @@ final class FD_Mysql extends FD_DB
         $numeric = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
         $nonnumeric = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         preg_match_all("/\"[0\+]+(\d+)\"/", $nonnumeric, $vars);
-        foreach($vars[0] as $k => $v){
-            $numeric = preg_replace("/\:\s*{$vars[1][$k]},/",": {$v},",$numeric);
+        foreach($vars[0] as $k => $v)
+        {
+            // echo $k." ".$v;
+            if ($v[1] != "0")
+            {
+                $numeric = preg_replace("/\:\s*{$vars[1][$k]},/",": {$v},",$numeric);
+            }
         }
         return $numeric;
     }
