@@ -61,6 +61,7 @@ try
 
     //Eseguo la query di login
     $result = wp_get_current_user()->data;
+    $result_final = (object) array('ID' => $result->ID, 'display_name' => $result->display_name);
 
     if (!isset($result->user_login))
     {
