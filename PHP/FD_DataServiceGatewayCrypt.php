@@ -565,7 +565,7 @@ try
 
         $sql->closeConnection();
 
-        if(strpos($result,"error") !== false)
+        if(array_key_exists("error", json_decode($result, true)[0]))
         {
             if(isset($debug))
             {
