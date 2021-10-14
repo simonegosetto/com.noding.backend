@@ -362,7 +362,8 @@ try
             $log->lwrite('[DENIED] - Invalid token !');
             return;
         }
-    }    else
+    }
+    else
     {
         echo '{"error" : "Invalid token 2 !"}';
         $log->lwrite('[DENIED] - Invalid token !');

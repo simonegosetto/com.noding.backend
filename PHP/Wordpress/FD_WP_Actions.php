@@ -66,7 +66,27 @@ if(strlen($user_name) == 0)
     return;
 }
 
+//Prendo il token di sessione dell'utente e controllo che sia valido
+$jwt = new FD_JWT();
+if(strlen($token) > 0)
+{
+    $keyRequest = $jwt->decode($token,strtolower(md5_file("Config/esatto.mp3"))); //ritorna il payload
+    if(strlen($keyRequest) == 0)
+    {
+        echo '{"error" : "Invalid token 1 !"}';
+        $log->lwrite('[DENIED] - Invalid token !');
+        return;
+    }
+}
+else
+{
+    echo '{"error" : "Invalid token 2 !"}';
+    $log->lwrite('[DENIED] - Invalid token !');
+    return;
+}
+
 //TODO controllare che il chiamante sia un amministratore
+
 
 // https://wpscholar.com/blog/add-wordpress-admin-user-via-php/
 $user_id = username_exists( $user_name );
