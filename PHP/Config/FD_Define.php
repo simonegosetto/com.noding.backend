@@ -63,3 +63,13 @@ final class DROPBOX extends FD_Define
 	const GET = 4;
 	const PREVIEW = 5;
 }
+
+final class WP_ACTIONS extends FD_Define
+{
+    const CREATA_USER = 1;
+    const UPDATE_USER = 2;
+	const CREATE_PRODUCT = 3;
+	const UPDATE_PRODUCT = 4;
+	const CREATE_ORDER = 5;
+	const UPDATE_ORDER = 6;
+}
