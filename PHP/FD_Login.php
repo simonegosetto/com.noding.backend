@@ -99,6 +99,8 @@ if ($gest == 1)
     }
 }
 
+$origin = str_replace("/","",str_replace("http://","",str_replace("https://","",$_SERVER['HTTP_ORIGIN'])));
+
 if(strlen($keyRequest)>0)
 {
     $keyRequest = strtolower($keyRequest);
@@ -132,7 +134,8 @@ if (strlen($keyRequest) > 0)
     $password = md5($password);//$crypt->simple_crypt($password);
 
     //Eseguo la query di login
-    $result = $sql->exportJSON("call sys_login('" . $username . "','" . $password . "');");
+    // echo "call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');";
+    $result = $sql->exportJSON("call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');");
 
     if (strlen($sql->lastError) > 0)
     {
