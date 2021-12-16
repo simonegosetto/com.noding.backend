@@ -59,7 +59,8 @@ final class DROPBOX extends FD_Define
 {
     const UPLOAD = 1;
     const DOWNLOAD = 2;
-	const DELETE = 3;
-	const GET = 4;
-	const PREVIEW = 5;
+    const DELETE = 3;
+    const GET = 4;
+    const PREVIEW = 5;
+    const SHARE = 6;
 }
