@@ -85,10 +85,20 @@ class FD_DropboxAPI
 	public function get($path)
 	{
 		$header = array();
-        $header[] = "Authorization: Bearer ".$this->AccessToken;
-        $header[] = 'Content-Type: application/json';
-        $data = '{"path": "'.$path.'"}';
-        return $this->_request('https://api.dropboxapi.com/2/files/get_temporary_link', $header, $data);
+		$header[] = "Authorization: Bearer ".$this->AccessToken;
+		$header[] = 'Content-Type: application/json';
+		$data = '{"path": "'.$path.'"}';
+		return $this->_request('https://api.dropboxapi.com/2/files/get_temporary_link', $header, $data);
+	}
+	
+	// https://www.dropbox.com/developers/documentation/http/documentation#sharing-create_shared_link_with_settings
+	public function get_shared($path)
+	{
+		$header = array();
+		$header[] = "Authorization: Bearer ".$this->AccessToken;
+		$header[] = 'Content-Type: application/json';
+		$data = '{"path": "'.$path.'", "settings": {"audience": "public","access": "viewer","requested_visibility": "public","allow_download": true}}';
+		return $this->_request('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', $header, $data);
 	}
 
 	// https://www.dropbox.com/developers/documentation/http/documentation#files-get_thumbnail
