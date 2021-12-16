@@ -92,7 +92,7 @@ class FD_DropboxAPI
 	}
 	
 	// https://www.dropbox.com/developers/documentation/http/documentation#sharing-create_shared_link_with_settings
-	public function get_shared($path)
+	public function share($path)
 	{
 		$header = array();
 		$header[] = "Authorization: Bearer ".$this->AccessToken;
