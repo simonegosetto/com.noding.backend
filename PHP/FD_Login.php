@@ -51,6 +51,7 @@ if (!isset($_GET["gest"])) {
  * 3 -> GET
  */
 $gest = $_GET["gest"];
+$arya = $_GET["arya"];
 $keyRequest = "";
 
 if ($gest == 1)
@@ -66,6 +67,10 @@ if ($gest == 1)
     if (isset($_POST["password"]))
     {
         $password = $_POST["password"];
+    }
+	if (isset($_POST["accountid"]))
+    {
+        $accountid = $_POST["accountid"];
     }
 } else if ($gest == 2)
 {
@@ -83,6 +88,10 @@ if ($gest == 1)
     {
         $password = $objData->password;
     }
+	if(property_exists((object) $objData,"accountid"))
+    {
+        $accountid = $objData->accountid;
+    }
 } else if ($gest == 3)
 {
     if (isset($_GET["token"]))
@@ -97,7 +106,13 @@ if ($gest == 1)
     {
         $password = $_GET["password"];
     }
+	if (isset($_GET["accountid"]))
+    {
+        $accountid = $_GET["accountid"];
+    }
 }
+
+$origin = str_replace("/","",str_replace("http://","",str_replace("https://","",$_SERVER['HTTP_ORIGIN'])));
 
 if(strlen($keyRequest)>0)
 {
@@ -131,8 +146,20 @@ if (strlen($keyRequest) > 0)
     $crypt = new FD_Crypt();
     $password = md5($password);//$crypt->simple_crypt($password);
 
+	if ($arya == 1)
+	{
+		$login_query = "call sys_login_4rya('".$accountid."');";
+	}
+	else
+	{
+		$login_query = "call sys_login('".$username."','".$password."');";
+	}
+
     //Eseguo la query di login
-    $result = $sql->exportJSON("call sys_login('" . $username . "','" . $password . "');");
+    // echo "call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');";
+    // $result = $sql->exportJSON("call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');");
+
+	$result = $sql->exportJSON($login_query);
 
     if (strlen($sql->lastError) > 0)
     {
@@ -168,7 +195,8 @@ if (strlen($keyRequest) > 0)
     else
     {
         $jwt = new FD_JWT();
-        $token = $jwt->encode($random->Generate(25),$keyRequest);
+        // $token = $jwt->encode($random->Generate(25),$keyRequest);
+		$token = $jwt->encode($result.$random->Generate(25),$keyRequest);
         //Prendo IP client
         $url = new FD_Url();
         //Salvo nel log delle sessioni
