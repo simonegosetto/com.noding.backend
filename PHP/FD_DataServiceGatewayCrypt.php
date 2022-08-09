@@ -12,7 +12,6 @@
  * token -> per autenticare la richiesta (implementato formato JWT)
  * process -> stored sql cryptata
  * params -> parametri per stored sql
- * type -> tipo di query (query/non query)
  *
  * OUTPUT:
  * error/debug
@@ -21,7 +20,7 @@
  *
  * Tutte le richieste vengono loggate nella cartella "Log" e viene fatto un file per giorno
  *
- * VERSIONE 3.2.1
+ * VERSIONE 4.2.1
  *
  * CREARE POLIMORFISMO PER PUSH / MAIL
  *
@@ -69,10 +68,12 @@ if (parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
     require("Google/FD_GoogleService.php");
 }
 require("Dropbox/FD_DropboxAPI.php");
+require("WebTools/FD_Url.php");
 
 //istanzio logger
 $log = new FD_Logger(null);
 $crypt = new FD_Crypt();
+$url = new FD_Url();
 
 //////////// consultazione del log /////////////////////////
 if(isset($_GET["log"]))
@@ -174,6 +175,8 @@ if(!isset($_GET["gest"]))
     return;
 }
 
+$token = $url->getBearerToken();
+
 try
 {
     //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
@@ -199,14 +202,14 @@ try
         {
             $params = $_POST["params"];
         }
-        if(isset($_POST["type"]))
+        /*if(isset($_POST["type"]))
         {
             $type = $_POST["type"];
         }
         if(isset($_POST["token"]))
         {
             $token = $_POST["token"];
-        }
+        }*/
         /*if (isset($_POST["mail"]))
         {
             $mail = $_POST["mail"];
@@ -239,8 +242,8 @@ try
         {
             $redirect = $_POST["redirect"];
         }
-    } 
-    else if($gest == 2) 
+    }
+    else if($gest == 2)
     {
         $data = file_get_contents("php://input");
         $objData = json_decode($data);
@@ -252,14 +255,14 @@ try
         {
             $params = $objData->params;
         }
-        if(property_exists((object) $objData,"type"))
+        /*if(property_exists((object) $objData,"type"))
         {
             $type = $objData->type;
         }
         if(property_exists((object) $objData,"token"))
         {
             $token = $objData->token;
-        }
+        }*/
         /*if(property_exists((object) $objData,"mail"))
         {
             $mail = $objData->mail;
@@ -292,8 +295,8 @@ try
         {
             $redirect = $objData->redirect;
         }
-    } 
-    else if($gest == 3) 
+    }
+    else if($gest == 3)
     {
         if(isset($_GET["process"]))
         {
@@ -303,14 +306,14 @@ try
         {
             $params = $_GET["params"];
         }
-        if(isset($_GET["type"]))
+        /*if(isset($_GET["type"]))
         {
             $type = $_GET["type"];
         }
         if(isset($_GET["token"]))
         {
             $token = $_GET["token"];
-        }
+        }*/
         /*if (isset($_GET["mail"]))
         {
             $mail = $_GET["mail"];
@@ -398,12 +401,12 @@ try
         return;
     }
 
-    if(strlen($type) == 0)
+    /*if(strlen($type) == 0)
     {
         echo '{"error" : "Invalid type !"}';
         $log->lwrite('[ERRORE] - Invalid type !');
         return;
-    }
+    }*/
 
     $random = new FD_Random();
     $query = '';
@@ -457,7 +460,7 @@ try
 
     $log->lwrite('[INFO] - query - '.$query);
 
-    if(strlen($query) > 0 && strlen($type) > 0)
+    if(strlen($query) > 0)
     {
         //Inizializzo componente SQL
         $sql = new FD_Mysql();
@@ -498,15 +501,7 @@ try
         }
 
         //Eseguo la query
-        if($type == EXECUTE_TYPE::QUERY)
-        {
-            $result = $sql->exportJSON($query);
-        }
-        else
-        {
-            $result = "";
-            $sql->executeSQL($query);
-        }
+        $result = $sql->exportJSON($query);
 
         if(strlen($sql->lastError) > 0)
         {
@@ -630,7 +625,7 @@ try
                     $log->lwrite('[INFO] - google service - '.$google->action);
                     $google_service = new FD_GoogleService();
                     $event_id = $google_service->engine($google->action,json_decode($result, true));
-                    
+
                     if(!is_null($event_id))
                     {
                         $log->lwrite('[INFO] - google calendar - evento id: '.$event_id);
