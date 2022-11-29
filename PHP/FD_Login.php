@@ -133,9 +133,17 @@ if (strlen($keyRequest) > 0)
     $crypt = new FD_Crypt();
     $password = md5($password);//$crypt->simple_crypt($password);
 
+	if ($arya == 1)
+	{
+		$login_query = "call sys_login_4rya('".$accountid."');";
+	}
+	else
+	{
+		$login_query = "call sys_login('".$username."','".$password."');";
+	}
+
     //Eseguo la query di login
-    // echo "call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');";
-    $result = $sql->exportJSON("call sys_login_v2('" . $username . "','" . $password . "','" . $origin . "');");
+    $result = $sql->exportJSON("call sys_login('" . $username . "','" . $password . "');");
 
     if (strlen($sql->lastError) > 0)
     {
@@ -171,7 +179,8 @@ if (strlen($keyRequest) > 0)
     else
     {
         $jwt = new FD_JWT();
-        $token = $jwt->encode($random->Generate(25),$keyRequest);
+        // $token = $jwt->encode($random->Generate(25),$keyRequest);
+		$token = $jwt->encode($result.$random->Generate(25),$keyRequest);
         //Prendo IP client
         $url = new FD_Url();
         //Salvo nel log delle sessioni

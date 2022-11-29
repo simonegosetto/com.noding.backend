@@ -123,7 +123,7 @@ try
                 return;
             }
         }
-		else if ((int)$action->mode == DROPBOX::GET)
+	else if ((int)$action->mode == DROPBOX::GET)
         {
             $result = $dp->get($action->path);
             if (strpos($result,"error") !== false)
@@ -136,6 +136,21 @@ try
             else
             {
                 echo '{"link" : "'.json_decode($result, true)["link"].'"}';
+            }
+        }
+	else if ((int)$action->mode == DROPBOX::SHARE)
+        {
+            $result = $dp->share($action->path);
+            if (strpos($result,"error") !== false)
+            {
+                $error = json_decode($result, true)["error"]["reason"][".tag"];
+                echo '{"error" : "'.$error.'"}';
+                $log->lwrite('[ERRORE] - '.$error);
+                return;
+            }
+            else
+            {
+                echo '{"link" : "'.json_decode($result, true)["url"].'"}';
             }
         }
         else if ((int)$action->mode == DROPBOX::PREVIEW)
