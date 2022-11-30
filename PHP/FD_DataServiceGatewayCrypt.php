@@ -6,27 +6,22 @@
  * Time: 15:55
  *
  * DATASERVICEGATEWAY - CRYPTATO
- * Per la gestione di tutte le richieste al DB + le varie estensioni (mail, push, report)
+ * Per la gestione di tutte le richieste al DB
  *
  * INPUT:
  * token -> per autenticare la richiesta (implementato formato JWT)
  * process -> stored sql cryptata
  * params -> parametri per stored sql
+ * type -> tipo di query (query/non query)
  *
  * OUTPUT:
  * error/debug
  * recordset
  * output
  *
- * Tutte le richieste vengono loggate nella cartella "Log" e viene fatto un file per giorno
- *
- * VERSIONE 4.2.1
- *
- * CREARE POLIMORFISMO PER PUSH / MAIL
+ * VERSIONE 5.0.1
  *
  */
-
-//header('Content-Type: application/json');
 
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
 if (isset($_SERVER['HTTP_ORIGIN']))
@@ -49,124 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 // error_reporting(E_ALL);
-//ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
-// require("DB/FD_Redis.php");
 require("DB/FD_Mysql.php");
 require("Tools/FD_Crypt.php");
-// require("WebTools/FD_Mailer.php");
 require("WebTools/FD_Logger.php");
-require("WebTools/FD_HTTP.php");
-require("PushNotification/FD_PushNotification.php");
-require("PushNotification/FD_OneSignal.php");
-require("Tools/FD_Random.php");
-require("Tools/FD_JWT.php");
-if (parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
-{
-    require("Google/FD_GoogleService.php");
-}
-require("Dropbox/FD_DropboxAPI.php");
 require("WebTools/FD_Url.php");
 
-//istanzio logger
+// istanzio logger
 $log = new FD_Logger(null);
 $crypt = new FD_Crypt();
 $url = new FD_Url();
-
-//////////// consultazione del log /////////////////////////
-if(isset($_GET["log"]))
-{
-    $log_file = 'Log/'.$_GET["log"].'.txt';
-    if(file_exists($log_file))
-    {
-        echo str_replace("\n","<br/>",file_get_contents($log_file));
-    }
-    else
-    {
-        echo "Non ci sono log del ".$_GET["log"].".";
-    }
-    return;
-}
-//////////// ricerca nel log /////////////////
-if(isset($_GET["log_search"]))
-{
-    $search = strtolower($_GET["log_search"]);
-    foreach (glob("Log/*.txt") as $file)
-    {
-        $content = file_get_contents($file);
-        if (strpos(strtolower($content), $search) !== false)
-        {
-            //leggo il file di log
-            $handle = fopen($file, "r");
-            if ($handle)
-            {
-                while (($line = fgets($handle)) !== false)
-                {
-                    //trovo la riga del login
-                    if (strpos(strtolower($line), $search) !== false)
-                    {
-                        echo str_replace($search,"<span style=\"font-weight:bold;background-color: orange\">".$search."</span>",
-                                        str_replace(strtoupper($search),"<span style=\"font-weight:bold;background-color: orange\">".strtoupper($search)."</span>",
-                                            $line
-                                        )
-                              )."<br/><br/>";
-                    }
-                }
-                fclose($handle);
-            }
-            else
-            {
-                echo "Nessun risultato per la ricerca";
-            }
-        }
-    }
-    return;
-}
-//////////// consultazione della sessione nel log /////////////////
-if(isset($_GET["ses"]))
-{
-    $ses_id = "(".$_GET["ses"].")";
-    foreach (glob("Log/*.txt") as $file)
-    {
-        $content = file_get_contents($file);
-        if (strpos($content, $ses_id) !== false)
-        {
-            //leggo il file di log
-            $handle = fopen($file, "r");
-            if ($handle)
-            {
-                while (($line = fgets($handle)) !== false)
-                {
-                    //trovo la riga del login
-                    if (strpos($line, $ses_id) !== false)
-                    {
-                        echo $line;
-                        return;
-                    }
-                }
-                fclose($handle);
-            }
-            else
-            {
-                echo "Sessione non trovata";
-            }
-            return;
-        }
-    }
-    echo "Sessione non trovata";
-    return;
-}
-///////////////////////////////////////////////////////////
-
-if ($_SERVER['SERVER_NAME'] != $crypt->host_decrypted())
-{
-    echo '{"error" : "Host not enabled !"}';
-    $log->lwrite('[DENIED] - Host not enabled ('.$_SERVER['SERVER_NAME'].') !');
-    return;
-}
-
 
 if(!isset($_GET["gest"]))
 {
@@ -179,7 +69,7 @@ $token = $url->getBearerToken();
 
 try
 {
-    //Parametro GET per capire se i parametri successivi sono POST o JSON o GET
+    // Parametro GET per capire se i parametri successivi sono POST o JSON o GET
     /**
      * gest:
      * 1 -> POST
@@ -187,11 +77,6 @@ try
      * 3 -> GET
      */
     $gest = $_GET["gest"];
-    /**
-     * $type:
-     * 1 -> Query
-     * 2 -> Non Query
-     */
     if($gest == 1)
     {
         if(isset($_POST["process"]))
@@ -201,46 +86,6 @@ try
         if(isset($_POST["params"]))
         {
             $params = $_POST["params"];
-        }
-        /*if(isset($_POST["type"]))
-        {
-            $type = $_POST["type"];
-        }
-        if(isset($_POST["token"]))
-        {
-            $token = $_POST["token"];
-        }*/
-        /*if (isset($_POST["mail"]))
-        {
-            $mail = $_POST["mail"];
-        }*/
-        if (isset($_POST["report"]))
-        {
-            $report = $_POST["report"];
-        }
-        if (isset($_POST["push"]))
-        {
-            $push = $_POST["push"];
-        }
-        if (isset($_POST["debug"]))
-        {
-            $debug = $_POST["debug"];
-        }
-        if (isset($_POST["redis"]))
-        {
-            $redis = $_POST["redis"];
-        }
-        if (isset($_POST["google"]))
-        {
-            $google = $_POST["google"];
-        }
-        if (isset($_POST["dropbox"]))
-        {
-            $dropbox = $_POST["dropbox"];
-        }
-        if (isset($_POST["redirect"]))
-        {
-            $redirect = $_POST["redirect"];
         }
     }
     else if($gest == 2)
@@ -255,46 +100,6 @@ try
         {
             $params = $objData->params;
         }
-        /*if(property_exists((object) $objData,"type"))
-        {
-            $type = $objData->type;
-        }
-        if(property_exists((object) $objData,"token"))
-        {
-            $token = $objData->token;
-        }*/
-        /*if(property_exists((object) $objData,"mail"))
-        {
-            $mail = $objData->mail;
-        }*/
-        if(property_exists((object) $objData,"report"))
-        {
-            $report = $objData->report;
-        }
-        if(property_exists((object) $objData,"push"))
-        {
-            $push = $objData->push;
-        }
-        if(property_exists((object) $objData,"debug"))
-        {
-            $debug = $objData->debug;
-        }
-        if(property_exists((object) $objData,"redis"))
-        {
-            $redis = $objData->redis;
-        }
-        if(property_exists((object) $objData,"google"))
-        {
-            $google = $objData->google;
-        }
-        if(property_exists((object) $objData,"dropbox"))
-        {
-            $dropbox = $objData->dropbox;
-        }
-        if(property_exists((object) $objData,"redirect"))
-        {
-            $redirect = $objData->redirect;
-        }
     }
     else if($gest == 3)
     {
@@ -306,93 +111,9 @@ try
         {
             $params = $_GET["params"];
         }
-        /*if(isset($_GET["type"]))
-        {
-            $type = $_GET["type"];
-        }
-        if(isset($_GET["token"]))
-        {
-            $token = $_GET["token"];
-        }*/
-        /*if (isset($_GET["mail"]))
-        {
-            $mail = $_GET["mail"];
-        }*/
-        if (isset($_GET["report"]))
-        {
-            $report = $_GET["report"];
-        }
-        if (isset($_GET["push"]))
-        {
-            $push = $_GET["push"];
-        }
-        if (isset($_GET["debug"]))
-        {
-            $debug = $_GET["debug"];
-        }
-        if (isset($_GET["redis"]))
-        {
-            $redis = $_GET["redis"];
-        }
-        if (isset($_GET["google"]))
-        {
-            $google = $_GET["google"];
-        }
-        if (isset($_GET["dropbox"]))
-        {
-            $dropbox = $_GET["dropbox"];
-        }
-        if (isset($_GET["redirect"]))
-        {
-            $redirect = $_GET["redirect"];
-        }
     }
 
-    /*if(parse_ini_file("Config/config.inc.ini")["REDIS_ENABLED"])
-    {
-        $redis_conn = new FD_Redis("",null);
-    }
-    */
-
-    //Prendo il token di sessione dell'utente e controllo che sia valido
-    $jwt = new FD_JWT();
-    if(strlen($token)>0)
-    {
-        $keyRequest = $jwt->decode($token,strtolower(md5_file("Config/esatto.mp3"))); //ritorna il payload
-        if(strlen($keyRequest) == 0)
-        {
-            echo '{"error" : "Invalid token 1 !"}';
-            $log->lwrite('[DENIED] - Invalid token !');
-            return;
-        }
-    }
-    else
-    {
-        echo '{"error" : "Invalid token 2 !"}';
-        $log->lwrite('[DENIED] - Invalid token !');
-        return;
-    }
-
-    $log->lwrite('[INFO] - token - <a href="?ses='.$token.'" target="_blank">'.$token.'</a>');
-
-    if(strlen($keyRequest) == 0)
-    {
-        echo '{"error" : "Invalid token 3 !"}';
-        $log->lwrite('[ERRORE] - Invalid token !');
-        return;
-    }
-
-    // gestione servizi google
-    if(isset($google) && parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
-    {
-        if($google->mode == GOOLE_SERVICE_ACTION_MODE::BEFORE_DB_CALL)
-        {
-            $log->lwrite('[INFO] - google service - '.$google->action);
-            $google_service = new FD_GoogleService();
-            $google_service->engine($google->action,$google->params);
-            return;
-        }
-    }
+    // $log->lwrite('[INFO] - token - <a href="?ses='.$token.'" target="_blank">'.$token.'</a>');
 
     if(strlen($process) == 0)
     {
@@ -401,36 +122,14 @@ try
         return;
     }
 
-    /*if(strlen($type) == 0)
-    {
-        echo '{"error" : "Invalid type !"}';
-        $log->lwrite('[ERRORE] - Invalid type !');
-        return;
-    }*/
-
-    $random = new FD_Random();
     $query = '';
 
-    // Gestione Dropbox
-    if (isset($dropbox))
-    {
-        $dp = new FD_DropboxAPI();
-        if ($dropbox->mode == DROPBOX::UPLOAD)
-        {
-
-        }
-        else if ($dropbox->mode == DROPBOX::DOWNLOAD)
-        {
-            header("Location: ".$dp->download("id:".$dropbox->id));
-            return;
-        }
-    }
-
-    //Capisco se ci sono parametri di output e compongo la query
+    // Capisco se ci sono parametri di output e compongo la query
     $pos = strpos($params,",@");
     if($pos > 0)
     {
-        $outputP = explode(",",$params);
+		$localOutputParams = substr($params,strpos($params,",@")+1,strlen($params)-strpos($params,",@"));
+        $outputP = explode(",",$localOutputParams);
         $count_output = count($outputP);
         $OUTPUT = "select ";
         for($i=0;$i<$count_output;$i++)
@@ -448,24 +147,32 @@ try
         $OUTPUT = '';
     }
 
-    //Compongo la query
+    // Compongo la query
+    $stored = '';
     if(strlen($query) == 0)
     {
         if (is_null($params))
         {
             $params = '';
         }
-        $query = "call " . str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process)))) . "(" . $crypt->fixString($params) . ");";
+        $stored = str_replace(" ", "",trim($crypt->stored_decrypt(str_replace("@", "=", $process))));
+        $query = "call " . $stored . "(" . $crypt->fixString($params) . ");";
+
+        // in caso di server di test rendo il nome della stored in chiaro
+        if (substr($_SERVER['HTTP_HOST'], 0, 5 ) == "test.")
+        {
+            header("AAA-Stored: ".$stored," ".$_SERVER['QUERY_STRING']);
+        }
     }
 
     $log->lwrite('[INFO] - query - '.$query);
 
     if(strlen($query) > 0)
     {
-        //Inizializzo componente SQL
+        // Inizializzo componente SQL
         $sql = new FD_Mysql();
 
-        //Controllo che la connessione al DB sia andata a buon fine
+        // Controllo che la connessione al DB sia andata a buon fine
         if(strlen($sql->lastError) > 0)
         {
             echo '{"error" : "'.$sql->lastError.'"}';
@@ -477,7 +184,7 @@ try
             return;
         }
 
-        //verifico che il token passato sia presente nelle sessioni di login
+        // verifico che il token passato sia presente nelle sessioni di login
         if(!$sql->tokenCheck($token))
         {
             echo '{"error" : "Invalid token 4 !"}';
@@ -500,7 +207,7 @@ try
             return;
         }
 
-        //Eseguo la query
+        // Eseguo la query
         $result = $sql->exportJSON($query);
 
         if(strlen($sql->lastError) > 0)
@@ -514,9 +221,9 @@ try
             return;
         }
 
-        //Gestisco gli output
+        // Gestisco gli output
         $result_ouput = '{}';
-        if(strlen($OUTPUT)>0)
+        if(strlen($OUTPUT) > 0)
         {
             $result_ouput = $sql->exportJSON($OUTPUT);
             $log->lwrite('[INFO] - output - '.$result_ouput);
@@ -533,115 +240,25 @@ try
             return;
         }
 
-        //Possibile integrazione del polimorgismo oppure della gestione del provider
-        //Se devo mandare delle notifiche push prendo il recorset che mi fornisce l'sql e lo ciclo
-        if(isset($push))
-        {
-            $pushNotification = new FD_OneSignal('https://onesignal.com/api/v1/notifications','5683f6e0-4499-4b0e-b797-0ed2a6b1509b','MjhlZTJmNGItMWQ1YS00NTAzLTljZTMtZmNlNTZiNzQzMDQz');
-            $array_push = json_decode($result, true);
-            $array_push_length = count($array_push);
-            if($array_push_length > 0)
-            {
-                $ids = [];
-                if (isset($array_push["device_id"]))
-                {
-                    $ids[0] = '"'.$array_push["device_id"].'"';
-                }
-                else
-                {
-                    for ($i = 0; $i < $array_push_length; $i++)
-                    {
-                        $ids[$i] = '"'.$array_push[$i]["device_id"].'"';
-                    }
-                }
-                $app = implode(",", $ids);
-                $pushNotification->Send($app,$push);
-            }
-        }
-
         $sql->closeConnection();
 
         if(array_key_exists("error", json_decode($result, true)[0]))
         {
-            if(isset($debug))
+            echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}';
+            if(array_key_exists("code", json_decode($result, true)[0]))
             {
-                if(isset($report) && $report != "" && $report != null)
-                {
-                    $log->lwrite('[DENIED] - report - debug - '.$report.' - '.$result);
-                    echo json_decode($result, true)[0]["error"];
-                }
-                else
-                {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}';
-                }
+                http_response_code(json_decode($result, true)[0]["code"]);
             }
             else
             {
-                if(isset($report) && $report != "" && $report != null)
-                {
-                    $log->lwrite('[DENIED] - report - '.$report.' - '.$result);
-                    echo json_decode($result, true)[0]["error"];
-                }
-                else
-                {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}';
-                }
+               http_response_code(400);
             }
+            exit;
         }
         else
         {
-            if(isset($report) && $report != "" && $report != null)
-            {
-                $log->lwrite('[INFO] - report - '.$report.' - '.$result);
-                // lancio report allocando i parametri in una sessione
-                session_start();
-                $_SESSION["ReportData"] = array(
-                    "template" => "../Reports/".$report,
-                    "data_object" => json_decode($result,true)
-                );
-                Header("Location: ReportService/FD_ReportService.php");
-            }
-            else if(isset($redirect))
-            {
-                Header("Location: ".$redirect);
-            }
-            else
-            {
-                if($result == "[0]") $result = "[]";
-                if(isset($debug))
-                {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
-                }
-                else
-                {
-                    echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
-                }
-            }
-
-            if(isset($google) && parse_ini_file("Config/config.inc.ini")["GOOGLE_ENABLED"])
-            {
-                if($google->mode == GOOLE_SERVICE_ACTION_MODE::AFTER_DB_CALL)
-                {
-                    $log->lwrite('[INFO] - google service - '.$google->action);
-                    $google_service = new FD_GoogleService();
-                    $event_id = $google_service->engine($google->action,json_decode($result, true));
-
-                    if(!is_null($event_id))
-                    {
-                        $log->lwrite('[INFO] - google calendar - evento id: '.$event_id);
-                        // aggiorno l'id dell'evento
-                        $data = array(
-                            "type" => "1",
-                            "token" => $token,
-                            "process" => "ye0USzs1oueSkQMa+9U5i4XfnzPAmo26kC+m4K2D6YstWy0tSVYtWy3lyPgdmkV/FOoX9YejmAyvSG3q7lxKqd0Uny89oXPQhg@@",
-                            "params" =>  json_decode($result, true)[0]["id"] . ",'" . $event_id ."'"
-                        );
-                        $http->Post($_SERVER["HTTP_REFERER"].explode("/",$_SERVER['REQUEST_URI'])[1]."/FD_DataServiceGatewayCrypt.php?gest=1",$data);
-                    }
-                }
-            }
-
-
+            if($result == "[0]") $result = "[]";
+            echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
         }
     }
     else
@@ -655,5 +272,3 @@ catch (Exception $e)
     echo '{"error" : "'.$e->getMessage().'"}';
     $log->lwrite('[ERRORE] - '.$e->getMessage());
 }
-
-
