@@ -181,6 +181,7 @@ try
             {
                 $sql->closeConnection();
             }
+            http_response_code(400);
             return;
         }
 
@@ -193,6 +194,7 @@ try
             {
                 $sql->closeConnection();
             }
+            http_response_code(401);
             return;
         }
 
@@ -204,6 +206,7 @@ try
             {
                 $sql->closeConnection();
             }
+            http_response_code(400);
             return;
         }
 
@@ -218,6 +221,7 @@ try
             {
                 $sql->closeConnection();
             }
+            http_response_code(400);
             return;
         }
 
@@ -237,6 +241,7 @@ try
             {
                 $sql->closeConnection();
             }
+            http_response_code(400);
             return;
         }
 
@@ -265,10 +270,12 @@ try
     {
         echo '{"error" : "Invalid request !"}';
         $log->lwrite('[ERRORE] - Invalid request !');
+        http_response_code(400);
     }
 }
 catch (Exception $e)
 {
     echo '{"error" : "'.$e->getMessage().'"}';
+    http_response_code(400);
     $log->lwrite('[ERRORE] - '.$e->getMessage());
 }
