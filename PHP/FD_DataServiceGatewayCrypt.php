@@ -20,20 +20,17 @@
  * output
  *
  * VERSIONE 5.0.1
- *
  */
 
 //Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
-if (isset($_SERVER['HTTP_ORIGIN']))
-{
+if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 
 //Imposto tutti i metodi come abilitati
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
-{
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
@@ -53,13 +50,13 @@ require("Tools/FD_Crypt.php");
 require("WebTools/FD_Logger.php");
 require("WebTools/FD_Url.php");
 
-// istanzio logger
 $log = new FD_Logger(null);
 $crypt = new FD_Crypt();
 $url = new FD_Url();
 
-if(!isset($_GET["gest"]))
-{
+// $config = parse_ini_file("Config/config.inc.ini");
+
+if (!isset($_GET["gest"])) {
     echo '{"error" : "Invalid request !"}';
     $log->lwrite('[ERRORE] - Invalid request !');
     return;
@@ -67,8 +64,7 @@ if(!isset($_GET["gest"]))
 
 $token = $url->getBearerToken();
 
-try
-{
+try {
     // Parametro GET per capire se i parametri successivi sono POST o JSON o GET
     /**
      * gest:
@@ -77,46 +73,34 @@ try
      * 3 -> GET
      */
     $gest = $_GET["gest"];
-    if($gest == 1)
-    {
-        if(isset($_POST["process"]))
-        {
+    if ($gest == 1) {
+        if (isset($_POST["process"])) {
             $process = $_POST["process"];
         }
-        if(isset($_POST["params"]))
-        {
+        if (isset($_POST["params"])) {
             $params = $_POST["params"];
         }
-    }
-    else if($gest == 2)
-    {
+    } else if ($gest == 2) {
         $data = file_get_contents("php://input");
         $objData = json_decode($data);
-        if(property_exists((object) $objData,"process"))
-        {
+        if (property_exists((object)$objData, "process")) {
             $process = $objData->process;
         }
-        if(property_exists((object) $objData,"params"))
-        {
+        if (property_exists((object)$objData, "params")) {
             $params = $objData->params;
         }
-    }
-    else if($gest == 3)
-    {
-        if(isset($_GET["process"]))
-        {
+    } else if ($gest == 3) {
+        if (isset($_GET["process"])) {
             $process = $_GET["process"];
         }
-        if(isset($_GET["params"]))
-        {
+        if (isset($_GET["params"])) {
             $params = $_GET["params"];
         }
     }
 
     // $log->lwrite('[INFO] - token - <a href="?ses='.$token.'" target="_blank">'.$token.'</a>');
 
-    if(strlen($process) == 0)
-    {
+    if (strlen($process) == 0) {
         echo '{"error" : "Invalid process !"}';
         $log->lwrite('[ERRORE] - Invalid process !');
         return;
@@ -125,60 +109,49 @@ try
     $query = '';
 
     // Capisco se ci sono parametri di output e compongo la query
-    $pos = strpos($params,",@");
-    if($pos > 0)
-    {
-		$localOutputParams = substr($params,strpos($params,",@")+1,strlen($params)-strpos($params,",@"));
-        $outputP = explode(",",$localOutputParams);
+    $pos = strpos($params, ",@");
+    if ($pos > 0) {
+        $localOutputParams = substr($params, strpos($params, ",@") + 1, strlen($params) - strpos($params, ",@"));
+        $outputP = explode(",", $localOutputParams);
         $count_output = count($outputP);
         $OUTPUT = "select ";
-        for($i=0;$i<$count_output;$i++)
-        {
-            if(strpos($outputP[$i],"@") !== false)
-            {
-                $OUTPUT .= $outputP[$i]." as ".str_replace("@","",$outputP[$i]).",";
+        for ($i = 0; $i < $count_output; $i++) {
+            if (str_contains($outputP[$i], "@")) {
+                $OUTPUT .= $outputP[$i] . " as " . str_replace("@", "", $outputP[$i]) . ",";
             }
         }
-        $OUTPUT = substr($OUTPUT,0,strlen($OUTPUT)-1);
+        $OUTPUT = substr($OUTPUT, 0, strlen($OUTPUT) - 1);
         $OUTPUT .= ";";
-    }
-    else
-    {
+    } else {
         $OUTPUT = '';
     }
 
     // Compongo la query
     $stored = '';
-    if(strlen($query) == 0)
-    {
-        if (is_null($params))
-        {
+    if (strlen($query) == 0) {
+        if (is_null($params)) {
             $params = '';
         }
-        $stored = str_replace(" ", "",trim($crypt->stored_decrypt(str_replace("@", "=", $process))));
+        $stored = str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process))));
         $query = "call " . $stored . "(" . $crypt->fixString($params) . ");";
 
         // in caso di server di test rendo il nome della stored in chiaro
-        if (substr($_SERVER['HTTP_HOST'], 0, 5 ) == "test.")
-        {
-            header("AAA-Stored: ".$stored," ".$_SERVER['QUERY_STRING']);
+        if (substr($_SERVER['HTTP_HOST'], 0, 5) == "test.") {
+            header("AAA-Stored: " . $stored, " " . $_SERVER['QUERY_STRING']);
         }
     }
 
-    $log->lwrite('[INFO] - query - '.$query);
+    $log->lwrite('[INFO] - query - ' . $query);
 
-    if(strlen($query) > 0)
-    {
+    if (strlen($query) > 0) {
         // Inizializzo componente SQL
         $sql = new FD_Mysql();
 
         // Controllo che la connessione al DB sia andata a buon fine
-        if(strlen($sql->lastError) > 0)
-        {
-            echo '{"error" : "'.$sql->lastError.'"}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError);
-            if($sql->connected)
-            {
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            $log->lwrite('[ERRORE] - ' . $sql->lastError);
+            if ($sql->connected) {
                 $sql->closeConnection();
             }
             http_response_code(400);
@@ -186,24 +159,19 @@ try
         }
 
         // verifico che il token passato sia presente nelle sessioni di login
-        if(!$sql->tokenCheck($token))
-        {
+        if (!$sql->tokenCheck($token)) {
             echo '{"error" : "Invalid token 4 !"}';
             $log->lwrite('[ERRORE] - Invalid token ! ');
-            if($sql->connected)
-            {
+            if ($sql->connected) {
                 $sql->closeConnection();
             }
-            http_response_code(401);
             return;
         }
 
-        if(strlen($sql->lastError) > 0)
-        {
-            echo '{"error" : "'.$sql->lastError.'"}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError);
-            if($sql->connected)
-            {
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            $log->lwrite('[ERRORE] - ' . $sql->lastError);
+            if ($sql->connected) {
                 $sql->closeConnection();
             }
             http_response_code(400);
@@ -213,12 +181,10 @@ try
         // Eseguo la query
         $result = $sql->exportJSON($query);
 
-        if(strlen($sql->lastError) > 0)
-        {
-            echo '{"error" : "'.$sql->lastError.'"}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError);
-            if($sql->connected)
-            {
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            $log->lwrite('[ERRORE] - ' . $sql->lastError);
+            if ($sql->connected) {
                 $sql->closeConnection();
             }
             http_response_code(400);
@@ -227,18 +193,15 @@ try
 
         // Gestisco gli output
         $result_ouput = '{}';
-        if(strlen($OUTPUT) > 0)
-        {
+        if (strlen($OUTPUT) > 0) {
             $result_ouput = $sql->exportJSON($OUTPUT);
-            $log->lwrite('[INFO] - output - '.$result_ouput);
+            $log->lwrite('[INFO] - output - ' . $result_ouput);
         }
 
-        if(strlen($sql->lastError) > 0)
-        {
-            echo '{"error" : "'.$sql->lastError.'"}';
-            $log->lwrite('[ERRORE] - '.$sql->lastError);
-            if($sql->connected)
-            {
+        if (strlen($sql->lastError) > 0) {
+            echo '{"error" : "' . $sql->lastError . '"}';
+            $log->lwrite('[ERRORE] - ' . $sql->lastError);
+            if ($sql->connected) {
                 $sql->closeConnection();
             }
             http_response_code(400);
@@ -247,35 +210,26 @@ try
 
         $sql->closeConnection();
 
-        if(array_key_exists("error", json_decode($result, true)[0]))
-        {
-            echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . json_decode($result, true)[0]["error"] . '"}';
-            if(array_key_exists("code", json_decode($result, true)[0]))
-            {
-                http_response_code(json_decode($result, true)[0]["code"]);
-            }
-            else
-            {
-               http_response_code(400);
+        $resultArray = json_decode($result, true);
+        if (array_key_exists("error", $resultArray[0])) {
+            echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . $resultArray[0]["error"] . '"}';
+            if (array_key_exists("code", $resultArray[0])) {
+                http_response_code($resultArray[0]["code"]);
+            } else {
+                http_response_code(400);
             }
             exit;
-        }
-        else
-        {
-            if($result == "[0]") $result = "[]";
+        } else {
+            if ($result == "[0]") $result = "[]";
             echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
         }
-    }
-    else
-    {
+    } else {
         echo '{"error" : "Invalid request !"}';
         $log->lwrite('[ERRORE] - Invalid request !');
         http_response_code(400);
     }
-}
-catch (Exception $e)
-{
-    echo '{"error" : "'.$e->getMessage().'"}';
+} catch (Exception $e) {
+    echo '{"error" : "' . $e->getMessage() . '"}';
     http_response_code(400);
-    $log->lwrite('[ERRORE] - '.$e->getMessage());
+    $log->lwrite('[ERRORE] - ' . $e->getMessage());
 }
