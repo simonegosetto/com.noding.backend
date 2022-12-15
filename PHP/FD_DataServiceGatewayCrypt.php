@@ -19,17 +19,17 @@
  * recordset
  * output
  *
- * VERSIONE 5.0.1
+ * VERSIONE 5.1.4
  */
 
-//Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
+// Imposto qualsiasi orgine da cui arriva la richiesta come abilitata e la metto in cache per un giorno
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 
-//Imposto tutti i metodi come abilitati
+// Imposto tutti i metodi come abilitati
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -48,6 +48,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require("Config/FD_Define.php");
 require("DB/FD_DB.php");
 require("DB/FD_Mysql.php");
+require("DB/FD_Redis.php");
 require("Tools/FD_Crypt.php");
 require("WebTools/FD_Logger.php");
 require("WebTools/FD_Url.php");
@@ -56,11 +57,10 @@ $log = new FD_Logger(null);
 $crypt = new FD_Crypt();
 $url = new FD_Url();
 
-// $config = parse_ini_file("Config/config.inc.ini");
-
 if (!isset($_GET["gest"])) {
     echo '{"error" : "Invalid request !"}';
     $log->lwrite('[ERRORE] - Invalid request !');
+    http_response_code(422);
     return;
 }
 
@@ -105,28 +105,25 @@ try {
     if (strlen($process) == 0) {
         echo '{"error" : "Invalid process !"}';
         $log->lwrite('[ERRORE] - Invalid process !');
+        // http_response_code(422);
         return;
     }
 
-    $query = '';
-
-    // Capisco se ci sono parametri di output e compongo la query
-    $pos = strpos($params, ",@");
-    if ($pos > 0) {
-        $localOutputParams = substr($params, strpos($params, ",@") + 1, strlen($params) - strpos($params, ",@"));
-        $outputP = explode(",", $localOutputParams);
-        $count_output = count($outputP);
-        $OUTPUT = "select ";
-        for ($i = 0; $i < $count_output; $i++) {
-            if (str_contains($outputP[$i], "@")) {
-                $OUTPUT .= $outputP[$i] . " as " . str_replace("@", "", $outputP[$i]) . ",";
-            }
+    // get query from cache
+    $config = parse_ini_file("Config/config.inc.ini");
+    if ($config["REDIS"] == "1") {
+        $redis = new FD_Redis('127.0.0.1', 6379);
+        $cachedQuery = $redis->queryGetFromCache($token, $process, $params);
+        // $log->lwrite('[REDIS] - query: '.$cachedQuery);
+        $redis->close();
+        if (strlen($cachedQuery) > 0) {
+            header("AAA-From-Cache: true");
+            echo $cachedQuery;
+            return;
         }
-        $OUTPUT = substr($OUTPUT, 0, strlen($OUTPUT) - 1);
-        $OUTPUT .= ";";
-    } else {
-        $OUTPUT = '';
     }
+
+    $query = '';
 
     // Compongo la query
     $stored = '';
@@ -141,6 +138,24 @@ try {
         if (substr($_SERVER['HTTP_HOST'], 0, 5) == "test.") {
             header("AAA-Stored: " . $stored, " " . $_SERVER['QUERY_STRING']);
         }
+    }
+
+    // Capisco se ci sono parametri di output e compongo la query
+    $pos = strpos($params, ",@");
+    if ($pos > 0) {
+        $localOutputParams = substr($params, strpos($params, ",@") + 1, strlen($params) - strpos($params, ",@"));
+        $outputP = explode(",", $localOutputParams);
+        $count_output = count($outputP);
+        $OUTPUT = "select ";
+        for ($i = 0; $i < $count_output; $i++) {
+            if(strpos($outputP[$i],"@") !== false) { // if (str_contains($outputP[$i], "@")) {
+                $OUTPUT .= $outputP[$i] . " as " . str_replace("@", "", $outputP[$i]) . ",";
+            }
+        }
+        $OUTPUT = substr($OUTPUT, 0, strlen($OUTPUT) - 1);
+        $OUTPUT .= ";";
+    } else {
+        $OUTPUT = '';
     }
 
     $log->lwrite('[INFO] - query - ' . $query);
@@ -162,11 +177,12 @@ try {
 
         // verifico che il token passato sia presente nelle sessioni di login
         if (!$sql->tokenCheck($token)) {
-            echo '{"error" : "Invalid token 4 !"}';
+            echo '{"error" : "Invalid token 4!"}';
             $log->lwrite('[ERRORE] - Invalid token ! ');
             if ($sql->connected) {
                 $sql->closeConnection();
             }
+            http_response_code(400);
             return;
         }
 
@@ -223,7 +239,17 @@ try {
             exit;
         } else {
             if ($result == "[0]") $result = "[]";
-            echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
+            $result = '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . '}';
+
+            // query caching
+            if (isset(getallheaders()['Caching']) && $config["REDIS"] == "1") {
+                $redis = new FD_Redis('127.0.0.1', 6379);
+                $cacheKey = $redis->queryCache($token, $process, $params, $result, getallheaders()['Caching']);
+                $redis->close();
+                header("AAA-Cached: ".$cacheKey);
+            }
+
+            echo $result;
         }
     } else {
         echo '{"error" : "Invalid request !"}';
@@ -232,6 +258,6 @@ try {
     }
 } catch (Exception $e) {
     echo '{"error" : "' . $e->getMessage() . '"}';
-    http_response_code(400);
     $log->lwrite('[ERRORE] - ' . $e->getMessage());
+    http_response_code(400);
 }

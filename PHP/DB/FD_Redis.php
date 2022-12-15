@@ -6,31 +6,18 @@
  * Time: 16:20
  **/
 
-//require "predis/autoload.php";
-//PredisAutoloader::register();
-
 final class FD_Redis
 {
-    var $redis;
+    var Redis $redis;
 
     // costruttore con connessione automatica
-    function __construct($scheme,$host,$port = 6379)
+    function __construct($host, $port = 6379)
     {
         try {
-            if($host == null)
-                $this->redis = new PredisClient();
-            else 
-            {
-                //connessione a serverExpress remoto
-                $redis = new PredisClient(array(
-                    "scheme" => $scheme,
-                    "host" => $host, //"153.202.124.2",
-                    "port" => $port //6379
-                ));
-            }
+            $this->redis = new Redis();
+            $this->redis->connect($host, $port);
             return true;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             //die($e->getMessage());
             return false;
         }
@@ -40,42 +27,83 @@ final class FD_Redis
 	 * PUBLIC
 	 * *******************/
 
-    public function exists($key)
+    /**
+     * @throws RedisException
+     */
+    public function close(): void
+    {
+        $this->redis->close();
+    }
+
+    /**
+     * @throws RedisException
+     */
+    public function exists($key): bool
     {
         return $this->redis->exists($key);
     }
 
+    /**
+     * @throws RedisException
+     */
     public function get($key)
     {
         return $this->redis->get($key);
     }
 
-    public function set($key,$value,$type)
+    /**
+     * @throws RedisException
+     */
+    public function queryCache($token, $process, $params, $result, $expire = 600): string {
+        $params = hash("sha256", $params, false);
+        $key = $token.":".$process.":".$params;
+        $this->set($key, $result, $expire);
+        return $key;
+    }
+
+    /**
+     * @throws RedisException
+     */
+    public function queryGetFromCache($token, $process, $params): string {
+        $params = hash("sha256", $params, false);
+        return $this->get($token.":".$process.":".$params);
+    }
+
+    /**
+     * @throws RedisException
+     */
+    public function set($key, $value, $expire = 600): void
     {
-        //  DA FINIRE !!!!!!!!!!!
         $this->redis->set($key, $value);
+        if ($expire > 0) {
+            $this->redis->expire($key, $expire);
+        }
     }
 
-    public function hmset($key, $value)
-    {
-        $this->redis->hset($key, $value);
-    }
-
-    public function hgetall($key)
+    /**
+     * @throws RedisException
+     */
+    public function hgetall($key): array
     {
         return $this->redis->hgetall($key);
     }
 
-    public function del($key)
+    /**
+     * @throws RedisException
+     */
+    public function del($key): void
     {
         $this->redis->del($key);
     }
 
-     /* *******************
-	 * EXPIRY
-	 * *******************/
+    /* *******************
+    * EXPIRY
+    * *******************/
 
-    public function persist($key)
+    /**
+     * @throws RedisException
+     */
+    public function persist($key): void
     {
         $this->redis->persist($key);
     }
