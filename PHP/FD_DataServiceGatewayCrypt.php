@@ -177,12 +177,12 @@ try {
 
         // verifico che il token passato sia presente nelle sessioni di login
         if (!$sql->tokenCheck($token)) {
-            echo '{"error" : "Invalid token 4!"}';
+            echo '{"error" : "Invalid token 4 !"}';
             $log->lwrite('[ERRORE] - Invalid token ! ');
             if ($sql->connected) {
                 $sql->closeConnection();
             }
-            http_response_code(400);
+            // http_response_code(400);
             return;
         }
 
