@@ -118,7 +118,7 @@ class FD_Url
     /**
      * get access token from header
      * */
-    function getBearerToken($key = 'Bearer')
+    /*function getBearerToken($key = 'Bearer')
     {
         $headers = getAuthorizationHeader();
         // HEADER: Get the access token from the header
@@ -128,7 +128,7 @@ class FD_Url
             }
         }
         return null;
-    }
+    }*/
 
     function parse_user_agent($u_agent = null)
     {
@@ -271,7 +271,7 @@ class FD_Url
     /**
      * Get header Authorization
      * */
-    function getAuthorizationHeader(): ?string
+/*    function getAuthorizationHeader(): ?string
     {
         $headers = null;
         if (isset($_SERVER['Authorization'])) {
@@ -288,7 +288,7 @@ class FD_Url
             }
         }
         return $headers;
-    }
+    }*/
 
     /**
      * get access token from header
