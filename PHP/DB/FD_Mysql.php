@@ -34,11 +34,14 @@ final class FD_Mysql extends FD_DB
      //Ritorna il valore decriptato
     public function decrypt($encrypted_string, $encryption_key)
     {
-        $encrypted_string = base64_decode($encrypted_string);
+        $decryption_iv = '1234567891011121';
+        return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
+
+        /*$encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;
+        return $decrypted_string;*/
     }
 
     //Connessione al DB

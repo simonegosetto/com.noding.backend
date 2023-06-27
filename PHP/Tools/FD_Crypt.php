@@ -42,7 +42,7 @@ final class FD_Crypt
     //Ritorna il valore decriptato
     public function decrypt($encrypted_string)
     {
-        //Sostituisco caratteri jolly di appoggio
+        /*//Sostituisco caratteri jolly di appoggio
         $encrypted_string = str_replace("@", "=", $encrypted_string);
         //Decrypto
         $encrypted_string = base64_decode($encrypted_string);
@@ -50,39 +50,65 @@ final class FD_Crypt
         $encrypted_string = str_replace("-[--IV-[-" . $iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
         //Ritorno il valore senza spazi
-        return str_replace(" ", "", trim($decrypted_string));
+        return str_replace(" ", "", trim($decrypted_string));*/
     }
 
     //ritorna il valore per la connessione mysql
     public function mysql_decrypt($encrypted_string, $encryption_key)
     {
-        $encrypted_string = base64_decode($encrypted_string);
+        /*$encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-" . $iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;
+        return $decrypted_string;*/
     }
 
-    //ritorna il nome della procedura decriptato
-    public function stored_decrypt($encrypted_string)
+    /**
+     * ritorna il nome della procedura decriptato
+     * @param $encrypted_string
+     * @return string
+     * @deprecated
+     */
+    public function stored_old_decrypt($encrypted_string)
     {
-        $encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
+        /*$encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
         $encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-" . $iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;
+        return $decrypted_string;*/
+    }
+
+    public function stored_decrypt($encrypted_string): string
+    {
+        $encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
+        $decryption_iv = '1234567891011121';
+        return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
+    }
+
+    public function stored_crypt($string): string
+    {
+        $encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
+        $encryption_iv = '1234567891011121';
+        return str_replace("=", "@", openssl_encrypt($string, "AES-128-CTR", $encryption_key, 0, $encryption_iv));
+    }
+
+    public function connection_crypt($string): string
+    {
+        $encryption_key = strtolower(md5_file("Config/esatto.mp3"));
+        $encryption_iv = '1234567891011121';
+        return str_replace("=", "@", openssl_encrypt($string, "AES-128-CTR", $encryption_key, 0, $encryption_iv));
     }
 
     public function host_decrypted()
     {
-        $ini_array = parse_ini_file("Config/config.inc.ini");
+        /*$ini_array = parse_ini_file("Config/config.inc.ini");
         $encrypted_string = base64_decode(str_replace("@", "=", ($ini_array["SERVER_NAME"])));
         $encryption_key = strtolower(md5_file("Config/cryptocurrency.ini"));
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-" . $iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return str_replace(" ", "", trim($decrypted_string));
+        return str_replace(" ", "", trim($decrypted_string));*/
     }
 
     //Ritorna la password criptata per Django

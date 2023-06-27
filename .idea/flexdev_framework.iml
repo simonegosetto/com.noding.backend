@@ -2,6 +2,13 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/lib" isTestSource="false" packagePrefix="Dompdf" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/lib/php-css-parser/lib" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/lib/php-css-parser/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/lib/php-font-lib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/lib/php-svg-lib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/ReportService/dompdf/src" isTestSource="false" packagePrefix="Dompdf" />
+      <sourceFolder url="file://$MODULE_DIR$/PHP/WebTools/FD_Faker" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/PHP/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/PHP/vendor/lcobucci/jwt" />
       <excludeFolder url="file://$MODULE_DIR$/PHP.Protector.v1.49.Cracked-ZEKE" />
