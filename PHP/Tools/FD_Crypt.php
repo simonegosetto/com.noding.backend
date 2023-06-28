@@ -83,11 +83,12 @@ final class FD_Crypt
     {
         $encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
         $decryption_iv = '1234567891011121';
-        return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
+        return base64_decode(openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv));
     }
 
     public function stored_crypt($string): string
     {
+        $string = base64_encode($string);
         $encryption_key = strtolower(md5_file("Config/WindowsFormsApplication1.pdb"));
         $encryption_iv = '1234567891011121';
         return str_replace("=", "@", openssl_encrypt($string, "AES-128-CTR", $encryption_key, 0, $encryption_iv));

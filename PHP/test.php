@@ -15,11 +15,11 @@ require("Tools/FD_Crypt.php");
 
 $crypt = new FD_Crypt();
 
-$string = 'sp_commissioniteste_list';
+$string = 'sp_commissionirighe_distinct';
 $encrypted = $crypt->stored_crypt($string);
 echo $encrypted;
 
-// echo "\n".$crypt->stored_decrypt($encrypted);
+echo "\n".$crypt->stored_decrypt($encrypted);
 
 
 
