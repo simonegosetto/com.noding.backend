@@ -27,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-$url = ($_POST['url']) ? $_POST['url'] : $_GET['url'];
+$url = $_REQUEST['url']; // ($_POST['url']) ? $_POST['url'] : $_GET['url'];
 // $headers = ($_POST['headers']) ? $_POST['headers'] : $_GET['headers'];
 // $mimeType = ($_POST['mimeType']) ? $_POST['mimeType'] : $_GET['mimeType'];
+
 $session = curl_init($url);
 
 if ($_POST['url']) {
@@ -50,9 +51,9 @@ curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
 $response = curl_exec($session);
 
-if ($mimeType != '') {
+/*if ($mimeType != '') {
     header('Content-Type: ' . $mimeType);
-}
+}*/
 
 echo $response;
 
