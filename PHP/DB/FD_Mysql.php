@@ -13,17 +13,14 @@ final class FD_Mysql extends FD_DB
         $ini_array = parse_ini_file("Config/config.inc.ini");
         $this->key = strtolower(md5_file("Config/esatto.mp3"));
 
-        $this->hostname = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["hostname"]),$this->key)));
-        $this->username = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["username"]),$this->key)));
-        if(strlen($ini_array["password"]) > 0)
-        {
-            $this->password = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["password"]),$this->key)));
-        }
-        else
-        {
+        $this->hostname = str_replace(" ", "", trim($this->decrypt(str_replace("@", "=", $ini_array["hostname"]), $this->key)));
+        $this->username = str_replace(" ", "", trim($this->decrypt(str_replace("@", "=", $ini_array["username"]), $this->key)));
+        if (strlen($ini_array["password"]) > 0) {
+            $this->password = str_replace(" ", "", trim($this->decrypt(str_replace("@", "=", $ini_array["password"]), $this->key)));
+        } else {
             $this->password = "";
         }
-        $this->database = str_replace(" ","",trim($this->decrypt(str_replace("@","=",$ini_array["database"]),$this->key)));
+        $this->database = str_replace(" ", "", trim($this->decrypt(str_replace("@", "=", $ini_array["database"]), $this->key)));
         $this->Connect();
     }
 
@@ -31,14 +28,17 @@ final class FD_Mysql extends FD_DB
 	 * PUBLIC
 	 * *******************/
 
-     //Ritorna il valore decriptato
+    //Ritorna il valore decriptato
     public function decrypt($encrypted_string, $encryption_key)
     {
-        $encrypted_string = base64_decode($encrypted_string);
+        $decryption_iv = '1234567891011121';
+        return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
+
+        /*$encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
         $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;
+        return $decrypted_string;*/
     }
 
     //Connessione al DB
@@ -47,16 +47,14 @@ final class FD_Mysql extends FD_DB
         //echo $this->hostname.$this->username.$this->password.$this->database;
         $this->conn = mysqli_connect($this->hostname, $this->username, $this->password, $this->database);
         mysqli_options($this->conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
-        if(!$this->conn)
-        {
-            $this->lastError = 'Nessuna connessione al serverExpress: ' . mysqli_connect_error().PHP_EOL;
+        if (!$this->conn) {
+            $this->lastError = 'Nessuna connessione al serverExpress: ' . mysqli_connect_error() . PHP_EOL;
             $this->connected = false;
             return false;
         }
 
-        if(!$this->UseDB($this->database))
-        {
-            $this->lastError = 'Nessun DB selezionato: ' . mysqli_connect_error().PHP_EOL;
+        if (!$this->UseDB($this->database)) {
+            $this->lastError = 'Nessun DB selezionato: ' . mysqli_connect_error() . PHP_EOL;
             $this->connected = false;
             return false;
         }
@@ -76,13 +74,10 @@ final class FD_Mysql extends FD_DB
     //Controllo coerenza token
     public function tokenCheck($token)
     {
-        $this->executeSQL("call sys_token_check('".$token."');");
-        if($this->affected > 0)
-        {
+        $this->executeSQL("call sys_token_check('" . $token . "');");
+        if ($this->affected > 0) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -90,11 +85,9 @@ final class FD_Mysql extends FD_DB
     //Pulisce il buffer della connessione dalle precedenti query
     public function CleanBufferResults($conn)
     {
-        while($conn->more_results())
-        {
+        while ($conn->more_results()) {
             $conn->next_result();
-            if($res = $conn->store_result())
-            {
+            if ($res = $conn->store_result()) {
                 $res->free();
             }
         }
@@ -104,31 +97,29 @@ final class FD_Mysql extends FD_DB
     public function executeSQL($query)
     {
         $this->lastQuery = $query;
-        if($this->result = mysqli_query($this->conn,$query))
-        {
-            if ($this->result)
-            {
+        if ($this->result = mysqli_query($this->conn, $query)) {
+            if ($this->result) {
                 $this->affected = mysqli_affected_rows($this->conn);
-                $this->records  = @mysqli_num_rows($this->result);
-            } else
-            {
-                $this->records  = 0;
+                if (!is_bool($this->result)) {
+                    $this->records = @mysqli_num_rows($this->result);
+                } else {
+                    $this->records = 0;
+                }
+            } else {
+                $this->records = 0;
                 $this->affected = 0;
             }
 
-            if($this->records > 0)
-            {
+            if ($this->records > 0) {
                 $this->arrayResults();
                 $this->CleanBufferResults($this->conn);
                 return $this->arrayedResult;
-            } else
-            {
+            } else {
                 $this->CleanBufferResults($this->conn);
                 return true;
             }
             //echo "Query eseguita correttamente !";
-        } else
-        {
+        } else {
             $this->lastError = mysqli_error($this->conn);
             return false;
         }
@@ -151,14 +142,12 @@ final class FD_Mysql extends FD_DB
     //Array multiplo
     public function arrayResults()
     {
-        if($this->records == 1)
-        {
+        if ($this->records == 1) {
             return $this->arrayResult();
         }
 
         $this->arrayedResult = array();
-        while ($data = mysqli_fetch_assoc($this->result))
-        {
+        while ($data = mysqli_fetch_assoc($this->result)) {
             $this->arrayedResult[] = $data;
         }
         return $this->arrayedResult;
@@ -167,24 +156,18 @@ final class FD_Mysql extends FD_DB
     //Seleziona il DB interessato (di dafault non importa)
     public function UseDB($db)
     {
-        if(strlen($this->database) > 0)
-        {
-            if(!mysqli_select_db($this->conn,$db))
-            {
+        if (strlen($this->database) > 0) {
+            if (!mysqli_select_db($this->conn, $db)) {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
-            } else
-            {
+            } else {
                 return true;
             }
-        } else
-        {
-            if(!mysqli_select_db($this->conn,$db))
-            {
+        } else {
+            if (!mysqli_select_db($this->conn, $db)) {
                 $this->lastError = 'Nessun DB selezionato: ' . mysqli_error($this->conn);
                 return false;
-            } else
-            {
+            } else {
                 return true;
             }
         }
@@ -196,18 +179,16 @@ final class FD_Mysql extends FD_DB
         $this->executeSQL($query);
         $fcount = mysqli_num_fields($this->result);
         $export = "<export>\n";
-        while($row = mysqli_fetch_array($this->result) )
-        {
-            $export.="\t<record>\n\t\t";
-            for($i=0; $i< $fcount; $i++)
-            {
+        while ($row = mysqli_fetch_array($this->result)) {
+            $export .= "\t<record>\n\t\t";
+            for ($i = 0; $i < $fcount; $i++) {
                 $tag = mysqli_fetch_field_direct($this->result, $i)->name;//mysql_field_name( $this->result, $i );
-                $export.="<$tag>".mysqli_real_escape_string($this->conn,$row[$i])."</$tag>";
+                $export .= "<$tag>" . mysqli_real_escape_string($this->conn, $row[$i]) . "</$tag>";
             }
-            $export.="\n\t</record>";
-            $export.="\n";
+            $export .= "\n\t</record>";
+            $export .= "\n";
         }
-        $export.="</export>\n";
+        $export .= "</export>\n";
 
         return $export;
     }
@@ -218,12 +199,10 @@ final class FD_Mysql extends FD_DB
         $this->executeSQL($query);
         $fcount = mysqli_num_fields($this->result);
         $export = "";
-        while($row = mysqli_fetch_array($this->result) )
-        {
-            for($i=0; $i< $fcount; $i++)
-            {
+        while ($row = mysqli_fetch_array($this->result)) {
+            for ($i = 0; $i < $fcount; $i++) {
                 $tag = mysqli_fetch_field_direct($this->result, $i)->name;//mysql_field_name( $this->result, $i );
-                $export .= mysqli_real_escape_string($this->conn,$row[$i])."\t";
+                $export .= mysqli_real_escape_string($this->conn, $row[$i]) . "\t";
             }
             $export .= "\n";
         }
@@ -237,12 +216,9 @@ final class FD_Mysql extends FD_DB
     {
         $this->executeSQL($query);
 
-        if($this->affected == 1)
-        {
+        if ($this->affected == 1) {
             $rows[] = $this->arrayedResult;
-        }
-        else
-        {
+        } else {
             $rows = $this->arrayedResult;
         }
         return $this->json_encode($rows);
@@ -253,12 +229,10 @@ final class FD_Mysql extends FD_DB
         $numeric = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
         $nonnumeric = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         preg_match_all("/\"[0\+]+(\d+)\"/", $nonnumeric, $vars);
-        foreach($vars[0] as $k => $v)
-        {
+        foreach ($vars[0] as $k => $v) {
             // echo $k." ".$v;
-            if ($v[1] != "0")
-            {
-                $numeric = preg_replace("/\:\s*{$vars[1][$k]},/",": {$v},",$numeric);
+            if ($v[1] != "0") {
+                $numeric = preg_replace("/\:\s*{$vars[1][$k]},/", ": {$v},", $numeric);
             }
         }
         return $numeric;
