@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
         header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 }
 
+ini_set('memory_limit', '500M');
 // ini_set('display_errors', 1);
 //remove the notice
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
