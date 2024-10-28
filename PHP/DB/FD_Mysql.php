@@ -31,14 +31,12 @@ final class FD_Mysql extends FD_DB
     //Ritorna il valore decriptato
     public function decrypt($encrypted_string, $encryption_key)
     {
-        $decryption_iv = '1234567891011121';
-        return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
-
-        /*$encrypted_string = base64_decode($encrypted_string);
+        // $decryption_iv = '1234567891011121';
+        // return openssl_decrypt($encrypted_string, "AES-128-CTR", $encryption_key, 0, $decryption_iv);
+        $encrypted_string = base64_decode($encrypted_string);
         $iv = substr($encrypted_string, strrpos($encrypted_string, "-[--IV-[-") + 9);
         $encrypted_string = str_replace("-[--IV-[-".$iv, "", $encrypted_string);
-        $decrypted_string = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
-        return $decrypted_string;*/
+        return mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $encryption_key, $encrypted_string, MCRYPT_MODE_CBC, $iv);
     }
 
     //Connessione al DB
@@ -224,6 +222,36 @@ final class FD_Mysql extends FD_DB
         return $this->json_encode($rows);
     }
 
+    /**
+     * TODO da testare ancora non funzionante del tutto
+     * @param $data
+     * @return false|string
+     */
+    public static function json_encode_new($data)
+    {
+        array_walk_recursive($data, function (&$item, $key) {
+            // Se il valore è una stringa numerica con zeri iniziali, lasciamolo com'è
+            if (is_string($item) && preg_match('/^0\d+$/', $item)) {
+                $item = (string)$item; // Mantieni come stringa
+            }
+            // Se è un numero decimale, lascialo come decimale
+            elseif (is_numeric($item) && strpos($item, '.') !== false) {
+                $item = (float)$item; // Mantieni il valore come decimale
+            }
+            // Se è un numero intero valido, lascialo come intero
+            elseif (is_numeric($item) && strpos($item, '.') === false && strpos($item, '0') !== 0) {
+                $item = (int)$item; // Converti in numero intero
+            }
+        });
+        // Usa la codifica JSON senza modificare slash o caratteri unicode
+        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
+     * @deprecated
+     * @param $data
+     * @return array|false|string|string[]|null
+     */
     public static function json_encode($data)
     {
         $numeric = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);

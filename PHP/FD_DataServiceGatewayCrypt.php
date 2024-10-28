@@ -132,7 +132,16 @@ try {
             $params = '';
         }
         $stored = str_replace(" ", "", trim($crypt->stored_decrypt(str_replace("@", "=", $process))));
-        $query = "call " . $stored . "(" . $crypt->fixString($params) . ");";
+        $query = "call " . $stored . "(" .
+            /*preg_replace_callback(
+                '/\\\U([A-F0-9]+)/',
+                function ($matches) {
+                    return mb_convert_encoding(hex2bin($matches[1]), 'UTF-8', 'UTF-32');
+                },
+                $crypt->fixString($params)
+            )*/
+            $crypt->fixString($params)
+            . ");";
 
         // in caso di server di test rendo il nome della stored in chiaro
         if (substr($_SERVER['HTTP_HOST'], 0, 5) == "test.") {
@@ -229,7 +238,7 @@ try {
         $sql->closeConnection();
 
         $resultArray = json_decode($result, true);
-        if (array_key_exists("error", $resultArray[0])) {
+        if (is_array($resultArray[0]) && array_key_exists("error", $resultArray[0])) {
             echo '{"recordset" : ' . $result . ',"output" : ' . $result_ouput . ', "error": "' . $resultArray[0]["error"] . '"}';
             if (array_key_exists("code", $resultArray[0])) {
                 http_response_code($resultArray[0]["code"]);
